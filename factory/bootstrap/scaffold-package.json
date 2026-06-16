@@ -1,0 +1,29 @@
+{
+  "schema_version": "2026-06-16",
+  "project": "Phoenix Epoxy Pros",
+  "status": "ready_for_auto_builder_ingestion",
+  "full_scaffold_package": {
+    "title": "xpswebsites-phoenix-full-scaffold.zip",
+    "drive_file_id": "1hWYcvKMk4NRJiMfpOLZzRmtJ4w9hsz4F",
+    "url": "https://drive.google.com/file/d/1hWYcvKMk4NRJiMfpOLZzRmtJ4w9hsz4F/view?usp=drivesdk",
+    "sha256": "dc92f5e923d54ec73c7e71f235603fe477a92cb654969ad7af00cdca98be617c",
+    "validated_locally": true
+  },
+  "readiness_checklist": {
+    "title": "Phoenix Epoxy Pros - Pre-Generation Readiness Checklist",
+    "spreadsheet_id": "1WbzhWAbXYBXXBlqn7GsgKcfkPvl0gHcbwSt3VyOHiK4",
+    "url": "https://docs.google.com/spreadsheets/d/1WbzhWAbXYBXXBlqn7GsgKcfkPvl0gHcbwSt3VyOHiK4"
+  },
+  "source_reference_repo": "Strategic-Minds/NASHVILLERESINWORX",
+  "target_repo": "Strategic-Minds/XPSWEBSITES",
+  "apps": {
+    "website": "apps/phoenix-epoxy-pros-site",
+    "customer_job_app": "apps/phoenix-job-ops-app"
+  },
+  "owner_defaults": {
+    "phone": "772-209-0266",
+    "email": "JEREMY@SHOPXPS.COM",
+    "logo": "placeholder",
+    "images": "placeholder"
+  }
+}
