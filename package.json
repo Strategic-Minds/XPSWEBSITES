@@ -1,0 +1,17 @@
+{
+  "name": "xps-websites-factory",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Factory repo for XPS connected local epoxy and concrete website/app templates.",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "validate": "node scripts/validate-supabase-migration.mjs && node scripts/validate-receipt-schema.mjs",
+    "validate:production": "node scripts/validate-supabase-migration.mjs && node scripts/validate-receipt-schema.mjs",
+    "test:e2e": "playwright test",
+    "test:pwa": "echo \"Run Lighthouse/PWA validation against deployed preview URLs\""
+  },
+  "engines": { "node": ">=20" },
+  "devDependencies": {
+    "@playwright/test": "latest"
+  }
+}
