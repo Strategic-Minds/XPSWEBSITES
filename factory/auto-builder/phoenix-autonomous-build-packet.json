@@ -6,8 +6,9 @@
   "auto_builder_repo": "Strategic-Minds/AUTO_BUILDER",
   "drive_folder_url": "https://drive.google.com/drive/folders/1wdvro-T90CqXjcLtyACFXnlJ9vOqxuTk",
   "readiness_sheet_url": "https://docs.google.com/spreadsheets/d/1WbzhWAbXYBXXBlqn7GsgKcfkPvl0gHcbwSt3VyOHiK4",
-  "scaffold_package_url": "https://drive.google.com/file/d/1hWYcvKMk4NRJiMfpOLZzRmtJ4w9hsz4F/view?usp=drivesdk",
-  "mode": "sandbox_generation_with_placeholders",
+  "scaffold_package_url": "https://drive.google.com/file/d/1uzNsNoK18ynpJXPtAiKnz-UG8fwCry9E/view?usp=drivesdk",
+  "scaffold_package_sha256": "2f174d4c23de84448f4ee2ef246a9af8f55bdc777a005ac1c6c41b730e31f0e9",
+  "mode": "sandbox_generation_with_placeholders_plus_production_readiness_layer",
   "apps": {
     "website": {
       "path": "apps/phoenix-epoxy-pros-site",
@@ -20,6 +21,15 @@
       "pwa_required": true
     }
   },
+  "production_artifacts": {
+    "integration_matrix": "https://docs.google.com/spreadsheets/d/1OlhBL3fZQ_6UBoj5ybnxvxF-RjFQG7ReShCMojZ20ww",
+    "pricing_workbook": "https://docs.google.com/spreadsheets/d/1FVqeSbU-xeHznz-zMWv3vnj48D5r3oP2bBYFZiibfu8",
+    "data_dictionary": "https://docs.google.com/spreadsheets/d/1Tijw6ey7A1eM9QTEODNU80PjChzOua9-psHFueLNpBM",
+    "legal_templates": "https://docs.google.com/document/d/1ermccPi0TB-BPZcEDBqmTFmdFmFPmxHNnG6pP2SJoX4",
+    "location_registry": "https://docs.google.com/spreadsheets/d/1fkT28Mv8iArZZYN3TDiyEm3gkLLRysGxitpmItgfE4w",
+    "metricool_inputs": "https://docs.google.com/spreadsheets/d/1B03cw3VPrNK4fPSMXuR2jXQm54DA3QL4TJ66T8vFJiQ",
+    "receipt_archive": "https://drive.google.com/drive/folders/1Up7KoErt8neJIGq9Ooxv9xscJWaY_0AY"
+  },
   "cron": {
     "schedule": "*/5 * * * *",
     "endpoint": "/api/cron/factory-readiness",
@@ -31,12 +41,22 @@
     "seo-schema-agent",
     "forms-and-upload-agent",
     "backend-template-agent",
-    "job-app-validation-agent"
+    "job-app-validation-agent",
+    "supabase-schema-agent",
+    "receipt-validation-agent",
+    "metricool-ops-agent"
   ],
   "generation_gates": [
     "repo_bootstrap_present",
-    "scaffold_package_present",
+    "production_ready_scaffold_package_present",
     "drive_checklist_present",
+    "integration_matrix_present",
+    "pricing_workbook_present",
+    "supabase_schema_present",
+    "legal_templates_present",
+    "receipt_archive_present",
+    "location_registry_present",
+    "metricool_inputs_present",
     "placeholder_assets_present",
     "pwa_manifests_present",
     "lead_api_stub_present",
@@ -58,7 +78,7 @@
     "owner_approval",
     "final_assets",
     "legal_disclaimers",
-    "pricing_matrix",
+    "pricing_matrix_owner_approval",
     "payment_credentials",
     "calendar_credentials",
     "crm_email_sms_credentials",
