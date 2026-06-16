@@ -3,14 +3,18 @@
 }
 
 .site-header {
-  grid-template-columns: minmax(260px, 390px) 1fr auto;
-  gap: 34px;
-  min-height: 104px;
-  padding: 12px clamp(36px, 5vw, 72px);
+  grid-template-columns: minmax(300px, 420px) 1fr auto;
+  gap: clamp(28px, 3.8vw, 62px);
+  min-height: 96px;
+  padding: 8px clamp(28px, 4.8vw, 76px);
+}
+
+.header-logo {
+  width: clamp(300px, 24vw, 420px);
 }
 
 .site-header nav {
-  gap: clamp(30px, 4vw, 64px);
+  gap: clamp(28px, 4vw, 62px);
   font-size: 18px;
   text-transform: none;
 }
@@ -35,13 +39,18 @@
   font-size: 18px;
 }
 
+.header-cta {
+  min-width: 174px;
+  min-height: 58px;
+}
+
 .mobile-menu-mark {
   display: none;
 }
 
 .hero {
   min-height: 0;
-  padding: 0 clamp(20px, 3vw, 36px) 24px;
+  padding: 0 0 24px;
   overflow: visible;
   background: var(--white);
   color: var(--ink);
@@ -49,13 +58,13 @@
 
 .hero-stage {
   position: relative;
-  height: clamp(520px, calc(100vh - 420px), 620px);
-  min-height: 520px;
+  height: clamp(390px, calc(100vh - 560px), 460px);
+  min-height: 390px;
   width: min(100%, 1420px);
   margin: 0 auto;
   overflow: hidden;
-  background: #eeeeee;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, .1);
+  background: #f4f4f4;
+  box-shadow: none;
 }
 
 .hero-photo,
@@ -72,39 +81,40 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 38%;
+  object-position: center 56%;
 }
 
 .hero-logo-panel {
   z-index: 2;
-  width: clamp(390px, 36vw, 560px);
+  width: clamp(340px, 29vw, 455px);
   pointer-events: none;
-  background: #ffffff;
+  background: transparent;
 }
 
 .hero-logo-panel img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
   object-position: left center;
 }
 
 .estimate-card {
   position: absolute;
-  top: 48px;
-  right: 30px;
+  top: clamp(32px, 4.2vw, 48px);
+  right: clamp(24px, 3.2vw, 42px);
   z-index: 4;
   gap: 8px;
-  width: min(330px, calc(100% - 48px));
-  padding: 22px;
-  border: 1px solid rgba(0, 0, 0, .08);
+  width: min(316px, calc(100% - 48px));
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 8px;
   background: rgba(255, 255, 255, .97);
-  box-shadow: 0 22px 44px rgba(0, 0, 0, .2);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .16);
 }
 
 .form-head h2 {
-  margin: 0 0 8px;
-  font-size: 36px;
+  margin: 0 0 6px;
+  font-size: 34px;
 }
 
 .form-field {
@@ -113,24 +123,37 @@
 
 .estimate-card input,
 .estimate-card select {
-  min-height: 40px;
-  padding: 0 14px;
+  min-height: 38px;
+  padding: 0 13px;
   border: 1px solid #c9c9c9;
   border-radius: 4px;
   color: #1f1f1f;
 }
 
+.form-submit {
+  min-height: 46px;
+}
+
 .form-status {
-  min-height: 18px;
+  min-height: 0;
+  margin: 0;
   font-size: 12px;
+}
+
+.form-status.idle {
+  display: none;
 }
 
 @media (max-width: 1180px) {
   .site-header {
     grid-template-columns: minmax(240px, 330px) 1fr auto;
     gap: 22px;
-    min-height: 94px;
-    padding: 12px 28px;
+    min-height: 90px;
+    padding: 10px 28px;
+  }
+
+  .header-logo {
+    width: min(100%, 330px);
   }
 
   .site-header nav {
@@ -147,19 +170,42 @@
     font-size: 16px;
   }
 
+  .header-cta {
+    min-width: 154px;
+    min-height: 54px;
+  }
+
   .hero-stage {
-    height: 500px;
-    min-height: 500px;
+    height: 400px;
+    min-height: 400px;
   }
 
   .hero-logo-panel {
-    width: 430px;
+    width: 365px;
   }
 
   .estimate-card {
-    top: 36px;
+    top: 28px;
     right: 22px;
     max-width: none;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 761px) {
+  .site-header {
+    grid-template-columns: minmax(220px, 280px) 1fr auto;
+  }
+
+  .site-header nav {
+    gap: 18px;
+  }
+
+  .hero-logo-panel {
+    width: 320px;
+  }
+
+  .estimate-card {
+    width: 300px;
   }
 }
 
@@ -170,6 +216,10 @@
     gap: 16px;
     min-height: 86px;
     padding: 14px 16px;
+  }
+
+  .header-logo {
+    width: 238px;
   }
 
   .site-header nav,
@@ -228,6 +278,10 @@
     width: calc(100% - 32px);
     margin: -28px auto 0;
     padding: 18px;
+  }
+
+  .form-status.idle {
+    display: block;
   }
 
   .mobile-action-rail {
