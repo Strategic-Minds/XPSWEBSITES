@@ -5,7 +5,7 @@ const phoneHref = "tel:17722090266";
 const email = "JEREMY@SHOPXPS.COM";
 
 const images = {
-  hero: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-hero.webp?v=1781648558",
+  hero: "/images/hero-garage-approved.webp?v=approved-20260616",
   beforeAfter: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-before-after.webp?v=1781648570",
   garage: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581",
   commercial: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-commercial.webp?v=1781648591",
@@ -84,7 +84,7 @@ export default function HomePage() {
             <img src={images.hero} alt="" />
           </div>
           <div className="hero-logo-panel" aria-hidden="true">
-            <img src="/images/logo-panel.webp" alt="" />
+            <img src="/images/logo-panel.webp?v=mask-20260616" alt="" />
           </div>
           <PhoenixLeadForm />
         </div>
