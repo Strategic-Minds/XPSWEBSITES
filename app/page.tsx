@@ -1,14 +1,30 @@
 const services = [
-  ["Garage Floors", "Flake, metallic, and high-wear garage systems for Phoenix homes."],
-  ["Commercial Floors", "Durable coating and polished concrete paths for shops and facilities."],
-  ["Patios & Outdoor Spaces", "Decorative concrete and coating direction for outdoor surfaces."],
-  ["Floor Repair", "Crack, prep, and surface repair workflows before the coating system."]
+  {
+    title: "Garage Floors",
+    image: "/images/services-strip-approved.webp",
+    slug: "garage"
+  },
+  {
+    title: "Commercial Floors",
+    image: "/images/services-strip-approved.webp",
+    slug: "commercial"
+  },
+  {
+    title: "Patios & Outdoor Spaces",
+    image: "/images/services-strip-approved.webp",
+    slug: "patio"
+  },
+  {
+    title: "Floor Repair",
+    image: "/images/services-strip-approved.webp",
+    slug: "repair"
+  }
 ];
 
 const reviews = [
-  ["Google", "Review link pending"],
-  ["Facebook", "Owner approval pending"],
-  ["Yelp", "Proof slot ready"]
+  { platform: "Google", mark: "G", avatar: "A" },
+  { platform: "Facebook", mark: "f", avatar: "B" },
+  { platform: "Yelp", mark: "Y", avatar: "C" }
 ];
 
 const phone = "772-209-0266";
@@ -16,118 +32,99 @@ const phoneHref = "tel:17722090266";
 
 export default function HomePage() {
   return (
-    <main>
-      <header className="topbar">
-        <a className="brand" href="#quote">
-          <span className="mark">PEP</span>
-          <span>Phoenix <strong>Epoxy Pros</strong></span>
+    <main className="site-shell">
+      <header className="site-header">
+        <a className="header-logo" href="#quote" aria-label="Phoenix Epoxy Pros home">
+          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
-        <nav>
+        <nav aria-label="Main navigation">
           <a href="#before-after">Before / After</a>
           <a href="#reviews">Reviews</a>
-          <a href={phoneHref}>Call</a>
+          <a className="call-link" href={phoneHref}>Call</a>
         </nav>
-        <a className="button" href="#quote-form">Get Quote</a>
+        <a className="quote-button header-cta" href="#quote-form">Get Quote</a>
+        <button className="menu-button" type="button" aria-label="Menu">
+          <span />
+          <span />
+          <span />
+        </button>
       </header>
 
       <section className="hero" id="quote">
-        <div className="hero-logo" aria-label="Phoenix Epoxy Pros">
-          <span className="phoenix">Phoenix</span>
-          <span className="epoxy">Epoxy Pros</span>
+        <h1 className="sr-only">Phoenix Epoxy Pros</h1>
+        <div className="brand-panel">
+          <img src="/images/logo-panel.webp" alt="Phoenix Epoxy Pros logo" />
         </div>
-        <div className="hero-image">
-          <img src="/images/hero-garage.webp" alt="Finished garage epoxy floor with cabinets" />
+        <div className="hero-photo">
+          <img src="/images/hero-garage-approved.webp" alt="Finished gray flake garage epoxy floor" />
         </div>
-        <section className="hero-copy">
-          <p className="eyebrow">Phoenix metro epoxy floor estimates</p>
-          <h1>Phoenix Epoxy Pros</h1>
-          <p>Garage floors, commercial floors, patios, outdoor spaces, repairs, polished concrete, decorative concrete, and XPS-connected training inquiries.</p>
-          <div className="actions">
-            <a className="button" href="#quote-form">Get Quote</a>
-            <a className="button ghost" href={phoneHref}>Call {phone}</a>
-          </div>
-        </section>
         <EstimateForm />
       </section>
 
-      <section className="quick" aria-label="Quick actions">
-        <a href="#before-after">Before / After</a>
-        <a href="#reviews">Reviews</a>
-        <a href={phoneHref}>Call</a>
+      <section className="mobile-actions" aria-label="Mobile quick actions">
+        <a href="#before-after"><span className="quick-icon before-icon" />Before / After</a>
+        <a href="#reviews"><span className="quick-icon review-icon" />Reviews</a>
+        <a href={phoneHref}><span className="quick-icon call-icon" />Call</a>
       </section>
 
-      <section className="section" id="before-after">
-        <div className="section-title"><span /> <h2>Before / After</h2></div>
-        <div className="before-after">
-          <figure className="before"><figcaption>Before</figcaption></figure>
-          <figure className="after"><figcaption>After</figcaption></figure>
+      <section className="proof-row" aria-label="Proof and reviews">
+        <div className="before-after-block" id="before-after">
+          <SectionTitle title="Before / After" />
+          <img src="/images/before-after-approved.webp" alt="Before and after epoxy floor comparison" />
+        </div>
+
+        <div className="reviews-block" id="reviews">
+          <SectionTitle title="Reviews" />
+          <div className="review-grid">
+            {reviews.map((review) => (
+              <article className="review-card" key={review.platform}>
+                <div className="review-top">
+                  <span className="stars" aria-label={`${review.platform} five star placeholder`}>
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </span>
+                  <span className={`platform platform-${review.mark.toLowerCase()}`}>{review.mark}</span>
+                </div>
+                <span className="avatar">{review.avatar}</span>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="section reviews" id="reviews">
-        <div className="section-title"><span /> <h2>Reviews</h2></div>
-        <div className="review-grid">
-          {reviews.map(([source, status]) => (
-            <article className="review-card" key={source}>
-              <div className="stars">*****</div>
-              <strong>{source}</strong>
-              <p>{status}</p>
+      <section className="services-section">
+        <SectionTitle title="Our Services" />
+        <div className="services-grid">
+          {services.map((service) => (
+            <article className={`service-card service-${service.slug}`} key={service.title}>
+              <img src={service.image} alt={`${service.title} preview`} />
+              <h2>{service.title}</h2>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="section">
-        <div className="section-title"><span /> <h2>Our Services</h2></div>
-        <div className="service-grid">
-          {services.map(([title, copy]) => (
-            <article className="service-card" key={title}>
-              <div className="tile-art"><span>XP</span></div>
-              <h3>{title}</h3>
-              <p>{copy}</p>
-            </article>
-          ))}
-        </div>
+      <section className="conversion-note">
+        <p>
+          Online estimates may take up to 48 hours. Final offer language, reviews, pricing, legal disclaimers,
+          and live lead integrations require owner approval before production launch.
+        </p>
       </section>
 
-      <section className="system">
-        <div>
-          <p className="eyebrow">Online estimate system</p>
-          <h2>Built For Photo Intake, Coupon Qualification, And Owner Review.</h2>
-          <p>Complete the questionnaire and upload floor photos to qualify for the online-estimate coupon. Estimates may take up to 48 hours; the internal automation target is under 24 hours.</p>
-        </div>
-        <ol>
-          <li>Upload floor photos</li>
-          <li>Pick project type</li>
-          <li>Confirm square footage</li>
-          <li>Receive estimate review</li>
-          <li>Approve schedule</li>
-        </ol>
-      </section>
-
-      <section className="xps">
-        <div>
-          <p className="eyebrow">Xtreme Polishing Systems connected</p>
-          <h2>Training, Products, Visualizer, And Job App Paths Stay In The Funnel.</h2>
-          <p>The site preserves the XPS connection, Torginol visualizer handoff, and customer job operations path for proposals, deposits, scheduling, approvals, photos, final walkthrough, warranty, and reviews.</p>
-        </div>
-        <div className="actions">
-          <a className="button" href="https://torginol.com/design" target="_blank" rel="noreferrer">Open Visualizer</a>
-          <a className="button ghost dark" href="https://xtremepolishingsystems.com" target="_blank" rel="noreferrer">XPS</a>
-        </div>
-      </section>
-
-      <footer>
-        <strong>Phoenix Epoxy Pros</strong>
-        <span>Phoenix, Arizona</span>
-        <p>Template language, pricing, testimonials, legal disclaimers, and production integrations require owner approval before launch.</p>
-      </footer>
-
-      <div className="mobile-bar">
-        <a href={phoneHref}>Call</a>
-        <a href="#quote-form">Get Quote</a>
-      </div>
+      <a className="mobile-call" href={phoneHref}>Call</a>
     </main>
+  );
+}
+
+function SectionTitle({ title }: { title: string }) {
+  return (
+    <div className="section-title">
+      <span />
+      <h2>{title}</h2>
+    </div>
   );
 }
 
@@ -135,16 +132,46 @@ function EstimateForm() {
   return (
     <form className="quote-card" id="quote-form" action="/api/leads" method="post" encType="multipart/form-data">
       <h2>Get Quote</h2>
-      <label><span>Name</span><input name="fullName" required autoComplete="name" /></label>
-      <label><span>Phone</span><input name="phone" required autoComplete="tel" /></label>
-      <label><span>Email</span><input name="email" type="email" required autoComplete="email" /></label>
-      <label><span>Zip Code</span><input name="zipCode" inputMode="numeric" autoComplete="postal-code" /></label>
-      <label><span>Project Type</span><select name="projectType" required defaultValue=""><option value="" disabled>Select project type</option>{services.map(([title]) => <option key={title}>{title}</option>)}</select></label>
-      <label><span>Timeline</span><select name="timeline" defaultValue=""><option value="" disabled>Select timeline</option><option>ASAP</option><option>Within 30 days</option><option>Within 90 days</option><option>Planning stage</option></select></label>
-      <label><span>Photos</span><input name="photos" type="file" accept="image/*" multiple /></label>
-      <input className="hidden" name="budget" aria-label="Budget range" />
-      <button className="button" type="submit">Get Quote</button>
-      <small>15% online-estimate coupon after questionnaire and photo upload. Owner/legal approval required before production launch.</small>
+      <Field icon="user" name="fullName" label="Name" required autoComplete="name" />
+      <Field icon="phone" name="phone" label="Phone" required autoComplete="tel" />
+      <Field icon="email" name="email" label="Email" type="email" required autoComplete="email" />
+      <Field icon="pin" name="zipCode" label="Zip Code" inputMode="numeric" autoComplete="postal-code" />
+      <label className="field select-field">
+        <span className="field-icon project" aria-hidden="true" />
+        <select name="projectType" required defaultValue="">
+          <option value="" disabled>Project Type</option>
+          {services.map((service) => <option key={service.title}>{service.title}</option>)}
+        </select>
+      </label>
+      <input className="hidden-field" name="timeline" value="Preview request" readOnly />
+      <input className="hidden-field" name="budget" value="Approved mockup template" readOnly />
+      <button className="quote-button form-submit" type="submit">Get Quote</button>
     </form>
+  );
+}
+
+type FieldProps = {
+  icon: string;
+  name: string;
+  label: string;
+  type?: string;
+  required?: boolean;
+  autoComplete?: string;
+  inputMode?: "numeric";
+};
+
+function Field({ icon, name, label, type = "text", required, autoComplete, inputMode }: FieldProps) {
+  return (
+    <label className="field">
+      <span className={`field-icon ${icon}`} aria-hidden="true" />
+      <input
+        name={name}
+        type={type}
+        placeholder={label}
+        required={required}
+        autoComplete={autoComplete}
+        inputMode={inputMode}
+      />
+    </label>
   );
 }
