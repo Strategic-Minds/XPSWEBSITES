@@ -1,0 +1,15 @@
+{
+  "schema_version": "2026-06-16",
+  "events": [
+    { "type": "build", "drive_folder": "01_BUILD_RECEIPTS", "required": ["repo", "commit_sha", "build_target"] },
+    { "type": "deploy", "drive_folder": "02_DEPLOY_RECEIPTS", "required": ["vercel_project", "preview_url"] },
+    { "type": "validation", "drive_folder": "03_VALIDATION_RECEIPTS", "required": ["test_suite", "result"] },
+    { "type": "owner_approval", "drive_folder": "04_OWNER_APPROVAL_RECEIPTS", "required": ["approver", "approval_status"] },
+    { "type": "estimate_sent", "drive_folder": "05_ESTIMATE_SENT_RECEIPTS", "required": ["lead_id", "estimate_id"] },
+    { "type": "proposal_signed", "drive_folder": "06_PROPOSAL_SIGNED_RECEIPTS", "required": ["proposal_id", "signature_reference"] },
+    { "type": "payment_received", "drive_folder": "07_PAYMENT_RECEIVED_RECEIPTS", "required": ["payment_id", "amount", "provider"] },
+    { "type": "schedule_approved", "drive_folder": "08_SCHEDULE_APPROVED_RECEIPTS", "required": ["job_id", "scheduled_start"] },
+    { "type": "job_completed", "drive_folder": "09_JOB_COMPLETED_RECEIPTS", "required": ["job_id", "completion_form_id"] },
+    { "type": "rollback", "drive_folder": "10_ERROR_AND_ROLLBACK_RECEIPTS", "required": ["reason", "rollback_target"] }
+  ]
+}
