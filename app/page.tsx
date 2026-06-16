@@ -41,9 +41,9 @@ const services = [
 ];
 
 const processSteps = [
-  ["1", "Estimate Intake", "Send photos, rough square footage, project type, and timeline."],
+  ["1", "Estimate Intake", "Send contact details, ZIP code, and project type."],
   ["2", "Surface Review", "We check coating history, cracks, stains, moisture risk, and prep needs."],
-  ["3", "Finish Direction", "Choose flake, decorative concrete, or repair-first options."],
+  ["3", "Finish Direction", "Choose flake, decorative concrete, polished concrete, or repair-first options."],
   ["4", "Proposal", "Receive next-step pricing direction and scheduling requirements after review."],
   ["5", "Install Prep", "Grinding, cleaning, patching, masking, and material planning happen before coating."],
   ["6", "Final Walkthrough", "Confirm finish quality, care notes, and follow-up items before closeout."]
@@ -65,81 +65,49 @@ const reviewCards = [
 export default function HomePage() {
   return (
     <main className="phoenix-site">
-      <div className="top-bar">
-        <span>Phoenix Metro | Scottsdale | Mesa | Chandler | Glendale</span>
-        <a href={phoneHref}>{phone}</a>
-        <a href={`mailto:${email}`}>{email}</a>
-      </div>
-
       <header className="site-header">
         <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
         <nav aria-label="Main navigation">
-          <a href="#services">Services</a>
-          <a href="#process">Process</a>
-          <a href="#gallery">Gallery</a>
-          <a href="#visualizer">Visualizer</a>
-          <a href="#portal">Portal</a>
+          <a href="#before-after">Before / After</a>
           <a href="#reviews">Reviews</a>
+          <a className="header-call" href={phoneHref}>Call</a>
         </nav>
-        <a className="gold-button header-cta" href="#estimate">Get My Free Estimate</a>
+        <a className="gold-button header-cta" href="#estimate">Get Quote</a>
+        <span className="mobile-menu-mark" aria-hidden="true"><span /><span /><span /></span>
       </header>
 
-      <nav className="mobile-action-rail" aria-label="Mobile quick actions">
-        <a href="#estimate"><span>01</span>Estimate</a>
-        <a href={phoneHref}><span>02</span>Call</a>
-        <a href="#process"><span>03</span>Process</a>
-        <a href="/customer-portal"><span>04</span>Portal</a>
-      </nav>
-
       <section className="hero" id="home" aria-label="Phoenix Epoxy Pros estimate hero">
-        <div className="hero-media" aria-hidden="true">
-          <img src={images.hero} alt="" />
-        </div>
-        <div className="hero-overlay" />
-        <div className="hero-grid">
-          <div className="hero-copy">
-            <div className="brand-slab">
-              <img src="/images/logo-panel.webp" alt="Phoenix Epoxy Pros logo" />
-            </div>
-            <p className="eyebrow">Garage floors | commercial floors | patios | floor repair</p>
-            <h1>
-              Premium Epoxy Floors
-              <span>Built For Phoenix Homes And Shops.</span>
-            </h1>
-            <p className="hero-intro">
-              Send project photos, square footage, surface condition, and finish direction. Get a cleaner first
-              estimate conversation with a guided intake built for real coating projects.
-            </p>
-            <div className="hero-actions">
-              <a className="gold-button" href="#estimate">Start Estimate</a>
-              <a className="dark-button" href={phoneHref}>Call {phone}</a>
-            </div>
-            <div className="hero-badges" aria-label="Project proof">
-              <span>Photo-first estimates</span>
-              <span>Garage and shop floors</span>
-              <span>Floor visualizer path</span>
-              <span>Customer project portal</span>
-            </div>
+        <div className="hero-stage">
+          <div className="hero-photo" aria-hidden="true">
+            <img src={images.hero} alt="" />
           </div>
-
+          <div className="hero-logo-panel" aria-hidden="true">
+            <img src="/images/logo-panel.webp" alt="" />
+          </div>
           <PhoenixLeadForm />
         </div>
+
+        <nav className="mobile-action-rail" aria-label="Mobile quick actions">
+          <a href="#before-after"><span className="action-icon">B/A</span>Before / After</a>
+          <a href="#reviews"><span className="action-icon">REV</span>Reviews</a>
+          <a href={phoneHref}><span className="action-icon">CALL</span>Call</a>
+        </nav>
       </section>
 
       <section className="mobile-steps" aria-label="Mobile estimate steps">
         <SectionIntro kicker="Start here" title="Four taps to get moving" />
         <div className="app-step-list">
           <a href="#estimate"><span>1</span><strong>Pick Your Surface</strong><small>Garage, commercial, patio, repair, or decorative concrete.</small></a>
-          <a href="#estimate"><span>2</span><strong>Send Photos</strong><small>Upload JPG or PNG photos with your estimate request.</small></a>
+          <a href="#estimate"><span>2</span><strong>Send Details</strong><small>Share your name, phone, email, ZIP code, and project type.</small></a>
           <a href="#process"><span>3</span><strong>Review The Process</strong><small>Understand prep, coating, topcoat, and walkthrough steps.</small></a>
           <a href="/customer-portal"><span>4</span><strong>Open Portal</strong><small>Preview job tracking, documents, messages, and care guides.</small></a>
         </div>
       </section>
 
       <section className="trust-band" aria-label="Estimate benefits">
-        <p><strong>Digital intake</strong><span>Contact details, project type, timeline, and photos in one flow.</span></p>
+        <p><strong>Digital intake</strong><span>Contact details, ZIP code, and project type in one flow.</span></p>
         <p><strong>Rough estimate path</strong><span>Better inputs create a cleaner first quote conversation.</span></p>
         <p><strong>Project guidance</strong><span>Choose services, finishes, and next steps without starting over.</span></p>
       </section>
@@ -165,10 +133,10 @@ export default function HomePage() {
           <span className="section-kicker">Before / After</span>
           <h2>See the difference a properly prepared floor can make.</h2>
           <p>
-            Surface prep, repair, coating choice, and topcoat finish all shape the final result. Send your current
-            floor condition so the estimate starts from the right system.
+            Surface prep, repair, coating choice, and topcoat finish all shape the final result. Start with the quote
+            card so the first conversation begins with the right project type.
           </p>
-          <a className="gold-button" href="#estimate">Send My Photos</a>
+          <a className="gold-button" href="#estimate">Start My Quote</a>
         </div>
         <img src={images.beforeAfter} alt="Before and after Phoenix epoxy garage floor comparison" />
       </section>
@@ -244,8 +212,8 @@ export default function HomePage() {
             <p>Send the project type, rough square footage, timeline, surface condition, and clear photos of the floor.</p>
           </details>
           <details>
-            <summary>Can I upload photos?</summary>
-            <p>Yes. Add multiple JPG or PNG photos so the project review starts with the real floor condition.</p>
+            <summary>Can I share photos?</summary>
+            <p>Yes. After the first quote request, project photos can be used to review the real floor condition.</p>
           </details>
           <details>
             <summary>What happens after I request a quote?</summary>
