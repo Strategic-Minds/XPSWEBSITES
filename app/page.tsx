@@ -1,4 +1,4 @@
-import { PhoenixLeadForm } from "@/app/components/PhoenixLeadForm";
+import { PhoenixLeadForm } from "./components/PhoenixLeadForm";
 
 const phone = "772-209-0266";
 const phoneHref = "tel:17722090266";

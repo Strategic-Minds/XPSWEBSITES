@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-import { scoreLead } from "@/lib/brand";
+
+function scoreLead(timeline: string, hasPhotos: boolean, hasBudget: boolean) {
+  const normalized = timeline.toLowerCase();
+  if ((normalized.includes("asap") || normalized.includes("30")) && hasPhotos && hasBudget) return "hot";
+  if (normalized.includes("90") || hasPhotos || hasBudget) return "warm";
+  return "cold";
+}
 
 export async function POST(request: Request) {
   const formData = await request.formData();
