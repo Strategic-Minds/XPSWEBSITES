@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://strategic-minds.local/xps/receipt.schema.json",
+  "title": "XPS Automation Receipt",
+  "type": "object",
+  "required": ["receipt_type", "receipt_key", "project", "created_at", "status", "actor", "payload"],
+  "properties": {
+    "receipt_type": { "type": "string", "enum": ["build", "deploy", "validation", "owner_approval", "estimate_sent", "proposal_signed", "payment_received", "schedule_approved", "job_completed", "rollback"] },
+    "receipt_key": { "type": "string", "minLength": 6 },
+    "project": { "type": "string" },
+    "location_slug": { "type": "string" },
+    "job_id": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "status": { "type": "string", "enum": ["success", "failed", "pending_review", "blocked", "rolled_back"] },
+    "actor": { "type": "object", "required": ["type"], "properties": { "type": { "type": "string", "enum": ["system", "auto_builder", "branding_agent", "home_office", "crew_leader", "customer", "billing"] }, "id": { "type": ["string", "null"] } } },
+    "links": { "type": "object", "properties": { "drive_file_url": { "type": ["string", "null"] }, "github_commit_sha": { "type": ["string", "null"] }, "vercel_preview_url": { "type": ["string", "null"] }, "production_url": { "type": ["string", "null"] } } },
+    "payload": { "type": "object" },
+    "errors": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
