@@ -1,177 +1,284 @@
-const services = [
-  {
-    title: "Garage Floors",
-    image: "/images/services-strip-approved.webp",
-    slug: "garage"
-  },
-  {
-    title: "Commercial Floors",
-    image: "/images/services-strip-approved.webp",
-    slug: "commercial"
-  },
-  {
-    title: "Patios & Outdoor Spaces",
-    image: "/images/services-strip-approved.webp",
-    slug: "patio"
-  },
-  {
-    title: "Floor Repair",
-    image: "/images/services-strip-approved.webp",
-    slug: "repair"
-  }
-];
-
-const reviews = [
-  { platform: "Google", mark: "G", avatar: "A" },
-  { platform: "Facebook", mark: "f", avatar: "B" },
-  { platform: "Yelp", mark: "Y", avatar: "C" }
-];
+import { PhoenixLeadForm } from "@/app/components/PhoenixLeadForm";
 
 const phone = "772-209-0266";
 const phoneHref = "tel:17722090266";
+const email = "JEREMY@SHOPXPS.COM";
+
+const images = {
+  hero: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-hero.webp?v=1781648558",
+  beforeAfter: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-before-after.webp?v=1781648570",
+  garage: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581",
+  commercial: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-commercial.webp?v=1781648591",
+  patio: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-patio.webp?v=1781648601",
+  repair: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-repair.webp?v=1781648616"
+};
+
+const services = [
+  {
+    title: "Garage Floors",
+    image: images.garage,
+    summary: "Flake systems, polyaspartic topcoats, and garage-ready finish planning.",
+    detail: "Most homeowners start here. Send photos, square footage, and finish direction for a rough estimate."
+  },
+  {
+    title: "Commercial Floors",
+    image: images.commercial,
+    summary: "Showrooms, shops, warehouses, and workspaces with durable coating systems.",
+    detail: "Built around traffic, use case, prep needs, timeline, and long-term maintenance."
+  },
+  {
+    title: "Patios & Outdoor Spaces",
+    image: images.patio,
+    summary: "Outdoor concrete coatings for patios, covered spaces, and Arizona homes.",
+    detail: "Finish direction depends on sun exposure, slab condition, and traffic patterns."
+  },
+  {
+    title: "Floor Repair",
+    image: images.repair,
+    summary: "Crack repair, coating removal, grinding, prep, and failed DIY recovery.",
+    detail: "Photos help determine whether the project needs repair, prep, or a full coating system."
+  }
+];
+
+const processSteps = [
+  ["1", "Estimate Intake", "Send photos, rough square footage, project type, and timeline."],
+  ["2", "Surface Review", "We check coating history, cracks, stains, moisture risk, and prep needs."],
+  ["3", "Finish Direction", "Choose flake, decorative concrete, or repair-first options."],
+  ["4", "Proposal", "Receive next-step pricing direction and scheduling requirements after review."],
+  ["5", "Install Prep", "Grinding, cleaning, patching, masking, and material planning happen before coating."],
+  ["6", "Final Walkthrough", "Confirm finish quality, care notes, and follow-up items before closeout."]
+];
+
+const gallery = [
+  { title: "Garage Floors", image: images.garage },
+  { title: "Commercial Floors", image: images.commercial },
+  { title: "Outdoor Spaces", image: images.patio },
+  { title: "Concrete Repair", image: images.repair }
+];
+
+const reviewCards = [
+  ["Google", "Photo-first estimates make the first conversation faster."],
+  ["Facebook", "Send the surface condition, timeline, and inspiration before scheduling."],
+  ["Yelp", "A guided quote flow helps avoid vague pricing and missed prep details."]
+];
 
 export default function HomePage() {
   return (
-    <main className="site-shell">
+    <main className="phoenix-site">
+      <div className="top-bar">
+        <span>Phoenix Metro | Scottsdale | Mesa | Chandler | Glendale</span>
+        <a href={phoneHref}>{phone}</a>
+        <a href={`mailto:${email}`}>{email}</a>
+      </div>
+
       <header className="site-header">
-        <a className="header-logo" href="#quote" aria-label="Phoenix Epoxy Pros home">
+        <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
         <nav aria-label="Main navigation">
-          <a href="#before-after">Before / After</a>
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#visualizer">Visualizer</a>
+          <a href="#portal">Portal</a>
           <a href="#reviews">Reviews</a>
-          <a className="call-link" href={phoneHref}>Call</a>
         </nav>
-        <a className="quote-button header-cta" href="#quote-form">Get Quote</a>
-        <button className="menu-button" type="button" aria-label="Menu">
-          <span />
-          <span />
-          <span />
-        </button>
+        <a className="gold-button header-cta" href="#estimate">Get My Free Estimate</a>
       </header>
 
-      <section className="hero" id="quote">
-        <h1 className="sr-only">Phoenix Epoxy Pros</h1>
-        <div className="brand-panel">
-          <img src="/images/logo-panel.webp" alt="Phoenix Epoxy Pros logo" />
-        </div>
-        <div className="hero-photo">
-          <img src="/images/hero-garage-approved.webp" alt="Finished gray flake garage epoxy floor" />
-        </div>
-        <EstimateForm />
-      </section>
+      <nav className="mobile-action-rail" aria-label="Mobile quick actions">
+        <a href="#estimate"><span>01</span>Estimate</a>
+        <a href={phoneHref}><span>02</span>Call</a>
+        <a href="#process"><span>03</span>Process</a>
+        <a href="/customer-portal"><span>04</span>Portal</a>
+      </nav>
 
-      <section className="mobile-actions" aria-label="Mobile quick actions">
-        <a href="#before-after"><span className="quick-icon before-icon" />Before / After</a>
-        <a href="#reviews"><span className="quick-icon review-icon" />Reviews</a>
-        <a href={phoneHref}><span className="quick-icon call-icon" />Call</a>
-      </section>
-
-      <section className="proof-row" aria-label="Proof and reviews">
-        <div className="before-after-block" id="before-after">
-          <SectionTitle title="Before / After" />
-          <img src="/images/before-after-approved.webp" alt="Before and after epoxy floor comparison" />
+      <section className="hero" id="home" aria-label="Phoenix Epoxy Pros estimate hero">
+        <div className="hero-media" aria-hidden="true">
+          <img src={images.hero} alt="" />
         </div>
-
-        <div className="reviews-block" id="reviews">
-          <SectionTitle title="Reviews" />
-          <div className="review-grid">
-            {reviews.map((review) => (
-              <article className="review-card" key={review.platform}>
-                <div className="review-top">
-                  <span className="stars" aria-label={`${review.platform} five star placeholder`}>
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                    <span />
-                  </span>
-                  <span className={`platform platform-${review.mark.toLowerCase()}`}>{review.mark}</span>
-                </div>
-                <span className="avatar">{review.avatar}</span>
-              </article>
-            ))}
+        <div className="hero-overlay" />
+        <div className="hero-grid">
+          <div className="hero-copy">
+            <div className="brand-slab">
+              <img src="/images/logo-panel.webp" alt="Phoenix Epoxy Pros logo" />
+            </div>
+            <p className="eyebrow">Garage floors | commercial floors | patios | floor repair</p>
+            <h1>
+              Premium Epoxy Floors
+              <span>Built For Phoenix Homes And Shops.</span>
+            </h1>
+            <p className="hero-intro">
+              Send project photos, square footage, surface condition, and finish direction. Get a cleaner first
+              estimate conversation with a guided intake built for real coating projects.
+            </p>
+            <div className="hero-actions">
+              <a className="gold-button" href="#estimate">Start Estimate</a>
+              <a className="dark-button" href={phoneHref}>Call {phone}</a>
+            </div>
+            <div className="hero-badges" aria-label="Project proof">
+              <span>Photo-first estimates</span>
+              <span>Garage and shop floors</span>
+              <span>Floor visualizer path</span>
+              <span>Customer project portal</span>
+            </div>
           </div>
+
+          <PhoenixLeadForm />
         </div>
       </section>
 
-      <section className="services-section">
-        <SectionTitle title="Our Services" />
+      <section className="mobile-steps" aria-label="Mobile estimate steps">
+        <SectionIntro kicker="Start here" title="Four taps to get moving" />
+        <div className="app-step-list">
+          <a href="#estimate"><span>1</span><strong>Pick Your Surface</strong><small>Garage, commercial, patio, repair, or decorative concrete.</small></a>
+          <a href="#estimate"><span>2</span><strong>Send Photos</strong><small>Upload JPG or PNG photos with your estimate request.</small></a>
+          <a href="#process"><span>3</span><strong>Review The Process</strong><small>Understand prep, coating, topcoat, and walkthrough steps.</small></a>
+          <a href="/customer-portal"><span>4</span><strong>Open Portal</strong><small>Preview job tracking, documents, messages, and care guides.</small></a>
+        </div>
+      </section>
+
+      <section className="trust-band" aria-label="Estimate benefits">
+        <p><strong>Digital intake</strong><span>Contact details, project type, timeline, and photos in one flow.</span></p>
+        <p><strong>Rough estimate path</strong><span>Better inputs create a cleaner first quote conversation.</span></p>
+        <p><strong>Project guidance</strong><span>Choose services, finishes, and next steps without starting over.</span></p>
+      </section>
+
+      <section className="section services-section" id="services">
+        <SectionIntro kicker="Services" title="Choose the right surface path" />
         <div className="services-grid">
           {services.map((service) => (
-            <article className={`service-card service-${service.slug}`} key={service.title}>
-              <img src={service.image} alt={`${service.title} preview`} />
-              <h2>{service.title}</h2>
+            <a className="service-card" href="#estimate" key={service.title}>
+              <img src={service.image} alt={`${service.title} project example`} />
+              <div>
+                <h2>{service.title}</h2>
+                <p>{service.summary}</p>
+                <small>{service.detail}</small>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="proof-section" id="before-after">
+        <div className="proof-copy">
+          <span className="section-kicker">Before / After</span>
+          <h2>See the difference a properly prepared floor can make.</h2>
+          <p>
+            Surface prep, repair, coating choice, and topcoat finish all shape the final result. Send your current
+            floor condition so the estimate starts from the right system.
+          </p>
+          <a className="gold-button" href="#estimate">Send My Photos</a>
+        </div>
+        <img src={images.beforeAfter} alt="Before and after Phoenix epoxy garage floor comparison" />
+      </section>
+
+      <section className="section process-section" id="process">
+        <SectionIntro kicker="Step by step" title="From first photos to final walkthrough" />
+        <div className="process-grid">
+          {processSteps.map(([number, title, text]) => (
+            <article className="process-card" key={title}>
+              <span>{number}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="conversion-note">
-        <p>
-          Online estimates may take up to 48 hours. Final offer language, reviews, pricing, legal disclaimers,
-          and live lead integrations require owner approval before production launch.
-        </p>
+      <section className="gallery-section" id="gallery">
+        <SectionIntro kicker="Project gallery" title="Sharp images that fill the screen" dark />
+        <div className="gallery-strip">
+          {gallery.map((item) => (
+            <a href="#estimate" key={item.title}>
+              <img src={item.image} alt={`${item.title} example`} />
+              <span>{item.title}</span>
+            </a>
+          ))}
+        </div>
+        <a className="gold-button" href="#estimate">Quote A Similar Project</a>
       </section>
 
-      <a className="mobile-call" href={phoneHref}>Call</a>
+      <section className="market-section" id="visualizer">
+        <div className="color-panel">
+          <span className="section-kicker">Color direction</span>
+          <h2>Explore finish families before you quote.</h2>
+          <div className="chip-grid">
+            {["Domino", "Nightfall", "Gravel", "Tuxedo", "Shoreline", "Wombat", "Saddle", "Outback"].map((color, index) => (
+              <span className={`flake-chip chip-${index % 4}`} key={color}>{color}</span>
+            ))}
+          </div>
+          <a className="dark-button" href="/visualizer">Open Floor Visualizer</a>
+        </div>
+        <div className="portal-teaser" id="portal">
+          <span className="section-kicker">Customer portal</span>
+          <h2>Your project in your pocket.</h2>
+          <ul>
+            <li>Track proposal and scheduling steps.</li>
+            <li>Keep project messages and documents in one place.</li>
+            <li>Preview warranty and care-guide handoff.</li>
+            <li>Keep the next project action easy to find.</li>
+          </ul>
+          <a className="gold-button" href="/customer-portal">Open Portal Preview</a>
+        </div>
+      </section>
+
+      <section className="section reviews-section" id="reviews">
+        <SectionIntro kicker="Reviews" title="Make the first conversation clearer" />
+        <div className="review-grid">
+          {reviewCards.map(([platform, text]) => (
+            <article className="review-card" key={platform}>
+              <div className="stars" aria-hidden="true"><span /><span /><span /><span /><span /></div>
+              <h3>{platform}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section faq-section">
+        <SectionIntro kicker="Common questions" title="Plan your epoxy floor estimate" />
+        <div className="faq-grid">
+          <details open>
+            <summary>What should I send for an estimate?</summary>
+            <p>Send the project type, rough square footage, timeline, surface condition, and clear photos of the floor.</p>
+          </details>
+          <details>
+            <summary>Can I upload photos?</summary>
+            <p>Yes. Add multiple JPG or PNG photos so the project review starts with the real floor condition.</p>
+          </details>
+          <details>
+            <summary>What happens after I request a quote?</summary>
+            <p>The project details are reviewed so the right prep, coating system, and scheduling path can be discussed.</p>
+          </details>
+        </div>
+      </section>
+
+      <footer className="site-footer">
+        <div>
+          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
+          <p>Phoenix epoxy floor estimates, visualizer direction, and customer project portal.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#gallery">Gallery</a>
+          <a href="/visualizer">Visualizer</a>
+          <a href="/customer-portal">Customer Portal</a>
+          <a href={phoneHref}>{phone}</a>
+        </nav>
+      </footer>
+
+      <a className="mobile-call" href={phoneHref}>Call {phone}</a>
     </main>
   );
 }
 
-function SectionTitle({ title }: { title: string }) {
+function SectionIntro({ kicker, title, dark = false }: { kicker: string; title: string; dark?: boolean }) {
   return (
-    <div className="section-title">
-      <span />
+    <div className={`section-intro ${dark ? "dark" : ""}`}>
+      <span className="section-kicker">{kicker}</span>
       <h2>{title}</h2>
     </div>
-  );
-}
-
-function EstimateForm() {
-  return (
-    <form className="quote-card" id="quote-form" action="/api/leads" method="post" encType="multipart/form-data">
-      <h2>Get Quote</h2>
-      <Field icon="user" name="fullName" label="Name" required autoComplete="name" />
-      <Field icon="phone" name="phone" label="Phone" required autoComplete="tel" />
-      <Field icon="email" name="email" label="Email" type="email" required autoComplete="email" />
-      <Field icon="pin" name="zipCode" label="Zip Code" inputMode="numeric" autoComplete="postal-code" />
-      <label className="field select-field">
-        <span className="field-icon project" aria-hidden="true" />
-        <select name="projectType" required defaultValue="">
-          <option value="" disabled>Project Type</option>
-          {services.map((service) => <option key={service.title}>{service.title}</option>)}
-        </select>
-      </label>
-      <input className="hidden-field" name="timeline" value="Preview request" readOnly />
-      <input className="hidden-field" name="budget" value="Approved mockup template" readOnly />
-      <button className="quote-button form-submit" type="submit">Get Quote</button>
-    </form>
-  );
-}
-
-type FieldProps = {
-  icon: string;
-  name: string;
-  label: string;
-  type?: string;
-  required?: boolean;
-  autoComplete?: string;
-  inputMode?: "numeric";
-};
-
-function Field({ icon, name, label, type = "text", required, autoComplete, inputMode }: FieldProps) {
-  return (
-    <label className="field">
-      <span className={`field-icon ${icon}`} aria-hidden="true" />
-      <input
-        name={name}
-        type={type}
-        placeholder={label}
-        required={required}
-        autoComplete={autoComplete}
-        inputMode={inputMode}
-      />
-    </label>
   );
 }
