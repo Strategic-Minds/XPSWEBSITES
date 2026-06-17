@@ -14,6 +14,24 @@
   display: none !important;
 }
 
+.xps-custom-color-note {
+  width: min(100%, 1380px) !important;
+  margin: 0 auto clamp(16px, 2vw, 26px) !important;
+  color: #101214 !important;
+  text-align: center !important;
+  font-size: clamp(1.05rem, 1.45vw, 1.42rem) !important;
+  font-weight: 900 !important;
+  line-height: 1.32 !important;
+}
+
+.xps-custom-color-note strong {
+  font-weight: 950 !important;
+}
+
+.xps-custom-color-note span {
+  margin-left: .35em !important;
+}
+
 .xps-chart-board {
   width: 100% !important;
   min-width: 0 !important;
@@ -222,8 +240,14 @@
     width: min(82%, 280px) !important;
   }
 
+  .xps-custom-color-note,
   .xps-chart-disclaimer {
     text-align: left !important;
     font-size: .9rem !important;
+  }
+
+  .xps-custom-color-note span {
+    display: block !important;
+    margin-left: 0 !important;
   }
 }
