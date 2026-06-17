@@ -6,11 +6,11 @@ export const maxDuration = 60;
 const MAX_IMAGE_BYTES = 12_000_000;
 
 function dataUrlBlob(dataUrl: string) {
-  const match = /^data:(?<mime>[\w/+.-]+);base64,(?<data>.+)$/u.exec(dataUrl || "");
-  if (!match?.groups) throw new Error("Expected a base64 data URL.");
+  const match = /^data:([\w/+.-]+);base64,(.+)$/u.exec(dataUrl || "");
+  if (!match) throw new Error("Expected a base64 data URL.");
 
-  const buffer = Buffer.from(match.groups.data, "base64");
-  return { mime: match.groups.mime, buffer, size: buffer.byteLength };
+  const buffer = Buffer.from(match[2], "base64");
+  return { mime: match[1], buffer, size: buffer.byteLength };
 }
 
 function bytes(buffer: Buffer) {
