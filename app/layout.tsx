@@ -4,6 +4,7 @@ import "./globals.css";
 import "./approved-hero.css";
 import "./phoenix-final-revision.css";
 import "./nashville-chart-template.css";
+import "./phoenix-recovery.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
