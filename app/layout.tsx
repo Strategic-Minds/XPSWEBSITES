@@ -14,7 +14,7 @@ import "./phoenix-enterprise-mobile-hardening.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
   title: "Phoenix Epoxy Pros | Phoenix Epoxy Floor Quotes",
-  description: "Quote-first Phoenix epoxy floor website for garage floors, commercial floors, patios, outdoor spaces, floor repair, polished concrete, and XPS connected services.",
+  description: "Quote-first Phoenix epoxy floor website for garage floors, commercial floors, patios, outdoor spaces, floor repair, polished concrete, and XPS-connected training inquiries.",
   manifest: "/manifest.webmanifest",
   openGraph: {
     title: "Phoenix Epoxy Pros",
