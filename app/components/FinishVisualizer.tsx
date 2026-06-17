@@ -170,6 +170,12 @@ export function FinishVisualizer() {
     setSelectedSample({ boardId: board.id, optionName: option.name });
   }
 
+  function clearSample(board: ChartBoard) {
+    if (selectedSample?.boardId === board.id) {
+      setSelectedSample(null);
+    }
+  }
+
   return (
     <>
       <section className="floor-visualizer-strip" id="visualizer" aria-label="Floor visualizer">
@@ -195,6 +201,10 @@ export function FinishVisualizer() {
       </section>
 
       <section className="xps-flake-chart-section" id="color-chart" aria-label="Interactive epoxy color charts">
+        <div className="xps-custom-color-note">
+          <strong>Don&apos;t see your color?</strong>
+          <span>Contact us, we have many other custom colors perfect for you!</span>
+        </div>
         <div className="xps-chart-board">
           <div className="xps-chart-board-grid">
             {chartBoards.map((board) => {
@@ -202,7 +212,7 @@ export function FinishVisualizer() {
 
               return (
                 <div className={`xps-chart-frame ${boardIsActive ? "active" : ""}`} key={board.id}>
-                  <div className="xps-chart-image-shell">
+                  <div className="xps-chart-image-shell" onPointerLeave={() => clearSample(board)}>
                     <img src={board.image} alt={board.alt} />
                     {board.options.map((option) => {
                       const selected = isSelected(board, option);
