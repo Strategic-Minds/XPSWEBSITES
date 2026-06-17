@@ -72,7 +72,7 @@ create extension if not exists pgcrypto;
 -- install.window.requested
 -- install.confirmed
 -- prep.checklist.completed
--- installer_en_route
+-- installer.en_route
 -- installer.arrived
 -- walkthrough.completed
 -- damage.photos_uploaded
