@@ -19,7 +19,17 @@ const defaultControls: VisualizerControlsState = {
   gloss: 34,
   textureScale: 100,
   textureAngle: 18,
-  glitterSize: "fine"
+  glitterSize: "fine",
+  flakeSize: "medium",
+  flakeCoverage: 72,
+  flakeLightPercent: 35,
+  flakeMidPercent: 40,
+  flakeDarkPercent: 25,
+  mixerColorOne: "#6d4510",
+  mixerColorTwo: "#dfad31",
+  mixerColorThree: "#f2d167",
+  metallicPattern: "marble",
+  metallicIntensity: 62
 };
 
 export function EnterpriseVisualizerShell({ flags }: EnterpriseVisualizerShellProps) {
@@ -108,6 +118,11 @@ export function EnterpriseVisualizerShell({ flags }: EnterpriseVisualizerShellPr
     setAiMessage(null);
   }
 
+  function handleMovePoint(index: number, point: MaskPoint) {
+    setMaskPoints((points) => points.map((currentPoint, currentIndex) => (currentIndex === index ? point : currentPoint)));
+    setPreparedQuote(null);
+  }
+
   function handleAiAssist() {
     if (!uploadedImage) {
       setAiMessage("Upload a photo before using AI assist.");
@@ -127,7 +142,7 @@ export function EnterpriseVisualizerShell({ flags }: EnterpriseVisualizerShellPr
       { x: canvas.width * 0.04, y: canvas.height * 0.94 }
     ];
     commitMask(suggestedMask);
-    setAiMessage("AI assist suggested a starting floor outline. Edit it manually if the floor edge is off.");
+    setAiMessage("AI assist suggested a starting floor outline. Drag any yellow point to refine the floor edge.");
   }
 
   function exportCanvas() {
@@ -155,7 +170,7 @@ export function EnterpriseVisualizerShell({ flags }: EnterpriseVisualizerShellPr
           <section className="ev-panel" aria-label="Mask tools">
             <p className="ev-kicker">Step 2</p>
             <h2>Mark Floor Area</h2>
-            <p className="ev-muted">Click points around the floor. The preview renders after three points.</p>
+            <p className="ev-muted">Click points around the floor. Drag yellow points to refine the mask. Three or more points render the finish.</p>
             <div className="ev-control-row">
               <button onClick={handleAiAssist} type="button">AI Assist</button>
               <button disabled={maskPoints.length === 0} onClick={handleClearMask} type="button">Clear Mask</button>
@@ -166,7 +181,7 @@ export function EnterpriseVisualizerShell({ flags }: EnterpriseVisualizerShellPr
         </aside>
 
         <main className="ev-stage" aria-label="Floor preview stage">
-          <FloorRenderCanvas canvasRef={canvasRef} imageUrl={uploadedImage?.url ?? null} maskPoints={maskPoints} selectedFinish={selectedFinish} controls={controls} onAddPoint={(point) => commitMask([...maskPoints, point])} />
+          <FloorRenderCanvas canvasRef={canvasRef} imageUrl={uploadedImage?.url ?? null} maskPoints={maskPoints} selectedFinish={selectedFinish} controls={controls} onAddPoint={(point) => commitMask([...maskPoints, point])} onMovePoint={handleMovePoint} />
         </main>
 
         <aside className="ev-sidebar ev-sidebar-right">
@@ -368,6 +383,7 @@ const enterpriseVisualizerStyles = `
   height: auto;
   min-height: 520px;
   cursor: crosshair;
+  touch-action: none;
 }
 .ev-canvas-help {
   position: absolute;
@@ -379,6 +395,18 @@ const enterpriseVisualizerStyles = `
   background: rgba(0,0,0,.68);
   color: #ffffff;
   font-weight: 800;
+}
+.ev-control-block {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+.ev-control-subhead {
+  margin: 0 0 8px;
+  color: #fff;
+  font-size: .86rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 .ev-slider {
   display: grid;
@@ -394,6 +422,26 @@ const enterpriseVisualizerStyles = `
 .ev-slider input {
   width: 100%;
   accent-color: #f6d21b;
+}
+.ev-color-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.ev-color-input {
+  display: grid;
+  gap: 5px;
+  font-size: .76rem;
+  font-weight: 800;
+  color: rgba(247, 242, 222, .74);
+}
+.ev-color-input input {
+  width: 100%;
+  min-height: 34px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.16);
+  background: transparent;
 }
 .ev-quote-ready {
   display: grid;
@@ -459,7 +507,8 @@ const enterpriseVisualizerStyles = `
   .ev-canvas-frame canvas {
     min-height: 390px;
   }
-  .ev-material-grid {
+  .ev-material-grid,
+  .ev-color-grid {
     grid-template-columns: 1fr;
   }
   .ev-slider {
