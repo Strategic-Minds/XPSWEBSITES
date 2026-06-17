@@ -14,8 +14,10 @@ export function ValidationBadge({ flags, maskPointCount, hasImage, canExport }: 
     { label: "Photo", ok: hasImage },
     { label: "Mask", ok: maskPointCount >= 3 },
     { label: "Export", ok: canExport },
-    { label: "AI flag", ok: flags.aiSegmentation, muted: !flags.aiSegmentation },
-    { label: "3D flag", ok: flags.scenes3d, muted: !flags.scenes3d }
+    { label: "AI", ok: flags.aiSegmentation, muted: !flags.aiSegmentation },
+    { label: "3D", ok: flags.scenes3d, muted: !flags.scenes3d },
+    { label: "Blend", ok: flags.customBlend, muted: !flags.customBlend },
+    { label: "Analytics", ok: flags.analytics, muted: !flags.analytics }
   ];
 
   return (
