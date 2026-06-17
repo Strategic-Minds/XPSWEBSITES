@@ -13,6 +13,10 @@ function dataUrlBlob(dataUrl: string) {
   return { mime: match.groups.mime, buffer, size: buffer.byteLength };
 }
 
+function bytes(buffer: Buffer) {
+  return new Uint8Array(buffer);
+}
+
 export async function POST(request: NextRequest) {
   if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json(
@@ -45,8 +49,8 @@ export async function POST(request: NextRequest) {
     form.append("model", process.env.OPENAI_IMAGE_MODEL || "gpt-image-1.5");
     form.append("prompt", prompt);
     form.append("size", "1536x1024");
-    form.append("image[]", new Blob([image.buffer], { type: image.mime }), "customer-floor.png");
-    form.append("mask", new Blob([mask.buffer], { type: mask.mime }), "floor-mask.png");
+    form.append("image[]", new Blob([bytes(image.buffer)], { type: image.mime }), "customer-floor.png");
+    form.append("mask", new Blob([bytes(mask.buffer)], { type: mask.mime }), "floor-mask.png");
 
     const response = await fetch("https://api.openai.com/v1/images/edits", {
       method: "POST",
