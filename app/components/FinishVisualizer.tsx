@@ -32,10 +32,10 @@ const chartSystems: ChartSystem[] = [
     key: "flake",
     label: "Flake",
     headline: "Top 12 epoxy flake color chart",
-    summary: "This uses the same top-12 flake chart structure from Nashville Resin Worx, rebuilt as clickable choices instead of a flat image.",
-    chartNote: "Source chart from the Nashville site: XPS Top 12 Epoxy Flake Color Chart.",
+    summary: "Clickable XPS flake options based on the Nashville Resin Worx color-chart section.",
+    chartNote: "Source chart: XPS Top 12 Epoxy Flake Color Chart.",
     chartImage: flakeChartImage,
-    chartAlt: "XPS top 12 epoxy flake color chart from Nashville Resin Worx",
+    chartAlt: "XPS top 12 epoxy flake color chart",
     options: [
       { name: "Domino", detail: "Black, white, and gray full broadcast blend.", bestFor: "Modern garages", palette: ["#111111", "#ffffff", "#8f8f8f", "#d8d8d8"], texture: "flake" },
       { name: "Nightfall", detail: "Dark charcoal and gray flake blend.", bestFor: "Shops and tool rooms", palette: ["#050505", "#262626", "#595959", "#9c9c9c"], texture: "flake" },
@@ -55,15 +55,15 @@ const chartSystems: ChartSystem[] = [
     key: "metallic",
     label: "Metallic",
     headline: "Metallic epoxy color direction",
-    summary: "This follows the Nashville metallic epoxy direction: high-movement, marble-style finishes selected before the estimate is finalized.",
-    chartNote: "Nashville template category: Metallic Epoxy. Use these as interactive direction choices before final pigment samples.",
+    summary: "Marble-style metallic directions for statement interior floors and showroom spaces.",
+    chartNote: "Use these as direction choices before confirming real pigment samples.",
     chartImage: metallicReferenceImage,
-    chartAlt: "Metallic marble epoxy floor reference from Nashville Resin Worx",
+    chartAlt: "Metallic marble epoxy floor reference",
     options: [
       { name: "White Marble", detail: "White and gray marble-style movement.", bestFor: "Interior feature floors", palette: ["#ffffff", "#d8d8d8", "#8f8f8f", "#f6f6f6"], texture: "metallic" },
       { name: "Steel Silver", detail: "Silver movement with a polished industrial feel.", bestFor: "Showrooms", palette: ["#f2f2f2", "#b7bec3", "#ffffff", "#626b73"], texture: "metallic" },
       { name: "Graphite", detail: "Dark gray motion with deep contrast.", bestFor: "Retail and offices", palette: ["#111111", "#3b3b3b", "#858585", "#d2d2d2"], texture: "metallic" },
-      { name: "Blue Metallic", detail: "Blue resin movement like the Nashville visual reference.", bestFor: "Feature spaces", palette: ["#092b43", "#0a6f8e", "#42d9ff", "#d9f7ff"], texture: "metallic" },
+      { name: "Blue Metallic", detail: "Blue resin movement with high visual impact.", bestFor: "Feature spaces", palette: ["#092b43", "#0a6f8e", "#42d9ff", "#d9f7ff"], texture: "metallic" },
       { name: "Copper Flow", detail: "Warm copper and dark resin movement.", bestFor: "Bars and studios", palette: ["#1d120c", "#7c3f21", "#c57b3a", "#f1c08a"], texture: "metallic" },
       { name: "Smoke Pearl", detail: "Soft gray pearl movement with a clean finish.", bestFor: "Professional interiors", palette: ["#262626", "#666666", "#b8b8b8", "#eeeeee"], texture: "metallic" }
     ]
@@ -72,8 +72,8 @@ const chartSystems: ChartSystem[] = [
     key: "quartz",
     label: "Quartz",
     headline: "Quartz broadcast color direction",
-    summary: "Quartz is the traction-focused system for wet, commercial, and heavy-use floors. The selector matches the same chart behavior while keeping quartz separate from decorative flake.",
-    chartNote: "Quartz options are shown as interactive broadcast directions so a customer can compare them with flake and metallic before requesting samples.",
+    summary: "Traction-focused quartz directions for wet, commercial, and heavy-use floors.",
+    chartNote: "Quartz choices are shown separately from decorative flake so the right system is easier to compare.",
     options: [
       { name: "Cobblestone", detail: "Balanced gray quartz broadcast.", bestFor: "Shops and walkways", palette: ["#3a3a36", "#77776f", "#c2c0b6", "#ededdf"], texture: "quartz" },
       { name: "Flint", detail: "Dark gray quartz for high-use spaces.", bestFor: "Industrial floors", palette: ["#161616", "#424242", "#777777", "#c5c5c5"], texture: "quartz" },
@@ -116,27 +116,6 @@ export function FinishVisualizer() {
 
   return (
     <section className="nrw-chart-section" id="color-chart" aria-label="Interactive color chart and floor visualizer">
-      <div className="nrw-visualizer-band">
-        <div className="nrw-preview-room" aria-label={`${selectedOption.name} floor preview`}>
-          <div className="nrw-preview-wall" aria-hidden="true" />
-          <div className="nrw-preview-base" aria-hidden="true" />
-          <div className={`nrw-preview-floor nrw-preview-${selectedOption.texture}`} style={getOptionStyle(selectedOption)}>
-            <span className="nrw-floor-shine" />
-          </div>
-          <div className="nrw-preview-label">
-            <span>{activeSystem.label}</span>
-            <strong>{selectedOption.name}</strong>
-          </div>
-        </div>
-        <div className="nrw-preview-copy">
-          <span className="section-kicker">Floor visualizer</span>
-          <h2>See the floor before the color chart.</h2>
-          <p>{activeSystem.summary}</p>
-          <p className="nrw-selected-note"><strong>{selectedOption.name}</strong> - {selectedOption.detail}</p>
-          <a className="gold-button" href="https://torginol.com/design" target="_blank" rel="noreferrer">Open Torginol Visualizer</a>
-        </div>
-      </div>
-
       <div className="nrw-color-panel">
         <h2>Explore Color Charts</h2>
         <div className="nrw-tabs" aria-label="Color chart categories">
@@ -152,12 +131,20 @@ export function FinishVisualizer() {
             </button>
           ))}
         </div>
+        <div className="nrw-mini-visualizer" style={getOptionStyle(selectedOption)}>
+          <span className={`nrw-mini-floor nrw-mini-${selectedOption.texture}`} aria-hidden="true" />
+          <div className="nrw-mini-copy">
+            <span>{activeSystem.label}</span>
+            <strong>{selectedOption.name}</strong>
+            <p>{selectedOption.detail}</p>
+          </div>
+        </div>
         <div className="nrw-chip-grid" aria-label={`${activeSystem.label} options`}>
-          {activeSystem.options.map((option, index) => (
+          {activeSystem.options.map((option) => (
             <button
               key={option.name}
               type="button"
-              className={`nrw-chip nrw-chip-${option.texture} chip-${index % 6} ${option.name === selectedOption.name ? "selected" : ""}`}
+              className={`nrw-chip nrw-chip-${option.texture} ${option.name === selectedOption.name ? "selected" : ""}`}
               style={getOptionStyle(option)}
               onClick={() => setSelectedName(option.name)}
             >
@@ -167,11 +154,12 @@ export function FinishVisualizer() {
         </div>
         <div className="nrw-visualizer-callout">
           <strong>Floor Visualizer by Torginol</strong>
-          <p>Choose a finish here, then use the full manufacturer visualizer for room-photo planning.</p>
+          <p>Choose a finish here, then open the manufacturer visualizer for full room planning.</p>
+          <a className="gold-button" href="https://torginol.com/design" target="_blank" rel="noreferrer">Try Floor Visualizer</a>
         </div>
       </div>
 
-      <div className="nrw-reference-panel">
+      <figure className="nrw-reference-panel">
         <span className="section-kicker">Selected chart</span>
         <h3>{activeSystem.headline}</h3>
         {activeSystem.chartImage ? (
@@ -183,18 +171,18 @@ export function FinishVisualizer() {
             ))}
           </div>
         )}
-        <p>{activeSystem.chartNote}</p>
-      </div>
+        <figcaption>{activeSystem.chartNote}</figcaption>
+      </figure>
 
-      <div className="nrw-proof-panel">
-        <h3>Pick finish direction first.</h3>
-        <p>Then confirm real samples, chip size, texture, sheen, and topcoat after the concrete condition is reviewed.</p>
+      <aside className="nrw-proof-panel">
+        <h3>Pick the finish direction first.</h3>
+        <p>{activeSystem.summary}</p>
         <ul>
           <li>Flake for garages and everyday durability</li>
           <li>Metallic for statement interior floors</li>
           <li>Quartz for traction-heavy or commercial spaces</li>
         </ul>
-      </div>
+      </aside>
     </section>
   );
 }
