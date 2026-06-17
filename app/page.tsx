@@ -5,7 +5,7 @@ const phoneHref = "tel:17722090266";
 const email = "JEREMY@SHOPXPS.COM";
 
 const images = {
-  hero: "/images/hero-garage-approved.webp?v=approved-20260616",
+  hero: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-hero.webp?v=1781648558",
   beforeAfter: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-before-after.webp?v=1781648570",
   garage: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581",
   commercial: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-commercial.webp?v=1781648591",
@@ -13,12 +13,21 @@ const images = {
   repair: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-repair.webp?v=1781648616"
 };
 
+const navLinks = [
+  { label: "Home", href: "#home" },
+  { label: "Services", href: "#services" },
+  { label: "Process", href: "#process" },
+  { label: "Color Chart", href: "#color-chart" },
+  { label: "Gallery", href: "#gallery" },
+  { label: "Portal", href: "#portal" }
+];
+
 const services = [
   {
     title: "Garage Floors",
     image: images.garage,
     summary: "Flake systems, polyaspartic topcoats, and garage-ready finish planning.",
-    detail: "Most homeowners start here. Send photos, square footage, and finish direction for a rough estimate."
+    detail: "Most homeowners start here. Send photos, square footage, and finish direction for a cleaner estimate review."
   },
   {
     title: "Commercial Floors",
@@ -40,13 +49,73 @@ const services = [
   }
 ];
 
+const trustItems = [
+  {
+    title: "Quote-Ready Details",
+    text: "Send the basics once so the first conversation starts with the right surface, location, and contact path."
+  },
+  {
+    title: "Photo-Based Estimate Prep",
+    text: "Project type, floor condition, rough size, and finish direction help shape a clearer first quote."
+  },
+  {
+    title: "Finish & Prep Guidance",
+    text: "Understand coating options, surface prep, color direction, and next steps before scheduling."
+  }
+];
+
 const processSteps = [
-  ["1", "Estimate Intake", "Send contact details, ZIP code, and project type."],
-  ["2", "Surface Review", "We check coating history, cracks, stains, moisture risk, and prep needs."],
-  ["3", "Finish Direction", "Choose flake, decorative concrete, polished concrete, or repair-first options."],
-  ["4", "Proposal", "Receive next-step pricing direction and scheduling requirements after review."],
-  ["5", "Install Prep", "Grinding, cleaning, patching, masking, and material planning happen before coating."],
-  ["6", "Final Walkthrough", "Confirm finish quality, care notes, and follow-up items before closeout."]
+  {
+    number: "1",
+    title: "Quote Intake",
+    image: images.garage,
+    text: "Share contact details, ZIP code, project type, size direction, and the best way to reach you."
+  },
+  {
+    number: "2",
+    title: "Photo & Surface Review",
+    image: images.repair,
+    text: "Review cracks, stains, existing coating, moisture concerns, and visible prep needs before pricing direction."
+  },
+  {
+    number: "3",
+    title: "Prep Plan",
+    image: images.commercial,
+    text: "Confirm grinding, repair, masking, cleaning, and coating removal needs so the install path is realistic."
+  },
+  {
+    number: "4",
+    title: "Color Selection",
+    image: images.patio,
+    text: "Choose flake, solid, decorative concrete, or repair-first direction with the color chart as the guide."
+  },
+  {
+    number: "5",
+    title: "Install & Topcoat",
+    image: images.beforeAfter,
+    text: "Base coat, broadcast, detail work, and topcoat finish are staged around the right system for the space."
+  },
+  {
+    number: "6",
+    title: "Walkthrough & Care",
+    image: images.garage,
+    text: "Confirm finish quality, cure guidance, maintenance notes, and portal handoff before closeout."
+  }
+];
+
+const colorChips = [
+  { name: "Domino", detail: "Black, white, gray", tone: "swatch-domino" },
+  { name: "Nightfall", detail: "Charcoal heavy blend", tone: "swatch-nightfall" },
+  { name: "Gravel", detail: "Mid-gray neutral", tone: "swatch-gravel" },
+  { name: "Tuxedo", detail: "High contrast flake", tone: "swatch-tuxedo" },
+  { name: "Shoreline", detail: "Light gray, tan, white", tone: "swatch-shoreline" },
+  { name: "Wombat", detail: "Warm gray blend", tone: "swatch-wombat" },
+  { name: "Saddle Tan", detail: "Tan and stone mix", tone: "swatch-saddle" },
+  { name: "Outback", detail: "Desert warm blend", tone: "swatch-outback" },
+  { name: "Creekbed", detail: "Natural stone tone", tone: "swatch-creekbed" },
+  { name: "Stonewash", detail: "Cool blue-gray", tone: "swatch-stonewash" },
+  { name: "Cabin Fever", detail: "Brown and charcoal", tone: "swatch-cabin" },
+  { name: "Custom Blend", detail: "Matched to project", tone: "swatch-custom" }
 ];
 
 const gallery = [
@@ -57,9 +126,9 @@ const gallery = [
 ];
 
 const reviewCards = [
-  ["Google", "Photo-first estimates make the first conversation faster."],
-  ["Facebook", "Send the surface condition, timeline, and inspiration before scheduling."],
-  ["Yelp", "A guided quote flow helps avoid vague pricing and missed prep details."]
+  ["Google", "A photo-first estimate path helps the first quote conversation move faster."],
+  ["Facebook", "Customers can send floor condition, timeline, and finish direction before scheduling."],
+  ["Yelp", "The guided flow makes prep, color choice, and next steps easier to understand."]
 ];
 
 export default function HomePage() {
@@ -70,8 +139,9 @@ export default function HomePage() {
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
         <nav aria-label="Main navigation">
-          <a href="#before-after">Before / After</a>
-          <a href="#reviews">Reviews</a>
+          {navLinks.map((link) => (
+            <a href={link.href} key={link.label}>{link.label}</a>
+          ))}
           <a className="header-call" href={phoneHref}>Call</a>
         </nav>
         <a className="gold-button header-cta" href="#estimate">Get Quote</a>
@@ -90,9 +160,10 @@ export default function HomePage() {
         </div>
 
         <nav className="mobile-action-rail" aria-label="Mobile quick actions">
-          <a href="#before-after"><span className="action-icon">B/A</span>Before / After</a>
-          <a href="#reviews"><span className="action-icon">REV</span>Reviews</a>
-          <a href={phoneHref}><span className="action-icon">CALL</span>Call</a>
+          <a href="#estimate"><span className="action-icon">01</span>Estimate</a>
+          <a href="#process"><span className="action-icon">02</span>Process</a>
+          <a href="#color-chart"><span className="action-icon">03</span>Colors</a>
+          <a href={phoneHref}><span className="action-icon">04</span>Call</a>
         </nav>
       </section>
 
@@ -100,16 +171,16 @@ export default function HomePage() {
         <SectionIntro kicker="Start here" title="Four taps to get moving" />
         <div className="app-step-list">
           <a href="#estimate"><span>1</span><strong>Pick Your Surface</strong><small>Garage, commercial, patio, repair, or decorative concrete.</small></a>
-          <a href="#estimate"><span>2</span><strong>Send Details</strong><small>Share your name, phone, email, ZIP code, and project type.</small></a>
-          <a href="#process"><span>3</span><strong>Review The Process</strong><small>Understand prep, coating, topcoat, and walkthrough steps.</small></a>
-          <a href="/customer-portal"><span>4</span><strong>Open Portal</strong><small>Preview job tracking, documents, messages, and care guides.</small></a>
+          <a href="#estimate"><span>2</span><strong>Send The Basics</strong><small>Name, phone, email, ZIP code, and project type start the quote path.</small></a>
+          <a href="#color-chart"><span>3</span><strong>Choose Direction</strong><small>Review flake colors, finish families, and visualizer options.</small></a>
+          <a href="/customer-portal"><span>4</span><strong>Track Next Steps</strong><small>Preview job tracking, documents, messages, and care guides.</small></a>
         </div>
       </section>
 
       <section className="trust-band" aria-label="Estimate benefits">
-        <p><strong>Digital intake</strong><span>Contact details, ZIP code, and project type in one flow.</span></p>
-        <p><strong>Rough estimate path</strong><span>Better inputs create a cleaner first quote conversation.</span></p>
-        <p><strong>Project guidance</strong><span>Choose services, finishes, and next steps without starting over.</span></p>
+        {trustItems.map((item) => (
+          <p key={item.title}><strong>{item.title}</strong><span>{item.text}</span></p>
+        ))}
       </section>
 
       <section className="section services-section" id="services">
@@ -144,13 +215,63 @@ export default function HomePage() {
       <section className="section process-section" id="process">
         <SectionIntro kicker="Step by step" title="From first photos to final walkthrough" />
         <div className="process-grid">
-          {processSteps.map(([number, title, text]) => (
-            <article className="process-card" key={title}>
-              <span>{number}</span>
-              <h3>{title}</h3>
-              <p>{text}</p>
+          {processSteps.map((step) => (
+            <article className="process-card" key={step.title}>
+              <div className="process-image">
+                <img src={step.image} alt={`${step.title} project stage`} />
+                <span className="process-number">{step.number}</span>
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="color-chart-section" id="color-chart">
+        <div className="color-chart-layout">
+          <div className="color-chart-copy">
+            <span className="section-kicker">Color chart</span>
+            <h2>Pick the finish family before the quote call.</h2>
+            <p>
+              Use the chart as a direction-setting tool. Final availability, chip size, texture, and topcoat sheen can be
+              confirmed once the surface condition and project scope are reviewed.
+            </p>
+            <div className="color-tabs" aria-label="Finish systems">
+              <span>Flake</span>
+              <span>Metallic</span>
+              <span>Concrete Stain</span>
+              <span>Polished</span>
+            </div>
+          </div>
+
+          <div className="color-grid" aria-label="Epoxy flake color chart preview">
+            {colorChips.map((color) => (
+              <article className={`color-swatch ${color.tone}`} key={color.name}>
+                <div className="swatch-preview" aria-hidden="true" />
+                <strong>{color.name}</strong>
+                <small>{color.detail}</small>
+              </article>
+            ))}
+          </div>
+
+          <aside className="visualizer-callout">
+            <strong>Need to see it on a floor?</strong>
+            <p>Open the floor visualizer, choose a direction, then bring that preference into the estimate path.</p>
+            <a className="dark-button" href="/visualizer">Open Floor Visualizer</a>
+          </aside>
+
+          <aside className="portal-teaser" id="portal">
+            <span className="section-kicker">Customer portal</span>
+            <h2>Your project in your pocket.</h2>
+            <ul>
+              <li>Track proposal and scheduling steps.</li>
+              <li>Keep project messages and documents in one place.</li>
+              <li>Preview warranty and care-guide handoff.</li>
+              <li>Keep the next project action easy to find.</li>
+            </ul>
+            <a className="gold-button" href="/customer-portal">Open Portal Preview</a>
+          </aside>
         </div>
       </section>
 
@@ -165,30 +286,6 @@ export default function HomePage() {
           ))}
         </div>
         <a className="gold-button" href="#estimate">Quote A Similar Project</a>
-      </section>
-
-      <section className="market-section" id="visualizer">
-        <div className="color-panel">
-          <span className="section-kicker">Color direction</span>
-          <h2>Explore finish families before you quote.</h2>
-          <div className="chip-grid">
-            {["Domino", "Nightfall", "Gravel", "Tuxedo", "Shoreline", "Wombat", "Saddle", "Outback"].map((color, index) => (
-              <span className={`flake-chip chip-${index % 4}`} key={color}>{color}</span>
-            ))}
-          </div>
-          <a className="dark-button" href="/visualizer">Open Floor Visualizer</a>
-        </div>
-        <div className="portal-teaser" id="portal">
-          <span className="section-kicker">Customer portal</span>
-          <h2>Your project in your pocket.</h2>
-          <ul>
-            <li>Track proposal and scheduling steps.</li>
-            <li>Keep project messages and documents in one place.</li>
-            <li>Preview warranty and care-guide handoff.</li>
-            <li>Keep the next project action easy to find.</li>
-          </ul>
-          <a className="gold-button" href="/customer-portal">Open Portal Preview</a>
-        </div>
       </section>
 
       <section className="section reviews-section" id="reviews">
@@ -225,14 +322,16 @@ export default function HomePage() {
       <footer className="site-footer">
         <div>
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
-          <p>Phoenix epoxy floor estimates, visualizer direction, and customer project portal.</p>
+          <p>Phoenix epoxy floor estimates, visualizer direction, color chart planning, and customer project portal.</p>
         </div>
         <nav aria-label="Footer navigation">
           <a href="#services">Services</a>
           <a href="#process">Process</a>
+          <a href="#color-chart">Color Chart</a>
           <a href="#gallery">Gallery</a>
           <a href="/visualizer">Visualizer</a>
           <a href="/customer-portal">Customer Portal</a>
+          <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
         </nav>
       </footer>
