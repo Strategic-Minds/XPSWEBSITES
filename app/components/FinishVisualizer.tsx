@@ -3,7 +3,6 @@
 import { CSSProperties, useMemo, useState } from "react";
 
 type ChartId = "flake" | "metallic" | "quartz" | "solid" | "glitter" | "stain";
-type ChartKind = "image" | "generated";
 
 type ChartArea = {
   left: string;
@@ -21,13 +20,12 @@ type ChartOption = {
 
 type ChartBoard = {
   id: ChartId;
-  kind: ChartKind;
   title: string;
   subtitle: string;
-  width?: number;
-  height?: number;
-  image?: string;
-  alt?: string;
+  width: number;
+  height: number;
+  image: string;
+  alt: string;
   options: ChartOption[];
 };
 
@@ -41,6 +39,9 @@ type FinishStyle = CSSProperties & Record<string, string>;
 const flakeChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-flake-colors-approved.png?v=1781670774";
 const metallicChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-metallic-colors-standardized.png?v=1781670766";
 const quartzChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-quartz-colors-standardized.png?v=1781670783";
+const solidChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-solid-color-epoxy-base-coats.png?v=1781680330";
+const glitterChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-glitter-additive-colors.png?v=1781680348";
+const stainChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-concrete-dye-stain-colors.png?v=1781680338";
 
 const chartAreas = {
   col1: "6.64%",
@@ -54,6 +55,10 @@ const chartAreas = {
   height: "11.23%"
 };
 
+function chartArea(left: string, top: string, width: string, height: string): ChartArea {
+  return { left, top, width, height };
+}
+
 function area(left: string, top: string, width = chartAreas.width, height = chartAreas.height): ChartArea {
   return { left, top, width, height };
 }
@@ -62,10 +67,6 @@ function gridArea(index: number): ChartArea {
   const columns = [chartAreas.col1, chartAreas.col2, chartAreas.col3];
   const rows = [chartAreas.row1, chartAreas.row2, chartAreas.row3, chartAreas.row4];
   return area(columns[index % 3], rows[Math.floor(index / 3)]);
-}
-
-function colorOption(name: string, code: string | undefined, palette: [string, string, string, string]): ChartOption {
-  return { name, code, palette, area: gridArea(0) };
 }
 
 const flakeOptions: ChartOption[] = [
@@ -111,81 +112,81 @@ const quartzOptions: ChartOption[] = [
 ];
 
 const solidOptions: ChartOption[] = [
-  colorOption("White", "FLV-0060", ["#f2f0ec", "#ffffff", "#d7d7d1", "#f9f8f4"]),
-  colorOption("Light Gray", "FLV-2000", ["#c9ced1", "#dce1e2", "#aeb5ba", "#f4f5f4"]),
-  colorOption("Medium Gray", "FLV-2010", ["#aaaeb4", "#c0c3c8", "#868b91", "#e2e3e4"]),
-  colorOption("Cement Gray", "FLV-2040", ["#9aa5ad", "#b4bdc4", "#76828a", "#d7dce0"]),
-  colorOption("Natural Gray", "FLV-2030", ["#a5a9ae", "#c2c5c8", "#85898f", "#e0e1e2"]),
-  colorOption("Warm Gray", "FLV-2020", ["#aaa9a2", "#c5c3ba", "#85847c", "#e2e0d7"]),
-  colorOption("Dark Gray", "FLV-2060", ["#7d858b", "#969da3", "#5e666b", "#c7ccd0"]),
-  colorOption("Charcoal", "FLV-2070", ["#626a70", "#7d858b", "#42494f", "#b2b8bc"]),
-  colorOption("Black", "FLV-9990", ["#101115", "#2d2f34", "#000000", "#73767c"]),
-  colorOption("Beige", "FLV-1000", ["#d1b6a7", "#e4cdbc", "#b49280", "#f0ded2"]),
-  colorOption("Tan", "FLV-1020", ["#aa9682", "#c2ae9a", "#887562", "#ddccbc"]),
-  colorOption("Khaki", "FLV-1050", ["#a59282", "#bca998", "#827061", "#d8c8b8"]),
-  colorOption("Toffee", "FLV-1080", ["#908780", "#aaa19a", "#6e6661", "#cfc7c0"]),
-  colorOption("Safety Yellow", "FLV-6010", ["#f3b407", "#ffc728", "#cf9300", "#ffe08a"]),
-  colorOption("Mint Green", "FLV-5000", ["#bdd8d8", "#d0e7e5", "#92b5b6", "#effafa"]),
-  colorOption("Kelly Green", "FLV-5030", ["#7ea247", "#97ba5e", "#5e7e2f", "#c4dc90"]),
-  colorOption("Bright Green", "FLV-5050", ["#08a37c", "#24bd96", "#007c5e", "#80d7c2"]),
-  colorOption("Forest Green", "FLV-5080", ["#527765", "#6f927d", "#385948", "#a3bcae"]),
-  colorOption("Light Blue", "FLV-7000", ["#9bc9da", "#b6dcec", "#72a8bd", "#d8f0f7"]),
-  colorOption("Neutral Blue", "FLV-7040", ["#6d8aa0", "#86a3b9", "#4d6a80", "#b9cedc"]),
-  colorOption("Deep Blue", "FLV-7070", ["#14085e", "#2a197b", "#07022d", "#6251b1"]),
-  colorOption("Brick Red", "FLV-8070", ["#8d3933", "#a94e45", "#64241f", "#d28d83"]),
-  colorOption("Safety Red", "FLV-8320", ["#bd2530", "#dc3d4a", "#8f1520", "#ee8990"])
+  { name: "White", code: "FLV-0060", palette: ["#8a8a87", "#efeeea", "#f4f3f0", "#ffffff"], area: chartArea("5.34%", "16.02%", "19.60%", "7.23%") },
+  { name: "Beige", code: "FLV-1000", palette: ["#7f7266", "#dcc5b1", "#e3cebb", "#ffffed"], area: chartArea("28.58%", "16.02%", "19.60%", "7.23%") },
+  { name: "Tan", code: "FLV-1020", palette: ["#6e6458", "#bfae99", "#c8b9a5", "#fee9cf"], area: chartArea("51.82%", "16.02%", "19.60%", "7.23%") },
+  { name: "Khaki", code: "FLV-1050", palette: ["#665b4d", "#b19e86", "#bbaa94", "#edd5b8"], area: chartArea("75.07%", "16.02%", "19.60%", "7.23%") },
+  { name: "Toffee", code: "FLV-1080", palette: ["#625f58", "#a9a499", "#b4afa5", "#e3ddcf"], area: chartArea("5.34%", "28.91%", "19.60%", "7.23%") },
+  { name: "Light Gray", code: "FLV-2000", palette: ["#767b7a", "#cdd5d4", "#d5dcdc", "#ffffff"], area: chartArea("28.58%", "28.91%", "19.60%", "7.23%") },
+  { name: "Medium Gray", code: "FLV-2010", palette: ["#6b6e6f", "#babfc1", "#c4c8ca", "#f8feff"], area: chartArea("51.82%", "28.91%", "19.60%", "7.23%") },
+  { name: "Warm Gray", code: "FLV-2020", palette: ["#6b6d65", "#babdaf", "#c4c6ba", "#f8fceb"], area: chartArea("75.07%", "28.91%", "19.60%", "7.23%") },
+  { name: "Natural Gray", code: "FLV-2030", palette: ["#6a6d6e", "#b7bcbe", "#c1c5c7", "#f4fbfd"], area: chartArea("5.34%", "41.80%", "19.60%", "7.23%") },
+  { name: "Cement Gray", code: "FLV-2040", palette: ["#5f6568", "#a5afb5", "#b0babf", "#deebf2"], area: chartArea("28.58%", "41.80%", "19.60%", "7.23%") },
+  { name: "Battleship Gray", code: "FLV-2050", palette: ["#585e62", "#98a3a9", "#a4aeb4", "#cedce3"], area: chartArea("51.82%", "41.80%", "19.60%", "7.23%") },
+  { name: "Dark Gray", code: "FLV-2060", palette: ["#545859", "#92999b", "#9fa5a7", "#c7cfd2"], area: chartArea("75.07%", "41.80%", "19.60%", "7.23%") },
+  { name: "Charcoal", code: "FLV-2070", palette: ["#394042", "#636f72", "#747f81", "#8c9b9f"], area: chartArea("5.34%", "54.69%", "19.60%", "7.23%") },
+  { name: "Mint Green", code: "FLV-5000", palette: ["#76837d", "#cde2d9", "#d5e8e0", "#ffffff"], area: chartArea("28.58%", "54.69%", "19.60%", "7.23%") },
+  { name: "Kelly Green", code: "FLV-5030", palette: ["#4e692d", "#88b64f", "#96c061", "#baf373"], area: chartArea("51.82%", "54.69%", "19.60%", "7.23%") },
+  { name: "Bright Green", code: "FLV-5050", palette: ["#266849", "#42b57e", "#55bf8c", "#63f2ae"], area: chartArea("75.07%", "54.69%", "19.60%", "7.23%") },
+  { name: "Forest Green", code: "FLV-5080", palette: ["#344738", "#5a7b62", "#6b8a73", "#81aa8b"], area: chartArea("5.34%", "67.58%", "19.60%", "7.23%") },
+  { name: "Safety Yellow", code: "FLV-6010", palette: ["#8c6d0c", "#f3bd15", "#f8c62c", "#fffc2c"], area: chartArea("28.58%", "67.58%", "19.60%", "7.23%") },
+  { name: "Light Blue", code: "FLV-7000", palette: ["#698188", "#b6e0eb", "#c0e7f1", "#f3ffff"], area: chartArea("51.82%", "67.58%", "19.60%", "7.23%") },
+  { name: "Neutral Blue", code: "FLV-7040", palette: ["#3e5060", "#6b8aa7", "#7b97b2", "#96bde1"], area: chartArea("75.07%", "67.58%", "19.60%", "7.23%") },
+  { name: "Deep Blue", code: "FLV-7070", palette: ["#1e3f50", "#346e8a", "#487e97", "#529abd"], area: chartArea("5.34%", "80.47%", "19.60%", "7.23%") },
+  { name: "Safety Red", code: "FLV-8320", palette: ["#712c2f", "#c34c52", "#cc5e64", "#ff7077"], area: chartArea("28.58%", "80.47%", "19.60%", "7.23%") },
+  { name: "Brick Red", code: "FLV-8070", palette: ["#452e2f", "#785052", "#876264", "#a67577"], area: chartArea("51.82%", "80.47%", "19.60%", "7.23%") },
+  { name: "Black", code: "FLV-9990", palette: ["#2b2f30", "#4b5254", "#5e6466", "#6f777a"], area: chartArea("75.07%", "80.47%", "19.60%", "7.23%") }
 ];
 
 const glitterOptions: ChartOption[] = [
-  colorOption("Clear Radiance", "Glitter", ["#f7fbff", "#cfdbe6", "#ffffff", "#eff6ff"]),
-  colorOption("Silver Sparkle", "Glitter", ["#bcc7d4", "#f4f7fb", "#7e8b98", "#d9e2eb"]),
-  colorOption("Azalea", "Glitter", ["#c1167e", "#f04bb0", "#7e064b", "#ff94d6"]),
-  colorOption("Red Dragon", "Glitter", ["#b6203c", "#eb5368", "#7d0d22", "#ff9aa6"]),
-  colorOption("Victorian Red", "Glitter", ["#9b1d22", "#c4484d", "#661014", "#e49a94"]),
-  colorOption("Red Hots", "Glitter", ["#bd2744", "#e45b73", "#7e1029", "#f5a2b0"]),
-  colorOption("Rusty Penny", "Glitter", ["#a65a37", "#ce835b", "#6b2d17", "#e3ae8b"]),
-  colorOption("Orange Citrus", "Glitter", ["#b7633d", "#df8b5e", "#7b381d", "#f2b88e"]),
-  colorOption("True Copper", "Glitter", ["#b06a49", "#dc9b75", "#753c24", "#f0c6a6"]),
-  colorOption("Storybrooke Brown", "Glitter", ["#60453c", "#8b6c61", "#2f211d", "#b89d91"]),
-  colorOption("Peach Fuzz", "Glitter", ["#c08c62", "#e3ba8a", "#8a5832", "#f2d5ab"]),
-  colorOption("Nutmeg", "Glitter", ["#9a7149", "#c19964", "#6a4829", "#dfc08b"]),
-  colorOption("Desert Sand", "Glitter", ["#b4935b", "#d4bb7e", "#806336", "#ead8aa"]),
-  colorOption("Sandstone Gold", "Glitter", ["#b79c54", "#dcc677", "#806d2f", "#f1dda0"]),
-  colorOption("Crown", "Glitter", ["#c8a428", "#f0cf48", "#806410", "#ffe17c"]),
-  colorOption("Sunstruck Gold", "Glitter", ["#d0aa1b", "#f5d43d", "#92730c", "#ffe982"])
+  { name: "Clear Radiance", code: "Glitter additive", palette: ["#767b81", "#cdd5df", "#d5dce6", "#ffffff"], area: chartArea("5.60%", "16.60%", "19.08%", "11.57%") },
+  { name: "Silver Sparkle", code: "Glitter additive", palette: ["#606770", "#a7b2c2", "#b2bccb", "#e1eeff"], area: chartArea("28.84%", "16.60%", "19.08%", "11.57%") },
+  { name: "Azalea", code: "Glitter additive", palette: ["#59213c", "#9a3a68", "#a64e78", "#d05992"], area: chartArea("52.08%", "16.60%", "19.08%", "11.57%") },
+  { name: "Red Dragon", code: "Glitter additive", palette: ["#63242e", "#ab3f50", "#b65262", "#e66075"], area: chartArea("75.33%", "16.60%", "19.08%", "11.57%") },
+  { name: "Victorian Red", code: "Glitter additive", palette: ["#531e1e", "#903435", "#9d4849", "#c45253"], area: chartArea("5.60%", "35.94%", "19.08%", "11.57%") },
+  { name: "Red Hots", code: "Glitter additive", palette: ["#63232e", "#ab3e50", "#b65262", "#e65e75"], area: chartArea("28.84%", "35.94%", "19.08%", "11.57%") },
+  { name: "Rusty Penny", code: "Glitter additive", palette: ["#522c26", "#8f4d43", "#9c5f56", "#c37165"], area: chartArea("52.08%", "35.94%", "19.08%", "11.57%") },
+  { name: "Orange Citrus", code: "Glitter additive", palette: ["#63332a", "#ac594a", "#b76a5d", "#e7806d"], area: chartArea("75.33%", "35.94%", "19.08%", "11.57%") },
+  { name: "True Copper", code: "Glitter additive", palette: ["#614035", "#a86f5c", "#b37f6d", "#e29b84"], area: chartArea("5.60%", "55.27%", "19.08%", "11.57%") },
+  { name: "Storybrooke Brown", code: "Glitter additive", palette: ["#463431", "#7a5b55", "#896c67", "#a9827b"], area: chartArea("28.84%", "55.27%", "19.08%", "11.57%") },
+  { name: "Peach Fuzz", code: "Glitter additive", palette: ["#5d4738", "#a27b61", "#ae8a72", "#daaa8a"], area: chartArea("52.08%", "55.27%", "19.08%", "11.57%") },
+  { name: "Nutmeg", code: "Glitter additive", palette: ["#5c4534", "#9f775b", "#ab866c", "#d7a582"], area: chartArea("75.33%", "55.27%", "19.08%", "11.57%") },
+  { name: "Desert Sand", code: "Glitter additive", palette: ["#624f26", "#aa8942", "#b59755", "#e4bb63"], area: chartArea("5.60%", "74.61%", "19.08%", "11.57%") },
+  { name: "Sandstone", code: "Glitter additive", palette: ["#605243", "#a68f74", "#b19c83", "#dfc3a1"], area: chartArea("28.84%", "74.61%", "19.08%", "11.57%") },
+  { name: "Gold Crown", code: "Glitter additive", palette: ["#564f30", "#958954", "#a29766", "#cabb7a"], area: chartArea("52.08%", "74.61%", "19.08%", "11.57%") },
+  { name: "Sunstruck Gold", code: "Glitter additive", palette: ["#6a5c38", "#b7a062", "#c1ac73", "#f4d88b"], area: chartArea("75.33%", "74.61%", "19.08%", "11.57%") }
 ];
 
 const stainOptions: ChartOption[] = [
-  colorOption("Gold", "Ameripolish", ["#b98222", "#dca947", "#795213", "#edc872"]),
-  colorOption("Sand", "Ameripolish", ["#ccb58e", "#e0c9a3", "#9d8057", "#f1dfbe"]),
-  colorOption("Raw Sienna", "Ameripolish", ["#ad6e2c", "#ce8e4c", "#7a4216", "#e7b77e"]),
-  colorOption("Terra Cotta", "Ameripolish", ["#a04b32", "#c76d51", "#67301e", "#e19a82"]),
-  colorOption("Caramel", "Ameripolish", ["#b46f2d", "#d9934f", "#7d4215", "#e7b67c"]),
-  colorOption("Mahogany", "Ameripolish", ["#673020", "#8b4b38", "#3d1a10", "#b48272"]),
-  colorOption("Saddle Brown", "Ameripolish", ["#6c3f22", "#9a6843", "#3f2413", "#c49c72"]),
-  colorOption("Burnt Sienna", "Ameripolish", ["#8e4a23", "#b36c3c", "#5b2b13", "#d79a6a"]),
-  colorOption("Chestnut", "Ameripolish", ["#6f3d22", "#9a6040", "#422113", "#c79370"]),
-  colorOption("Walnut", "Ameripolish", ["#55351f", "#7c563a", "#2f1e12", "#ad8665"]),
-  colorOption("Chocolate Brown", "Ameripolish", ["#3e291e", "#604232", "#221710", "#987667"]),
-  colorOption("Sepia", "Ameripolish", ["#4b3c2a", "#74634b", "#292013", "#a9977a"]),
-  colorOption("Maroon", "Ameripolish", ["#60233a", "#8d435d", "#381020", "#bb7c93"]),
-  colorOption("Eggplant", "Ameripolish", ["#3d253f", "#67476a", "#221326", "#9a7aa0"]),
-  colorOption("Slate Blue", "Ameripolish", ["#556d7a", "#7892a1", "#344651", "#adc1cb"]),
-  colorOption("Patriot Blue", "Ameripolish", ["#203a6b", "#42659a", "#101d39", "#7f9dc5"]),
-  colorOption("Turquoise", "Ameripolish", ["#0f9a91", "#35c0b6", "#08645f", "#8be0d9"]),
-  colorOption("Green", "Ameripolish", ["#4f8a41", "#72aa5d", "#2d5725", "#aad293"]),
-  colorOption("Pine Green", "Ameripolish", ["#23563e", "#3f765a", "#123223", "#7eaa91"]),
-  colorOption("Forest Green", "Ameripolish", ["#183e2d", "#355e48", "#0b2117", "#73917f"]),
-  colorOption("Midnight Black", "Ameripolish", ["#141414", "#333333", "#000000", "#777777"]),
-  colorOption("Black", "Ameripolish", ["#050505", "#242424", "#000000", "#646464"]),
-  colorOption("Gray", "Ameripolish", ["#737778", "#969b9c", "#4b4f50", "#c4c8c9"]),
-  colorOption("Red", "Ameripolish", ["#9e2430", "#c94653", "#64131b", "#e28b95"])
+  { name: "Gold", code: "Ameripolish", palette: ["#574625", "#967941", "#a38854", "#cca862"], area: chartArea("5.34%", "16.02%", "19.60%", "7.23%") },
+  { name: "Raw Sienna", code: "Ameripolish", palette: ["#554223", "#94723e", "#a18152", "#c99f5e"], area: chartArea("28.58%", "16.02%", "19.60%", "7.23%") },
+  { name: "Caramel", code: "Ameripolish", palette: ["#483723", "#7d603d", "#8c7151", "#ad895d"], area: chartArea("51.82%", "16.02%", "19.60%", "7.23%") },
+  { name: "Sand", code: "Ameripolish", palette: ["#4b3b29", "#826748", "#90775b", "#b3916b"], area: chartArea("75.07%", "16.02%", "19.60%", "7.23%") },
+  { name: "Terra Cotta", code: "Ameripolish", palette: ["#3f2923", "#6d483d", "#7d5b51", "#996b5d"], area: chartArea("5.34%", "28.91%", "19.60%", "7.23%") },
+  { name: "Mahogany", code: "Ameripolish", palette: ["#372520", "#604038", "#71534c", "#896157"], area: chartArea("28.58%", "28.91%", "19.60%", "7.23%") },
+  { name: "Saddle Brown", code: "Ameripolish", palette: ["#42261c", "#724331", "#815646", "#9f654e"], area: chartArea("51.82%", "28.91%", "19.60%", "7.23%") },
+  { name: "Chocolate Brown", code: "Ameripolish", palette: ["#402c22", "#6f4d3b", "#7f5f4f", "#9b715b"], area: chartArea("75.07%", "28.91%", "19.60%", "7.23%") },
+  { name: "Walnut", code: "Ameripolish", palette: ["#312419", "#553f2c", "#675241", "#7b6048"], area: chartArea("5.34%", "41.80%", "19.60%", "7.23%") },
+  { name: "Burnt Sienna", code: "Ameripolish", palette: ["#4f2a1b", "#894a2f", "#975d44", "#bb6d4c"], area: chartArea("28.58%", "41.80%", "19.60%", "7.23%") },
+  { name: "Chestnut", code: "Ameripolish", palette: ["#4e302c", "#87534d", "#95655f", "#b97871"], area: chartArea("51.82%", "41.80%", "19.60%", "7.23%") },
+  { name: "Red", code: "Ameripolish", palette: ["#4d1c1e", "#853135", "#934649", "#b64e53"], area: chartArea("75.07%", "41.80%", "19.60%", "7.23%") },
+  { name: "Maroon", code: "Ameripolish", palette: ["#3c1b1b", "#693030", "#794545", "#944d4d"], area: chartArea("5.34%", "54.69%", "19.60%", "7.23%") },
+  { name: "Sepia", code: "Ameripolish", palette: ["#391c1b", "#633130", "#744645", "#8c4e4d"], area: chartArea("28.58%", "54.69%", "19.60%", "7.23%") },
+  { name: "Eggplant", code: "Ameripolish", palette: ["#342829", "#5b4648", "#6c595b", "#82686b"], area: chartArea("51.82%", "54.69%", "19.60%", "7.23%") },
+  { name: "Turquoise", code: "Ameripolish", palette: ["#2d3f40", "#4e6d70", "#607d80", "#72999c"], area: chartArea("75.07%", "54.69%", "19.60%", "7.23%") },
+  { name: "Slate Blue", code: "Ameripolish", palette: ["#313433", "#555a59", "#676b6a", "#7b8180"], area: chartArea("5.34%", "67.58%", "19.60%", "7.23%") },
+  { name: "Patriot Blue", code: "Ameripolish", palette: ["#272d2d", "#444e4f", "#576061", "#667273"], area: chartArea("28.58%", "67.58%", "19.60%", "7.23%") },
+  { name: "Green", code: "Ameripolish", palette: ["#373c22", "#5f683b", "#70784f", "#87925b"], area: chartArea("51.82%", "67.58%", "19.60%", "7.23%") },
+  { name: "Pine Green", code: "Ameripolish", palette: ["#2c3c2f", "#4c6952", "#5e7964", "#709477"], area: chartArea("75.07%", "67.58%", "19.60%", "7.23%") },
+  { name: "Forest Green", code: "Ameripolish", palette: ["#2a3028", "#495345", "#5c6558", "#6c7867"], area: chartArea("5.34%", "80.47%", "19.60%", "7.23%") },
+  { name: "Gray", code: "Ameripolish", palette: ["#3f3932", "#6d6457", "#7d7569", "#998e7d"], area: chartArea("28.58%", "80.47%", "19.60%", "7.23%") },
+  { name: "Black", code: "Ameripolish", palette: ["#2e2b28", "#514b45", "#635e58", "#766f67"], area: chartArea("51.82%", "80.47%", "19.60%", "7.23%") },
+  { name: "Midnight Black", code: "Ameripolish", palette: ["#201f1d", "#383733", "#4c4b47", "#575651"], area: chartArea("75.07%", "80.47%", "19.60%", "7.23%") }
 ];
 
 const chartBoards: ChartBoard[] = [
   {
     id: "flake",
-    kind: "image",
     title: "Top Flake Colors",
     subtitle: "Full-broadcast flake finish options.",
     width: 1536,
@@ -196,7 +197,6 @@ const chartBoards: ChartBoard[] = [
   },
   {
     id: "metallic",
-    kind: "image",
     title: "Top Metallic Colors",
     subtitle: "Decorative metallic epoxy finish options.",
     width: 1536,
@@ -207,7 +207,6 @@ const chartBoards: ChartBoard[] = [
   },
   {
     id: "quartz",
-    kind: "image",
     title: "Top Quartz Colors",
     subtitle: "Quartz texture finish options.",
     width: 1536,
@@ -218,23 +217,32 @@ const chartBoards: ChartBoard[] = [
   },
   {
     id: "solid",
-    kind: "generated",
     title: "Solid Color Epoxy Base Coats",
     subtitle: "Solid color epoxy is typically used as the base coat during the application process.",
+    width: 1536,
+    height: 2048,
+    image: solidChartImage,
+    alt: "XPS solid color epoxy base coat chart",
     options: solidOptions
   },
   {
     id: "glitter",
-    kind: "generated",
-    title: "Top Glitter Additives",
+    title: "Top Glitter Additive Colors",
     subtitle: "Glitter is an additive, but it can also be used to create an overall sparkle look.",
+    width: 1536,
+    height: 2048,
+    image: glitterChartImage,
+    alt: "XPS top glitter additive color chart",
     options: glitterOptions
   },
   {
     id: "stain",
-    kind: "generated",
     title: "Concrete Dye & Stain Colors",
     subtitle: "Concrete dye and stain options for polished or decorative concrete color direction.",
+    width: 1536,
+    height: 2048,
+    image: stainChartImage,
+    alt: "XPS concrete dye and stain color chart",
     options: stainOptions
   }
 ];
@@ -253,14 +261,12 @@ function hotspotStyle(option: ChartOption): CSSProperties {
 }
 
 function popupStyle(chart: ChartBoard, option: ChartOption): CSSProperties {
-  const chartWidth = chart.width ?? 1536;
-  const chartHeight = chart.height ?? 2048;
   const left = parseFloat(option.area.left);
   const top = parseFloat(option.area.top);
   const width = parseFloat(option.area.width);
   const height = parseFloat(option.area.height);
-  const cropWidth = (width / 100) * chartWidth;
-  const cropHeight = (height / 100) * chartHeight;
+  const cropWidth = (width / 100) * chart.width;
+  const cropHeight = (height / 100) * chart.height;
 
   return {
     left: `${left + width / 2}%`,
@@ -346,87 +352,37 @@ export function FinishVisualizer() {
               return (
                 <div className={`xps-chart-frame ${boardIsActive ? "active" : ""}`} key={board.id}>
                   <div className="xps-chart-image-shell" data-chart={board.id} onPointerLeave={() => clearSample(board)}>
-                    {board.kind === "image" ? (
-                      <>
-                        <img src={board.image} alt={board.alt} />
-                        {board.options.map((option) => {
-                          const selected = isSelected(board, option);
+                    <img src={board.image} alt={board.alt} />
+                    {board.options.map((option) => {
+                      const selected = isSelected(board, option);
 
-                          return (
-                            <button
-                              key={`${board.id}-${option.name}`}
-                              type="button"
-                              className={`xps-chart-hotspot ${selected ? "selected" : ""}`}
-                              style={hotspotStyle(option)}
-                              aria-pressed={selected}
-                              aria-label={`Enlarge ${option.name}${option.code ? ` ${option.code}` : ""}`}
-                              onClick={() => selectSample(board, option)}
-                            >
-                              <span>{option.name}</span>
-                            </button>
-                          );
-                        })}
-                        {board.options.map((option) => (
-                          isSelected(board, option) ? (
-                            <div
-                              className="xps-color-popup"
-                              style={popupStyle(board, option)}
-                              aria-label={`${option.name} enlarged sample`}
-                              key={`${board.id}-${option.name}-popup`}
-                            >
-                              <img src={board.image} alt="" style={popupImageStyle(option)} aria-hidden="true" />
-                              <span className="xps-color-popup-label">{option.name}</span>
-                            </div>
-                          ) : null
-                        ))}
-                      </>
-                    ) : (
-                      <div className="xps-generated-chart" data-chart={board.id}>
-                        <div className="xps-generated-topbar">
-                          <span>Color Charts</span>
-                          <span className="xps-generated-icon" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /><i /><i /></span>
+                      return (
+                        <button
+                          key={`${board.id}-${option.name}`}
+                          type="button"
+                          className={`xps-chart-hotspot ${selected ? "selected" : ""}`}
+                          style={hotspotStyle(option)}
+                          aria-pressed={selected}
+                          aria-label={`Enlarge ${option.name}${option.code ? ` ${option.code}` : ""}`}
+                          onClick={() => selectSample(board, option)}
+                        >
+                          <span>{option.name}</span>
+                        </button>
+                      );
+                    })}
+                    {board.options.map((option) => (
+                      isSelected(board, option) ? (
+                        <div
+                          className="xps-color-popup"
+                          style={popupStyle(board, option)}
+                          aria-label={`${option.name} enlarged sample`}
+                          key={`${board.id}-${option.name}-popup`}
+                        >
+                          <img src={board.image} alt="" style={popupImageStyle(option)} aria-hidden="true" />
+                          <span className="xps-color-popup-label">{option.name}</span>
                         </div>
-                        <div className="xps-generated-content">
-                          <h3>{board.title}</h3>
-                          <p>{board.subtitle}</p>
-                          <div className="xps-generated-swatches">
-                            {board.options.map((option) => {
-                              const selected = isSelected(board, option);
-
-                              return (
-                                <button
-                                  key={`${board.id}-${option.name}`}
-                                  type="button"
-                                  className={`xps-generated-swatch ${selected ? "selected" : ""}`}
-                                  style={finishStyle(option)}
-                                  aria-pressed={selected}
-                                  aria-label={`Enlarge ${option.name}${option.code ? ` ${option.code}` : ""}`}
-                                  onClick={() => selectSample(board, option)}
-                                >
-                                  <span className="xps-swatch-tile" aria-hidden="true" />
-                                  <span className="xps-swatch-label">
-                                    <strong>{option.name}</strong>
-                                    {option.code ? <small>{option.code}</small> : null}
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                        {board.options.map((option) => (
-                          isSelected(board, option) ? (
-                            <div
-                              className={`xps-generated-popup ${board.id}`}
-                              style={finishStyle(option)}
-                              aria-label={`${option.name} enlarged sample`}
-                              key={`${board.id}-${option.name}-popup`}
-                            >
-                              <span className="xps-color-popup-label">{option.name}</span>
-                            </div>
-                          ) : null
-                        ))}
-                      </div>
-                    )}
+                      ) : null
+                    ))}
                   </div>
                 </div>
               );
