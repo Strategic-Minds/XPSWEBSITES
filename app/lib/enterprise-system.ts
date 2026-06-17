@@ -87,9 +87,9 @@ export function getEnterpriseModuleStatuses(): EnterpriseModuleStatus[] {
       configured: flags.aiGateway && ai.groqPrimary && ai.openAiFallback,
       mode: flags.aiAgents ? "active" : "approval_gated",
       blockers: [
-        ...(flags.aiGateway ? [] : ["AI Gateway auth is not configured."],),
-        ...(ai.groqPrimary ? [] : ["AI_GATEWAY_PRIMARY_MODEL must be a groq/* model."],),
-        ...(ai.openAiFallback ? [] : ["AI_GATEWAY_FALLBACK_MODELS must include at least one openai/* model."],)
+        ...(flags.aiGateway ? [] : ["AI Gateway auth is not configured."]),
+        ...(ai.groqPrimary ? [] : ["AI_GATEWAY_PRIMARY_MODEL must be a groq/* model."]),
+        ...(ai.openAiFallback ? [] : ["AI_GATEWAY_FALLBACK_MODELS must include at least one openai/* model."])
       ]
     },
     {
