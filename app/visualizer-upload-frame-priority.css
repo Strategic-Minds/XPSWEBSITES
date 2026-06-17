@@ -1,0 +1,107 @@
+/* Final sizing pass: make the upload picture area dominate the visualizer. */
+
+.floor-visualizer-strip .visualizer-image-frame {
+  left: 8% !important;
+  right: 8% !important;
+  top: 7% !important;
+  height: 66% !important;
+  outline-offset: -7px !important;
+}
+
+.floor-visualizer-strip .visualizer-frame-empty {
+  font-size: .66rem !important;
+}
+
+.floor-visualizer-strip .visualizer-frame-empty small {
+  font-size: .56rem !important;
+}
+
+.floor-visualizer-strip .visualizer-frame-toolbar {
+  left: 8% !important;
+  right: 8% !important;
+  top: auto !important;
+  bottom: 8.5% !important;
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+  gap: 9px !important;
+}
+
+.floor-visualizer-strip .visualizer-mic-button,
+.floor-visualizer-strip .visualizer-attach-box {
+  min-height: 48px !important;
+}
+
+.floor-visualizer-strip .visualizer-attach-box {
+  grid-template-columns: 24px minmax(0, 1fr) !important;
+  padding: 7px 10px !important;
+}
+
+.floor-visualizer-strip .visualizer-attach-copy {
+  font-size: .68rem !important;
+}
+
+.floor-visualizer-strip .visualizer-attach-box small {
+  font-size: .54rem !important;
+}
+
+.floor-visualizer-strip .visualizer-paperclip-icon {
+  width: 11px !important;
+  height: 21px !important;
+}
+
+.floor-visualizer-strip .visualizer-paperclip-icon::after {
+  width: 6px !important;
+  height: 12px !important;
+}
+
+.floor-visualizer-strip .visualizer-mic-icon {
+  width: 14px !important;
+  height: 21px !important;
+}
+
+.floor-visualizer-strip .visualizer-mic-icon::before {
+  width: 20px !important;
+  height: 12px !important;
+}
+
+.floor-visualizer-strip .visualizer-voice-status {
+  left: 8% !important;
+  right: 8% !important;
+  top: auto !important;
+  bottom: 2.6% !important;
+  overflow: hidden !important;
+  color: rgba(16, 18, 20, .62) !important;
+  font-size: .56rem !important;
+  line-height: 1.15 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 760px) {
+  .floor-visualizer-strip .visualizer-image-frame {
+    left: 7% !important;
+    right: 7% !important;
+    top: 7% !important;
+    height: 64% !important;
+  }
+
+  .floor-visualizer-strip .visualizer-frame-toolbar {
+    left: 7% !important;
+    right: 7% !important;
+    top: auto !important;
+    bottom: 8.5% !important;
+    grid-template-columns: 46px minmax(0, 1fr) !important;
+  }
+
+  .floor-visualizer-strip .visualizer-mic-button,
+  .floor-visualizer-strip .visualizer-attach-box {
+    min-height: 46px !important;
+  }
+
+  .floor-visualizer-strip .visualizer-voice-status {
+    left: 7% !important;
+    right: 7% !important;
+    top: auto !important;
+    bottom: 2.3% !important;
+    font-size: .54rem !important;
+  }
+}
