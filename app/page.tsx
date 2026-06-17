@@ -6,7 +6,7 @@ const phoneHref = "tel:17722090266";
 const email = "JEREMY@SHOPXPS.COM";
 
 const images = {
-  hero: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-hero.webp?v=1781648558",
+  hero: "/images/hero-garage-approved.webp?v=approved-final-20260617",
   beforeAfter: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-before-after.webp?v=1781648570",
   garage: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581",
   commercial: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-commercial.webp?v=1781648591",
@@ -21,12 +21,8 @@ const images = {
 };
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
-  { label: "Visualizer", href: "#color-chart" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Portal", href: "#portal" }
+  { label: "Before / After", href: "#before-after" },
+  { label: "Reviews", href: "#reviews" }
 ];
 
 const services = [
