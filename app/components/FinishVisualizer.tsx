@@ -18,6 +18,7 @@ type FlakeOption = {
 type FinishStyle = CSSProperties & Record<string, string>;
 
 const flakeChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-12-epoxy-flake-color-chart.png?v=1781666861";
+const chartBoards = ["board-a", "board-b", "board-c"];
 
 const flakeOptions: FlakeOption[] = [
   { name: "Gravel", code: "FB-414", rank: "01", palette: ["#23303a", "#6f7f87", "#c9d0d2", "#f3f1e8"], area: { left: "5.0%", top: "15.7%", width: "28.9%", height: "17.3%" } },
@@ -49,11 +50,17 @@ function hotspotStyle(option: FlakeOption): CSSProperties {
 
 export function FinishVisualizer() {
   const [selectedName, setSelectedName] = useState(flakeOptions[0].name);
+  const [selectedBoard, setSelectedBoard] = useState(0);
 
   const selectedOption = useMemo(
     () => flakeOptions.find((option) => option.name === selectedName) ?? flakeOptions[0],
     [selectedName]
   );
+
+  function selectFlake(option: FlakeOption, boardIndex: number) {
+    setSelectedName(option.name);
+    setSelectedBoard(boardIndex);
+  }
 
   return (
     <>
@@ -83,7 +90,7 @@ export function FinishVisualizer() {
         <div className="xps-flake-info">
           <span className="xps-flake-kicker">Flake</span>
           <h2>Top 12 Epoxy Flake Colors</h2>
-          <p>Tap a card on the chart. The selected color highlights on the chart and enlarges here so the customer can compare options fast.</p>
+          <p>Tap a chart card to open a clean popup square. The chart itself stays clear with no hover color over the image.</p>
           <div className="selected-flake-card" style={finishStyle(selectedOption)} aria-live="polite">
             <span>Selected Flake</span>
             <strong>{selectedOption.name}</strong>
@@ -94,20 +101,33 @@ export function FinishVisualizer() {
         </div>
 
         <div className="xps-chart-board">
-          <div className="xps-chart-frame">
-            <img src={flakeChartImage} alt="XPS top 12 epoxy flake colors chart" />
-            {flakeOptions.map((option) => (
-              <button
-                key={option.name}
-                type="button"
-                className={`xps-chart-hotspot ${option.name === selectedOption.name ? "selected" : ""}`}
-                style={hotspotStyle(option)}
-                aria-pressed={option.name === selectedOption.name}
-                aria-label={`Select ${option.name} ${option.code}`}
-                onClick={() => setSelectedName(option.name)}
-              >
-                <span>{option.name}</span>
-              </button>
+          <div className="xps-chart-board-grid">
+            {chartBoards.map((board, boardIndex) => (
+              <div className="xps-chart-frame" key={board}>
+                <img src={flakeChartImage} alt="XPS top 12 epoxy flake colors chart" />
+                {flakeOptions.map((option) => {
+                  const isSelected = boardIndex === selectedBoard && option.name === selectedOption.name;
+
+                  return (
+                    <button
+                      key={`${board}-${option.name}`}
+                      type="button"
+                      className={`xps-chart-hotspot ${isSelected ? "selected" : ""}`}
+                      style={hotspotStyle(option)}
+                      aria-pressed={isSelected}
+                      aria-label={`Select ${option.name} ${option.code}`}
+                      onClick={() => selectFlake(option, boardIndex)}
+                    />
+                  );
+                })}
+                {boardIndex === selectedBoard && (
+                  <div className="xps-color-popup" style={finishStyle(selectedOption)} aria-hidden="true">
+                    <div className="xps-color-popup-square" />
+                    <strong>{selectedOption.name}</strong>
+                    <span>{selectedOption.code}</span>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
