@@ -1,0 +1,21 @@
+{
+  "status": "draft_only_do_not_apply_without_approval",
+  "project": "xpswebsites",
+  "project_id": "prj_Pb24DYvWhwMzYLNKMaTkRzcxVGvt",
+  "team_id": "team_aFdds8lsbHMwe2ip4aQdbQ3d",
+  "crons": [
+    { "path": "/api/cron/event-processor", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/quote-sla-monitor", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/sms-dispatcher", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/project-status-monitor", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/review-referral-monitor", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/validation-agent", "schedule": "*/5 * * * *" }
+  ],
+  "rules": [
+    "No uncontrolled background loops",
+    "Every run writes a receipt",
+    "Every failure creates a validation event",
+    "Routes must be auth-gated",
+    "Do not launch production cron without explicit approval"
+  ]
+}
