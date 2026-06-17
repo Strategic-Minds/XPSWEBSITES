@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useEffect, type MouseEvent, type RefObject } from "react";
 import type { FinishOption } from "../../data/finish-options";
 import type { MaskPoint, VisualizerControlsState } from "./types";
 
@@ -53,7 +53,7 @@ export function FloorRenderCanvas({ canvasRef, imageUrl, maskPoints, selectedFin
     };
   }, [canvasRef, controls, imageUrl, maskPoints, selectedFinish]);
 
-  function handleCanvasClick(event: React.MouseEvent<HTMLCanvasElement>) {
+  function handleCanvasClick(event: MouseEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current;
     if (!canvas || !imageUrl) return;
     const rect = canvas.getBoundingClientRect();
