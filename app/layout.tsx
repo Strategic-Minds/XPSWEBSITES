@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { VisualizerUploadEnhancer } from "./components/VisualizerUploadEnhancer";
 import "./globals.css";
 import "./approved-hero.css";
 import "./phoenix-final-revision.css";
@@ -10,6 +11,7 @@ import "./phoenix-approved-template.css";
 import "./phoenix-nashville-chart-lock.css";
 import "./xps-flake-chart-lock.css";
 import "./vizual-x/vizual-x.css";
+import "./visualizer-upload-frame.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
@@ -31,7 +33,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <VisualizerUploadEnhancer />
+        {children}
+      </body>
     </html>
   );
 }
