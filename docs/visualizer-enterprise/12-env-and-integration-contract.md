@@ -30,13 +30,45 @@ Presence of an env variable is not the same as approval to execute live mutation
 - `ENTERPRISE_AUTO_OPS_ENABLED`
 - `ENTERPRISE_AUTO_FIX_ENABLED`
 
+### Browser Worker Enablement
+
+Preview activation value:
+
+```env
+VISUALIZER_BROWSER_WORKER_ENABLED=true
+```
+
+Rules:
+
+- Use lowercase `true`, with no quotes and no spaces.
+- Enable in Preview first, preferably branch-scoped to `auto-builder/enterprise-floor-visualizer`.
+- Do not enable Production until upload/mask/export/mobile E2E has passed.
+- `BROWSER_WORKER_URL` must be present.
+- One protected validation secret must be present: `ENTERPRISE_VALIDATION_SECRET` or `CRON_SECRET`.
+- The validation route must report execution enabled before true browser-worker E2E is considered active.
+
 ## AI Gateway
 
 - `AI_GATEWAY_API_KEY` or Vercel OIDC runtime support.
-- `AI_GATEWAY_PRIMARY_MODEL`: must be a `groq/*` model to satisfy the requested primary route.
-- `AI_GATEWAY_FALLBACK_MODELS`: comma-separated list and must include at least one `openai/*` model.
+- `AI_GATEWAY_PRIMARY_MODEL`: must be a valid Vercel AI Gateway routeable model slug from the live model registry.
+- `AI_GATEWAY_PRIMARY_PROVIDER`: set to `groq` when Groq is the required primary provider route.
+- `AI_GATEWAY_FALLBACK_MODELS`: comma-separated list and must include at least one valid OpenAI routeable model slug such as `openai/gpt-5.5` when available in the model registry.
 - `ENTERPRISE_AI_AGENTS_ENABLED`
 - `OWNER_ASSISTANT_ENABLED`
+
+Recommended preview pattern after verifying live model availability:
+
+```env
+AI_GATEWAY_PRIMARY_MODEL=meta/llama-4-scout
+AI_GATEWAY_PRIMARY_PROVIDER=groq
+AI_GATEWAY_FALLBACK_MODELS=openai/gpt-5.5
+```
+
+Fallback-safe validation rule:
+
+- Accept a primary config when `AI_GATEWAY_PRIMARY_PROVIDER=groq` and `AI_GATEWAY_PRIMARY_MODEL` is a valid routeable model slug.
+- Also accept legacy direct-provider slugs if Vercel exposes a `groq/...` model slug in the live registry.
+- Reject human-readable placeholders like `GROQ`, `OPEN AI`, `OpenAI`, or `Groq` because those are not routeable model IDs.
 
 ## Voice And Video
 
@@ -67,9 +99,19 @@ Presence of an env variable is not the same as approval to execute live mutation
 ## Storage, CRM, Analytics
 
 - `ENTERPRISE_STORAGE_CRM_ENABLED`
-- Supabase project/branch/bucket variables to be finalized.
-- CRM target variables to be finalized.
+- `ENTERPRISE_CRM_FOLDER_ID`
+- `ENTERPRISE_CRM_SPREADSHEET_ID`
+- `ENTERPRISE_CRM_SYNC_ENABLED`
+- `ENTERPRISE_PREVIEW_STORAGE_TARGET`
+- `ENTERPRISE_QUOTE_ATTACHMENT_STORAGE_TARGET`
+- Supabase project/branch/bucket variables to be finalized if Supabase becomes the durable data layer.
 - Analytics destination variables to be finalized.
+
+Current approved interim metadata/control targets:
+
+- CRM folder: `XPS_ENTERPRISE_VISUALIZER_CRM`, folder ID `1hRvRfg4k4HfM1-vPF34LySDcU5WxG_Rm`.
+- CRM Sheet: `XPS Enterprise Visualizer CRM`, spreadsheet ID `1jizwt6Cf0wBNltNfhldyekkoa1kR0J7Ugm4_rzbLWvs`.
+- Mockup baseline folder: `PIXEL_PERFECT_MOCKUP_BASELINES_20260617`, folder ID `1RlIkclW2H8Cm1q-cpc26HGQ1XkTnujES`.
 
 ## Required Before Activation
 
@@ -85,3 +127,5 @@ Presence of an env variable is not the same as approval to execute live mutation
 ## Official Routing Notes
 
 Vercel AI Gateway supports model fallback through provider options. The repo uses env-driven model configuration because available model slugs can change and should be discovered from the Gateway before hardcoding.
+
+Vercel Cron Jobs can call protected routes on a schedule, but cron execution must remain auth-gated and non-destructive until the production approval gate is cleared.
