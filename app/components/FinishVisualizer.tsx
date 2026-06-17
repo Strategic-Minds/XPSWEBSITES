@@ -2,84 +2,94 @@
 
 import { CSSProperties, useMemo, useState } from "react";
 
-type FinishKey = "flake" | "metallic" | "quartz";
+type ChartKey = "flake" | "metallic" | "quartz";
 type Texture = "flake" | "metallic" | "quartz";
 
-type FinishOption = {
+type ChartOption = {
   name: string;
-  code: string;
   detail: string;
   bestFor: string;
   palette: [string, string, string, string];
   texture: Texture;
 };
 
-type FinishSystem = {
-  key: FinishKey;
+type ChartSystem = {
+  key: ChartKey;
   label: string;
   headline: string;
   summary: string;
-  performance: string;
-  surfaceUse: string;
-  options: FinishOption[];
+  chartNote: string;
+  chartImage?: string;
+  chartAlt?: string;
+  options: ChartOption[];
 };
 
-const finishSystems: FinishSystem[] = [
+const flakeChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-12-epoxy-flake-color-chart.webp?v=1780952839";
+const metallicReferenceImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/nashville-resin-worx-metallic-marble-epoxy-floor.webp?v=1780952466";
+
+const chartSystems: ChartSystem[] = [
   {
     key: "flake",
     label: "Flake",
-    headline: "Full-broadcast flake systems",
-    summary: "The everyday garage, patio, shop, and utility-room finish. It adds texture, hides concrete imperfections, and gives the floor a clean stone-like look.",
-    performance: "Textured, durable, easy to clean, and usually the best first choice for Phoenix garages.",
-    surfaceUse: "Garages, patios, shops, warehouses, laundry rooms, and high-use residential concrete.",
+    headline: "Top 12 epoxy flake color chart",
+    summary: "This uses the same top-12 flake chart structure from Nashville Resin Worx, rebuilt as clickable choices instead of a flat image.",
+    chartNote: "Source chart from the Nashville site: XPS Top 12 Epoxy Flake Color Chart.",
+    chartImage: flakeChartImage,
+    chartAlt: "XPS top 12 epoxy flake color chart from Nashville Resin Worx",
     options: [
-      { name: "Domino", code: "XPS-F01", detail: "Black, white, and gray with a clean garage look.", bestFor: "Modern garages", palette: ["#111111", "#ffffff", "#8f8f8f", "#d8d8d8"], texture: "flake" },
-      { name: "Nightfall", code: "XPS-F02", detail: "Charcoal-heavy blend for a darker floor.", bestFor: "Tool rooms and shops", palette: ["#050505", "#272727", "#5e5e5e", "#a8a8a8"], texture: "flake" },
-      { name: "Gravel", code: "XPS-F03", detail: "Mid-gray blend that works with most garage colors.", bestFor: "Neutral garages", palette: ["#3f3f3f", "#787878", "#bfbfbf", "#f4f4f4"], texture: "flake" },
-      { name: "Tuxedo", code: "XPS-F04", detail: "High contrast black and white blend.", bestFor: "Clean high-contrast spaces", palette: ["#000000", "#ffffff", "#333333", "#eeeeee"], texture: "flake" },
-      { name: "Shoreline", code: "XPS-F05", detail: "Light gray, tan, and white for a softer finish.", bestFor: "Bright garages", palette: ["#d7d2c8", "#ffffff", "#a9a9a9", "#6f6b62"], texture: "flake" },
-      { name: "Saddle Tan", code: "XPS-F06", detail: "Warm tan and stone tones for desert palettes.", bestFor: "Arizona homes", palette: ["#715536", "#c7a46d", "#efe4c8", "#3b3026"], texture: "flake" }
+      { name: "Domino", detail: "Black, white, and gray full broadcast blend.", bestFor: "Modern garages", palette: ["#111111", "#ffffff", "#8f8f8f", "#d8d8d8"], texture: "flake" },
+      { name: "Nightfall", detail: "Dark charcoal and gray flake blend.", bestFor: "Shops and tool rooms", palette: ["#050505", "#262626", "#595959", "#9c9c9c"], texture: "flake" },
+      { name: "Gravel", detail: "Balanced mid-gray blend for clean neutral floors.", bestFor: "Everyday garages", palette: ["#3f3f3f", "#787878", "#bfbfbf", "#f4f4f4"], texture: "flake" },
+      { name: "Tuxedo", detail: "High-contrast black and white flake look.", bestFor: "Showpiece garages", palette: ["#000000", "#ffffff", "#333333", "#eeeeee"], texture: "flake" },
+      { name: "Shoreline", detail: "Light gray, white, and warm neutral stone tones.", bestFor: "Bright homes", palette: ["#d7d2c8", "#ffffff", "#a9a9a9", "#6f6b62"], texture: "flake" },
+      { name: "Wombat", detail: "Warm gray and taupe blend with softer contrast.", bestFor: "Residential garages", palette: ["#4b4944", "#8d8277", "#c8c2b8", "#eee9df"], texture: "flake" },
+      { name: "Saddle Tan", detail: "Tan and stone blend for desert-style homes.", bestFor: "Phoenix garages", palette: ["#715536", "#c7a46d", "#efe4c8", "#3b3026"], texture: "flake" },
+      { name: "Cabin Fever", detail: "Brown, tan, and black cabin-style blend.", bestFor: "Warm interiors", palette: ["#181818", "#735640", "#cdb18a", "#f1e4d0"], texture: "flake" },
+      { name: "Outback", detail: "Earth-tone gray, black, and tan blend.", bestFor: "Workshops", palette: ["#232323", "#836c4c", "#d0c7b0", "#5c5145"], texture: "flake" },
+      { name: "Biscuit", detail: "Light tan, cream, and soft stone finish.", bestFor: "Light floors", palette: ["#f0dfc0", "#c8ac79", "#8a7152", "#fff7e5"], texture: "flake" },
+      { name: "Custom Blend", detail: "Custom XPS blend direction for branded floors.", bestFor: "Custom projects", palette: ["#050505", "#f6b800", "#f1f1f1", "#7d7d7d"], texture: "flake" },
+      { name: "Chestnut", detail: "Deep brown and tan flake blend.", bestFor: "Warm-tone spaces", palette: ["#2b1810", "#6d3f22", "#b98b55", "#ead5b0"], texture: "flake" }
     ]
   },
   {
     key: "metallic",
     label: "Metallic",
-    headline: "Metallic epoxy feature floors",
-    summary: "A decorative, high-movement finish with depth and shine. Best when the project calls for a custom statement floor instead of a standard garage broadcast.",
-    performance: "High visual movement, smoother feel, and more custom layout control than flake.",
-    surfaceUse: "Showrooms, offices, salons, retail spaces, interior rooms, and specialty residential floors.",
+    headline: "Metallic epoxy color direction",
+    summary: "This follows the Nashville metallic epoxy direction: high-movement, marble-style finishes selected before the estimate is finalized.",
+    chartNote: "Nashville template category: Metallic Epoxy. Use these as interactive direction choices before final pigment samples.",
+    chartImage: metallicReferenceImage,
+    chartAlt: "Metallic marble epoxy floor reference from Nashville Resin Worx",
     options: [
-      { name: "Pearl Silver", code: "XPS-M01", detail: "Bright silver movement with a clean polished look.", bestFor: "Showrooms", palette: ["#f2f2f2", "#b7bec3", "#ffffff", "#626b73"], texture: "metallic" },
-      { name: "Graphite Flow", code: "XPS-M02", detail: "Dark gray motion with a high-end industrial feel.", bestFor: "Retail and offices", palette: ["#111111", "#3b3b3b", "#858585", "#d2d2d2"], texture: "metallic" },
-      { name: "Cobalt Blue", code: "XPS-M03", detail: "Blue metallic motion for a bold custom floor.", bestFor: "Feature rooms", palette: ["#092b43", "#0a6f8e", "#42d9ff", "#d9f7ff"], texture: "metallic" },
-      { name: "Copper Drift", code: "XPS-M04", detail: "Warm copper and dark resin movement.", bestFor: "Bars and studios", palette: ["#1d120c", "#7c3f21", "#c57b3a", "#f1c08a"], texture: "metallic" },
-      { name: "White Marble", code: "XPS-M05", detail: "Soft marble-style movement for decorative interiors.", bestFor: "Interior statement floors", palette: ["#ffffff", "#d9d9d9", "#9d9d9d", "#f6f6f6"], texture: "metallic" },
-      { name: "Smoke Pearl", code: "XPS-M06", detail: "Subtle smoke movement with a refined gray finish.", bestFor: "Professional spaces", palette: ["#262626", "#666666", "#b8b8b8", "#eeeeee"], texture: "metallic" }
+      { name: "White Marble", detail: "White and gray marble-style movement.", bestFor: "Interior feature floors", palette: ["#ffffff", "#d8d8d8", "#8f8f8f", "#f6f6f6"], texture: "metallic" },
+      { name: "Steel Silver", detail: "Silver movement with a polished industrial feel.", bestFor: "Showrooms", palette: ["#f2f2f2", "#b7bec3", "#ffffff", "#626b73"], texture: "metallic" },
+      { name: "Graphite", detail: "Dark gray motion with deep contrast.", bestFor: "Retail and offices", palette: ["#111111", "#3b3b3b", "#858585", "#d2d2d2"], texture: "metallic" },
+      { name: "Blue Metallic", detail: "Blue resin movement like the Nashville visual reference.", bestFor: "Feature spaces", palette: ["#092b43", "#0a6f8e", "#42d9ff", "#d9f7ff"], texture: "metallic" },
+      { name: "Copper Flow", detail: "Warm copper and dark resin movement.", bestFor: "Bars and studios", palette: ["#1d120c", "#7c3f21", "#c57b3a", "#f1c08a"], texture: "metallic" },
+      { name: "Smoke Pearl", detail: "Soft gray pearl movement with a clean finish.", bestFor: "Professional interiors", palette: ["#262626", "#666666", "#b8b8b8", "#eeeeee"], texture: "metallic" }
     ]
   },
   {
     key: "quartz",
     label: "Quartz",
-    headline: "Quartz broadcast systems",
-    summary: "A heavier-duty broadcast system with small colored quartz granules. It is built for traction, impact resistance, wet areas, and commercial traffic.",
-    performance: "More aggressive texture, high traction, strong durability, and excellent wet-area performance.",
-    surfaceUse: "Commercial kitchens, restrooms, locker rooms, patios, walkways, shops, and heavy-traffic spaces.",
+    headline: "Quartz broadcast color direction",
+    summary: "Quartz is the traction-focused system for wet, commercial, and heavy-use floors. The selector matches the same chart behavior while keeping quartz separate from decorative flake.",
+    chartNote: "Quartz options are shown as interactive broadcast directions so a customer can compare them with flake and metallic before requesting samples.",
     options: [
-      { name: "Blue Moon", code: "QZ-01", detail: "Cool blue-gray quartz for clean commercial spaces.", bestFor: "Wet areas", palette: ["#1c3444", "#577383", "#9fb4bd", "#e0e8eb"], texture: "quartz" },
-      { name: "Cobblestone", code: "QZ-02", detail: "Balanced gray quartz with a practical stone look.", bestFor: "Walkways and shops", palette: ["#3a3a36", "#77776f", "#c2c0b6", "#ededdf"], texture: "quartz" },
-      { name: "Flint", code: "QZ-03", detail: "Dark gray quartz for high-use service areas.", bestFor: "Industrial floors", palette: ["#161616", "#424242", "#777777", "#c5c5c5"], texture: "quartz" },
-      { name: "Limestone", code: "QZ-04", detail: "Light tan quartz that keeps a space brighter.", bestFor: "Patios and restrooms", palette: ["#eee4c7", "#c2a878", "#827156", "#fff7df"], texture: "quartz" },
-      { name: "Mojave", code: "QZ-05", detail: "Warm desert quartz for Arizona exterior and utility spaces.", bestFor: "Phoenix patios", palette: ["#3d2c20", "#856441", "#c9a66e", "#ead8b9"], texture: "quartz" },
-      { name: "Sandstone", code: "QZ-06", detail: "Neutral tan quartz with strong traction potential.", bestFor: "Commercial entries", palette: ["#5f4a32", "#a98355", "#d8c09a", "#f2e6cf"], texture: "quartz" }
+      { name: "Cobblestone", detail: "Balanced gray quartz broadcast.", bestFor: "Shops and walkways", palette: ["#3a3a36", "#77776f", "#c2c0b6", "#ededdf"], texture: "quartz" },
+      { name: "Flint", detail: "Dark gray quartz for high-use spaces.", bestFor: "Industrial floors", palette: ["#161616", "#424242", "#777777", "#c5c5c5"], texture: "quartz" },
+      { name: "Blue Moon", detail: "Cool blue-gray quartz blend.", bestFor: "Wet areas", palette: ["#1c3444", "#577383", "#9fb4bd", "#e0e8eb"], texture: "quartz" },
+      { name: "Limestone", detail: "Light tan quartz that keeps the room bright.", bestFor: "Patios and restrooms", palette: ["#eee4c7", "#c2a878", "#827156", "#fff7df"], texture: "quartz" },
+      { name: "Mojave", detail: "Warm desert quartz for Arizona spaces.", bestFor: "Phoenix patios", palette: ["#3d2c20", "#856441", "#c9a66e", "#ead8b9"], texture: "quartz" },
+      { name: "Sandstone", detail: "Neutral tan quartz with strong texture potential.", bestFor: "Commercial entries", palette: ["#5f4a32", "#a98355", "#d8c09a", "#f2e6cf"], texture: "quartz" }
     ]
   }
 ];
 
-function getSystem(key: FinishKey) {
-  return finishSystems.find((system) => system.key === key) ?? finishSystems[0];
+function getSystem(key: ChartKey) {
+  return chartSystems.find((system) => system.key === key) ?? chartSystems[0];
 }
 
-function getFloorStyle(option: FinishOption): CSSProperties {
+function getOptionStyle(option: ChartOption): CSSProperties {
   return {
     "--tone-a": option.palette[0],
     "--tone-b": option.palette[1],
@@ -89,8 +99,8 @@ function getFloorStyle(option: FinishOption): CSSProperties {
 }
 
 export function FinishVisualizer() {
-  const [activeKey, setActiveKey] = useState<FinishKey>("flake");
-  const [selectedName, setSelectedName] = useState(finishSystems[0].options[0].name);
+  const [activeKey, setActiveKey] = useState<ChartKey>("flake");
+  const [selectedName, setSelectedName] = useState(chartSystems[0].options[0].name);
 
   const activeSystem = getSystem(activeKey);
   const selectedOption = useMemo(
@@ -98,97 +108,92 @@ export function FinishVisualizer() {
     [activeSystem, selectedName]
   );
 
-  function selectSystem(key: FinishKey) {
+  function selectSystem(key: ChartKey) {
     const nextSystem = getSystem(key);
     setActiveKey(key);
     setSelectedName(nextSystem.options[0].name);
   }
 
   return (
-    <section className="finish-section" id="color-chart">
-      <div className="finish-head">
-        <span className="section-kicker">Floor visualizer</span>
-        <h2>See the finish first. Then choose the chart.</h2>
-        <p>
-          Start with a visible floor preview, choose Flake, Metallic, or Quartz, then compare specific blends before
-          bringing the selection into the estimate.
-        </p>
-      </div>
-
-      <div className="visualizer-shell" aria-label="Interactive floor finish visualizer">
-        <div className="visualizer-preview">
-          <div className="preview-wall" aria-hidden="true">
-            <span />
-            <span />
-            <span />
+    <section className="nrw-chart-section" id="color-chart" aria-label="Interactive color chart and floor visualizer">
+      <div className="nrw-visualizer-band">
+        <div className="nrw-preview-room" aria-label={`${selectedOption.name} floor preview`}>
+          <div className="nrw-preview-wall" aria-hidden="true" />
+          <div className="nrw-preview-base" aria-hidden="true" />
+          <div className={`nrw-preview-floor nrw-preview-${selectedOption.texture}`} style={getOptionStyle(selectedOption)}>
+            <span className="nrw-floor-shine" />
           </div>
-          <div className="preview-baseboard" aria-hidden="true" />
-          <div className={`preview-floor preview-${selectedOption.texture}`} style={getFloorStyle(selectedOption)}>
-            <div className="floor-shine" aria-hidden="true" />
-          </div>
-          <div className="preview-label">
+          <div className="nrw-preview-label">
             <span>{activeSystem.label}</span>
             <strong>{selectedOption.name}</strong>
           </div>
         </div>
-
-        <aside className="visualizer-controls">
-          <div className="system-tabs" aria-label="Finish system choices">
-            {finishSystems.map((system) => (
-              <button
-                type="button"
-                aria-pressed={system.key === activeKey}
-                className={system.key === activeKey ? "active" : ""}
-                key={system.key}
-                onClick={() => selectSystem(system.key)}
-              >
-                {system.label}
-              </button>
-            ))}
-          </div>
-          <span className="section-kicker">{activeSystem.label} system</span>
-          <h3>{activeSystem.headline}</h3>
+        <div className="nrw-preview-copy">
+          <span className="section-kicker">Floor visualizer</span>
+          <h2>See the floor before the color chart.</h2>
           <p>{activeSystem.summary}</p>
-          <dl>
-            <div>
-              <dt>Best use</dt>
-              <dd>{activeSystem.surfaceUse}</dd>
-            </div>
-            <div>
-              <dt>Performance</dt>
-              <dd>{activeSystem.performance}</dd>
-            </div>
-          </dl>
-          <a className="gold-button" href="https://torginol.com/design" target="_blank" rel="noreferrer">
-            Open Full Visualizer
-          </a>
-        </aside>
+          <p className="nrw-selected-note"><strong>{selectedOption.name}</strong> - {selectedOption.detail}</p>
+          <a className="gold-button" href="https://torginol.com/design" target="_blank" rel="noreferrer">Open Torginol Visualizer</a>
+        </div>
       </div>
 
-      <div className="finish-chart-layout">
-        <div className="finish-chart-copy">
-          <span className="section-kicker">Interactive color chart</span>
-          <h3>{activeSystem.label} choices</h3>
-          <p>
-            Tap a blend to update the visible floor preview above. Final samples, chip size, sheen, and texture should be
-            confirmed after the concrete condition is reviewed.
-          </p>
-        </div>
-        <div className="finish-option-grid" aria-label={`${activeSystem.label} finish choices`}>
-          {activeSystem.options.map((option) => (
+      <div className="nrw-color-panel">
+        <h2>Explore Color Charts</h2>
+        <div className="nrw-tabs" aria-label="Color chart categories">
+          {chartSystems.map((system) => (
             <button
+              key={system.key}
               type="button"
-              className={option.name === selectedOption.name ? "selected" : ""}
-              key={option.name}
-              onClick={() => setSelectedName(option.name)}
+              className={system.key === activeKey ? "active" : ""}
+              aria-pressed={system.key === activeKey}
+              onClick={() => selectSystem(system.key)}
             >
-              <span className={`option-swatch option-${option.texture}`} style={getFloorStyle(option)} aria-hidden="true" />
-              <strong>{option.name}</strong>
-              <small>{option.detail}</small>
-              <em>{option.bestFor}</em>
+              {system.label}
             </button>
           ))}
         </div>
+        <div className="nrw-chip-grid" aria-label={`${activeSystem.label} options`}>
+          {activeSystem.options.map((option, index) => (
+            <button
+              key={option.name}
+              type="button"
+              className={`nrw-chip nrw-chip-${option.texture} chip-${index % 6} ${option.name === selectedOption.name ? "selected" : ""}`}
+              style={getOptionStyle(option)}
+              onClick={() => setSelectedName(option.name)}
+            >
+              <span>{option.name}</span>
+            </button>
+          ))}
+        </div>
+        <div className="nrw-visualizer-callout">
+          <strong>Floor Visualizer by Torginol</strong>
+          <p>Choose a finish here, then use the full manufacturer visualizer for room-photo planning.</p>
+        </div>
+      </div>
+
+      <div className="nrw-reference-panel">
+        <span className="section-kicker">Selected chart</span>
+        <h3>{activeSystem.headline}</h3>
+        {activeSystem.chartImage ? (
+          <img src={activeSystem.chartImage} alt={activeSystem.chartAlt ?? activeSystem.headline} />
+        ) : (
+          <div className="nrw-quartz-board" aria-hidden="true">
+            {activeSystem.options.map((option) => (
+              <span key={option.name} style={getOptionStyle(option)} />
+            ))}
+          </div>
+        )}
+        <p>{activeSystem.chartNote}</p>
+      </div>
+
+      <div className="nrw-proof-panel">
+        <h3>Pick finish direction first.</h3>
+        <p>Then confirm real samples, chip size, texture, sheen, and topcoat after the concrete condition is reviewed.</p>
+        <ul>
+          <li>Flake for garages and everyday durability</li>
+          <li>Metallic for statement interior floors</li>
+          <li>Quartz for traction-heavy or commercial spaces</li>
+        </ul>
       </div>
     </section>
   );
