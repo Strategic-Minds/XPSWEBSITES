@@ -432,6 +432,85 @@
   font-size: clamp(46px, 5vw, 68px);
 }
 
+.color-chart-layout {
+  grid-template-areas:
+    "copy chart"
+    "callout chart"
+    "portal portal";
+}
+
+.flake-chart-panel {
+  grid-area: chart;
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+  margin: 0;
+  padding: clamp(16px, 2vw, 24px);
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
+  background: var(--white);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, .1);
+}
+
+.flake-chart-header {
+  display: grid;
+  gap: 5px;
+}
+
+.flake-chart-header span {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.flake-chart-header strong {
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: clamp(34px, 3.8vw, 52px);
+  line-height: .95;
+  text-transform: uppercase;
+}
+
+.flake-chart-panel img {
+  width: 100%;
+  height: auto;
+  max-height: min(62vh, 760px);
+  object-fit: contain;
+  object-position: center;
+  border: 1px solid #dfdfdf;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.flake-chart-panel figcaption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.flake-name-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.flake-name-row span {
+  display: grid;
+  place-items: center;
+  min-height: 34px;
+  padding: 6px 8px;
+  border: 1px solid #d8d8d8;
+  border-radius: 6px;
+  background: #f8f8f8;
+  color: #1b1b1b;
+  font-size: 12px;
+  font-weight: 950;
+  text-align: center;
+}
+
 @media (max-width: 1240px) {
   .site-header {
     grid-template-columns: minmax(220px, 300px) 1fr auto;
@@ -503,12 +582,20 @@
     grid-template-columns: 1fr;
     grid-template-areas:
       "copy"
-      "grid"
+      "chart"
       "callout"
       "portal";
   }
 
   .color-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .flake-chart-panel img {
+    max-height: none;
+  }
+
+  .flake-name-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
@@ -682,6 +769,18 @@
   .visualizer-callout,
   .color-chart-section .portal-teaser {
     padding: 24px 18px;
+  }
+
+  .flake-chart-panel {
+    padding: 14px;
+  }
+
+  .flake-chart-header strong {
+    font-size: 32px;
+  }
+
+  .flake-name-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .color-tabs span {
