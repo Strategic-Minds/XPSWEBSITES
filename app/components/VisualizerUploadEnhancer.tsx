@@ -255,13 +255,21 @@ export function VisualizerUploadEnhancer() {
         return;
       }
 
+      const previewPanel = preview;
+      const fileInput = input;
+      const imageFrame = frame;
+      const attachButton = attachBox;
+      const sampleMeta = attachMeta;
+      const voiceButton = micButton;
+      const voiceStatus = status;
+
       if (uploadedImage) {
-        buildUploadedImage(frame, uploadedImage);
-        attachMeta.textContent = selectedSampleLabel;
+        buildUploadedImage(imageFrame, uploadedImage);
+        sampleMeta.textContent = selectedSampleLabel;
       }
 
       function openUploadPicker() {
-        input.click();
+        fileInput.click();
       }
 
       function handleUpload(event: Event) {
@@ -279,9 +287,9 @@ export function VisualizerUploadEnhancer() {
           }
 
           uploadedImage = reader.result;
-          buildUploadedImage(frame, uploadedImage);
-          attachMeta.textContent = selectedSampleLabel;
-          status.textContent = "Image attached. Tap a chart color or press the microphone to apply a finish color.";
+          buildUploadedImage(imageFrame, uploadedImage);
+          sampleMeta.textContent = selectedSampleLabel;
+          voiceStatus.textContent = "Image attached. Tap a chart color or press the microphone to apply a finish color.";
         };
         reader.readAsDataURL(file);
       }
@@ -289,14 +297,14 @@ export function VisualizerUploadEnhancer() {
       function applySample(sample: ChartSample, source: "chart" | "voice") {
         selectedSampleLabel = sampleLabel(sample);
         system.dataset.activeChart = sample.chartId;
-        attachMeta.textContent = selectedSampleLabel;
-        status.textContent = uploadedImage
+        sampleMeta.textContent = selectedSampleLabel;
+        voiceStatus.textContent = uploadedImage
           ? `${source === "voice" ? "Voice selected" : "Chart selected"} ${selectedSampleLabel}. Local color preview applied.`
           : `${source === "voice" ? "Voice selected" : "Chart selected"} ${selectedSampleLabel}. Attach a floor photo to preview it in the frame.`;
 
         if (uploadedImage) {
           window.setTimeout(() => {
-            void requestAiRecolor(preview, frame, status, uploadedImage, sample);
+            void requestAiRecolor(previewPanel, imageFrame, voiceStatus, uploadedImage, sample);
           }, 80);
         }
       }
@@ -316,7 +324,7 @@ export function VisualizerUploadEnhancer() {
         const SpeechRecognition = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
 
         if (!SpeechRecognition) {
-          status.textContent = "Voice input is not supported in this browser. Tap a chart color or type through the future AI prompt flow.";
+          voiceStatus.textContent = "Voice input is not supported in this browser. Tap a chart color or type through the future AI prompt flow.";
           return;
         }
 
@@ -324,15 +332,15 @@ export function VisualizerUploadEnhancer() {
         recognition.lang = "en-US";
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
-        micButton.classList.add("listening");
-        status.textContent = "Listening. Say a chart color name or code, such as Gravel FB-414 or Copper metallic.";
+        voiceButton.classList.add("listening");
+        voiceStatus.textContent = "Listening. Say a chart color name or code, such as Gravel FB-414 or Copper metallic.";
 
         recognition.onresult = (event) => {
           const transcript = event.results[0]?.[0]?.transcript || "";
           const sample = findSpokenSample(transcript);
 
           if (!sample) {
-            status.textContent = `I heard "${transcript}". Say a color name or code from the flake, metallic, quartz, solid, glitter, or stain charts.`;
+            voiceStatus.textContent = `I heard "${transcript}". Say a color name or code from the flake, metallic, quartz, solid, glitter, or stain charts.`;
             return;
           }
 
@@ -341,27 +349,27 @@ export function VisualizerUploadEnhancer() {
         };
 
         recognition.onerror = () => {
-          status.textContent = "Voice prompt stopped before a chart color was selected. Try again or tap a color sample.";
+          voiceStatus.textContent = "Voice prompt stopped before a chart color was selected. Try again or tap a color sample.";
         };
 
         recognition.onend = () => {
-          micButton.classList.remove("listening");
+          voiceButton.classList.remove("listening");
         };
 
         recognition.start();
       }
 
-      frame.addEventListener("click", openUploadPicker);
-      attachBox.addEventListener("click", openUploadPicker);
-      input.addEventListener("change", handleUpload);
+      imageFrame.addEventListener("click", openUploadPicker);
+      attachButton.addEventListener("click", openUploadPicker);
+      fileInput.addEventListener("change", handleUpload);
       document.addEventListener("click", handleChartClick);
-      micButton.addEventListener("click", startVoicePrompt);
+      voiceButton.addEventListener("click", startVoicePrompt);
 
-      cleanups.push(() => frame.removeEventListener("click", openUploadPicker));
-      cleanups.push(() => attachBox.removeEventListener("click", openUploadPicker));
-      cleanups.push(() => input.removeEventListener("change", handleUpload));
+      cleanups.push(() => imageFrame.removeEventListener("click", openUploadPicker));
+      cleanups.push(() => attachButton.removeEventListener("click", openUploadPicker));
+      cleanups.push(() => fileInput.removeEventListener("change", handleUpload));
       cleanups.push(() => document.removeEventListener("click", handleChartClick));
-      cleanups.push(() => micButton.removeEventListener("click", startVoicePrompt));
+      cleanups.push(() => voiceButton.removeEventListener("click", startVoicePrompt));
     }
 
     install();
