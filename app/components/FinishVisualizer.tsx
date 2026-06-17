@@ -5,7 +5,7 @@ import { CSSProperties, useMemo, useState } from "react";
 type ChartKey = "flake" | "metallic" | "quartz";
 type Texture = "flake" | "metallic" | "quartz";
 
-type ChartOption = {
+type FinishOption = {
   name: string;
   detail: string;
   bestFor: string;
@@ -13,31 +13,35 @@ type ChartOption = {
   texture: Texture;
 };
 
-type ChartSystem = {
+type FinishSystem = {
   key: ChartKey;
   label: string;
+  tabLabel: string;
   headline: string;
   summary: string;
   chartNote: string;
   chartImage?: string;
   chartAlt?: string;
-  options: ChartOption[];
+  options: FinishOption[];
 };
+
+type FinishStyle = CSSProperties & Record<string, string>;
 
 const flakeChartImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-12-epoxy-flake-color-chart.webp?v=1780952839";
 const metallicReferenceImage = "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/nashville-resin-worx-metallic-marble-epoxy-floor.webp?v=1780952466";
 
-const chartSystems: ChartSystem[] = [
+const finishSystems: FinishSystem[] = [
   {
     key: "flake",
     label: "Flake",
+    tabLabel: "Flake",
     headline: "Top 12 epoxy flake color chart",
-    summary: "Clickable XPS flake options based on the Nashville Resin Worx color-chart section.",
-    chartNote: "Source chart: XPS Top 12 Epoxy Flake Color Chart.",
+    summary: "The core garage-floor path: a full-broadcast flake finish with a durable clear topcoat and clean texture underfoot.",
+    chartNote: "XPS Top 12 flake colors are interactive here, with the reference chart kept visible for comparison.",
     chartImage: flakeChartImage,
     chartAlt: "XPS top 12 epoxy flake color chart",
     options: [
-      { name: "Domino", detail: "Black, white, and gray full broadcast blend.", bestFor: "Modern garages", palette: ["#111111", "#ffffff", "#8f8f8f", "#d8d8d8"], texture: "flake" },
+      { name: "Domino", detail: "Black, white, and gray full-broadcast blend.", bestFor: "Modern garages", palette: ["#111111", "#ffffff", "#8f8f8f", "#d8d8d8"], texture: "flake" },
       { name: "Nightfall", detail: "Dark charcoal and gray flake blend.", bestFor: "Shops and tool rooms", palette: ["#050505", "#262626", "#595959", "#9c9c9c"], texture: "flake" },
       { name: "Gravel", detail: "Balanced mid-gray blend for clean neutral floors.", bestFor: "Everyday garages", palette: ["#3f3f3f", "#787878", "#bfbfbf", "#f4f4f4"], texture: "flake" },
       { name: "Tuxedo", detail: "High-contrast black and white flake look.", bestFor: "Showpiece garages", palette: ["#000000", "#ffffff", "#333333", "#eeeeee"], texture: "flake" },
@@ -53,10 +57,11 @@ const chartSystems: ChartSystem[] = [
   },
   {
     key: "metallic",
-    label: "Metallic",
+    label: "Metallic Epoxy",
+    tabLabel: "Metallic",
     headline: "Metallic epoxy color direction",
-    summary: "Marble-style metallic directions for statement interior floors and showroom spaces.",
-    chartNote: "Use these as direction choices before confirming real pigment samples.",
+    summary: "A decorative resin path for interiors, showrooms, bars, offices, and statement floors that need visible movement.",
+    chartNote: "Metallic selections are design directions; final pigment samples should be confirmed before installation.",
     chartImage: metallicReferenceImage,
     chartAlt: "Metallic marble epoxy floor reference",
     options: [
@@ -71,9 +76,10 @@ const chartSystems: ChartSystem[] = [
   {
     key: "quartz",
     label: "Quartz",
+    tabLabel: "Quartz",
     headline: "Quartz broadcast color direction",
-    summary: "Traction-focused quartz directions for wet, commercial, and heavy-use floors.",
-    chartNote: "Quartz choices are shown separately from decorative flake so the right system is easier to compare.",
+    summary: "A traction-first broadcast path for commercial, wet, and heavy-use spaces that need more grip than decorative flake.",
+    chartNote: "Quartz is shown as a separate system because the performance goal is different from decorative flake.",
     options: [
       { name: "Cobblestone", detail: "Balanced gray quartz broadcast.", bestFor: "Shops and walkways", palette: ["#3a3a36", "#77776f", "#c2c0b6", "#ededdf"], texture: "quartz" },
       { name: "Flint", detail: "Dark gray quartz for high-use spaces.", bestFor: "Industrial floors", palette: ["#161616", "#424242", "#777777", "#c5c5c5"], texture: "quartz" },
@@ -86,21 +92,21 @@ const chartSystems: ChartSystem[] = [
 ];
 
 function getSystem(key: ChartKey) {
-  return chartSystems.find((system) => system.key === key) ?? chartSystems[0];
+  return finishSystems.find((system) => system.key === key) ?? finishSystems[0];
 }
 
-function getOptionStyle(option: ChartOption): CSSProperties {
+function finishStyle(option: FinishOption): FinishStyle {
   return {
     "--tone-a": option.palette[0],
     "--tone-b": option.palette[1],
     "--tone-c": option.palette[2],
     "--tone-d": option.palette[3]
-  } as CSSProperties;
+  };
 }
 
 export function FinishVisualizer() {
   const [activeKey, setActiveKey] = useState<ChartKey>("flake");
-  const [selectedName, setSelectedName] = useState(chartSystems[0].options[0].name);
+  const [selectedName, setSelectedName] = useState(finishSystems[0].options[0].name);
 
   const activeSystem = getSystem(activeKey);
   const selectedOption = useMemo(
@@ -115,72 +121,77 @@ export function FinishVisualizer() {
   }
 
   return (
-    <section className="nrw-chart-section" id="color-chart" aria-label="Interactive color chart and floor visualizer">
-      <div className="nrw-color-panel">
+    <section className="market-section phoenix-finish-section" id="color-chart" aria-label="Interactive color chart and floor visualizer">
+      <div className="color-panel finish-color-panel">
         <h2>Explore Color Charts</h2>
-        <div className="nrw-tabs" aria-label="Color chart categories">
-          {chartSystems.map((system) => (
+        <div className="tabs finish-tabs" role="tablist" aria-label="Color chart categories">
+          {finishSystems.map((system) => (
             <button
               key={system.key}
               type="button"
+              role="tab"
               className={system.key === activeKey ? "active" : ""}
-              aria-pressed={system.key === activeKey}
+              aria-selected={system.key === activeKey}
               onClick={() => selectSystem(system.key)}
             >
-              {system.label}
+              {system.tabLabel}
             </button>
           ))}
         </div>
-        <div className="nrw-mini-visualizer" style={getOptionStyle(selectedOption)}>
-          <span className={`nrw-mini-floor nrw-mini-${selectedOption.texture}`} aria-hidden="true" />
-          <div className="nrw-mini-copy">
-            <span>{activeSystem.label}</span>
-            <strong>{selectedOption.name}</strong>
-            <p>{selectedOption.detail}</p>
-          </div>
-        </div>
-        <div className="nrw-chip-grid" aria-label={`${activeSystem.label} options`}>
+        <div className="chip-grid finish-chip-grid" aria-label={`${activeSystem.label} options`}>
           {activeSystem.options.map((option) => (
             <button
               key={option.name}
               type="button"
-              className={`nrw-chip nrw-chip-${option.texture} ${option.name === selectedOption.name ? "selected" : ""}`}
-              style={getOptionStyle(option)}
+              className={`flake-chip finish-chip finish-chip-${option.texture} ${option.name === selectedOption.name ? "selected" : ""}`}
+              style={finishStyle(option)}
+              aria-pressed={option.name === selectedOption.name}
               onClick={() => setSelectedName(option.name)}
             >
+              <span className="finish-chip-swatch" aria-hidden="true" />
               <span>{option.name}</span>
             </button>
           ))}
         </div>
-        <div className="nrw-visualizer-callout">
+        <a className="gold-button" href="#estimate">Get Finish Guidance</a>
+        <div className="visualizer-block finish-visualizer-block">
           <strong>Floor Visualizer by Torginol</strong>
-          <p>Choose a finish here, then open the manufacturer visualizer for full room planning.</p>
-          <a className="gold-button" href="https://torginol.com/design" target="_blank" rel="noreferrer">Try Floor Visualizer</a>
+          <p>Use the live finish choice above, then open the manufacturer visualizer to see the system in a room.</p>
+          <a className="gold-button outline" href="https://torginol.com/design" target="_blank" rel="noreferrer">Try Floor Visualizer</a>
         </div>
       </div>
 
-      <figure className="nrw-reference-panel">
+      <div className="product-panel finish-product-panel">
+        <span className="section-kicker">Floor visualizer</span>
+        <h2>{selectedOption.name}</h2>
+        <div className={`finish-floor-preview finish-floor-${selectedOption.texture}`} style={finishStyle(selectedOption)} aria-hidden="true">
+          <span className="finish-room-wall" />
+          <span className="finish-room-cabinet" />
+          <span className="finish-room-floor" />
+        </div>
+        <p>{selectedOption.detail}</p>
+        <div className="finish-best-for">
+          <span>Best for</span>
+          <strong>{selectedOption.bestFor}</strong>
+        </div>
+      </div>
+
+      <aside className="proof-panel finish-proof-panel">
         <span className="section-kicker">Selected chart</span>
-        <h3>{activeSystem.headline}</h3>
+        <h2>{activeSystem.headline}</h2>
         {activeSystem.chartImage ? (
-          <img src={activeSystem.chartImage} alt={activeSystem.chartAlt ?? activeSystem.headline} />
+          <img className="finish-chart-image" src={activeSystem.chartImage} alt={activeSystem.chartAlt ?? activeSystem.headline} />
         ) : (
-          <div className="nrw-quartz-board" aria-hidden="true">
+          <div className="finish-quartz-board" aria-hidden="true">
             {activeSystem.options.map((option) => (
-              <span key={option.name} style={getOptionStyle(option)} />
+              <span key={option.name} style={finishStyle(option)} />
             ))}
           </div>
         )}
-        <figcaption>{activeSystem.chartNote}</figcaption>
-      </figure>
-
-      <aside className="nrw-proof-panel">
-        <h3>Pick the finish direction first.</h3>
-        <p>{activeSystem.summary}</p>
+        <p>{activeSystem.chartNote}</p>
         <ul>
-          <li>Flake for garages and everyday durability</li>
-          <li>Metallic for statement interior floors</li>
-          <li>Quartz for traction-heavy or commercial spaces</li>
+          <li>{activeSystem.summary}</li>
+          <li>Compare the finish first, then confirm samples before installation.</li>
         </ul>
       </aside>
     </section>
