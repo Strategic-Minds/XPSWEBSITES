@@ -1,136 +1,78 @@
-/* Final XPS flake chart lock: three compact boards with click/tap popup only. */
+/* XPS color chart lock: three matched image boards with real crop popups only. */
 
 .xps-flake-chart-section {
-  display: grid !important;
-  grid-template-columns: minmax(260px, .24fr) minmax(0, .76fr) !important;
-  gap: 1px !important;
+  display: block !important;
   margin: 0 !important;
-  padding: 0 !important;
+  padding: clamp(18px, 2.4vw, 36px) !important;
   background: #d9dddd !important;
   color: #101214 !important;
 }
 
 .xps-flake-info,
-.xps-chart-board {
-  min-width: 0 !important;
-  padding: clamp(22px, 3vw, 38px) !important;
-}
-
-.xps-flake-info {
-  display: grid !important;
-  align-content: center !important;
-  gap: 14px !important;
-  background: #101214 !important;
-  color: #ffffff !important;
-}
-
-.xps-flake-kicker {
-  width: fit-content !important;
-  min-height: 32px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  padding: 0 13px !important;
-  border-radius: 999px !important;
-  background: #f6d21b !important;
-  color: #080808 !important;
-  font-size: .74rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0 !important;
-  text-transform: uppercase !important;
-}
-
-.xps-flake-info h2 {
-  max-width: 440px !important;
-  margin: 0 !important;
-  color: #ffffff !important;
-  font-family: var(--display), Impact, "Arial Narrow", sans-serif !important;
-  font-size: clamp(2.2rem, 3.8vw, 4.25rem) !important;
-  line-height: .9 !important;
-  letter-spacing: 0 !important;
-  text-transform: uppercase !important;
-}
-
-.xps-flake-info p {
-  max-width: 430px !important;
-  margin: 0 !important;
-  color: rgba(255, 255, 255, .76) !important;
-  font-size: .94rem !important;
-  line-height: 1.5 !important;
-}
-
-.selected-flake-card {
-  display: grid !important;
-  gap: 7px !important;
-  width: min(100%, 380px) !important;
-  margin-top: 4px !important;
-  padding: 14px !important;
-  border: 1px solid rgba(246, 210, 27, .42) !important;
-  border-radius: 8px !important;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .03)) !important;
-  box-shadow: 0 18px 34px rgba(0, 0, 0, .26) !important;
-}
-
-.selected-flake-card > span,
-.selected-flake-card small {
-  color: #f6d21b !important;
-  font-size: .68rem !important;
-  font-weight: 950 !important;
-  letter-spacing: 0 !important;
-  text-transform: uppercase !important;
-}
-
-.selected-flake-card strong {
-  color: #ffffff !important;
-  font-family: var(--display), Impact, "Arial Narrow", sans-serif !important;
-  font-size: clamp(1.8rem, 3vw, 3rem) !important;
-  line-height: .92 !important;
-  letter-spacing: 0 !important;
-  text-transform: uppercase !important;
-}
-
+.selected-flake-card,
 .selected-flake-swatch {
-  min-height: clamp(120px, 13vw, 190px) !important;
-  margin-top: 6px !important;
-  border: 1px solid rgba(255, 255, 255, .26) !important;
-  border-radius: 8px !important;
-  background:
-    radial-gradient(circle at 13% 18%, var(--tone-d) 0 8px, transparent 9px),
-    radial-gradient(circle at 25% 72%, var(--tone-b) 0 10px, transparent 11px),
-    radial-gradient(circle at 45% 35%, var(--tone-c) 0 11px, transparent 12px),
-    radial-gradient(circle at 64% 66%, var(--tone-d) 0 9px, transparent 10px),
-    radial-gradient(circle at 84% 27%, var(--tone-b) 0 9px, transparent 10px),
-    linear-gradient(135deg, var(--tone-a), var(--tone-b), var(--tone-c), var(--tone-d)) !important;
-  box-shadow: inset 0 18px 36px rgba(255, 255, 255, .16) !important;
+  display: none !important;
 }
 
 .xps-chart-board {
-  background: #f7f8f8 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
 }
 
 .xps-chart-board-grid {
   display: grid !important;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: clamp(10px, 1.25vw, 16px) !important;
   align-items: start !important;
-  max-width: 1320px !important;
+  gap: clamp(16px, 2vw, 30px) !important;
+  width: 100% !important;
+  max-width: none !important;
   margin: 0 auto !important;
 }
 
 .xps-chart-frame {
   position: relative !important;
+  z-index: 1 !important;
   width: 100% !important;
+  min-width: 0 !important;
   margin: 0 !important;
-  border-radius: 6px !important;
-  background: #ffffff !important;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, .18) !important;
+  padding: 8px !important;
+  border: 4px solid #101214 !important;
+  border-radius: 10px !important;
+  background: #101214 !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .24), inset 0 0 0 2px #f6d21b !important;
   overflow: visible !important;
 }
 
-.xps-chart-frame img {
+.xps-chart-frame.active {
+  z-index: 12 !important;
+}
+
+.xps-chart-frame::before {
+  content: "" !important;
+  display: block !important;
+  height: 8px !important;
+  margin: 0 0 8px !important;
+  border-radius: 4px !important;
+  background: #f6d21b !important;
+}
+
+.xps-chart-image-shell {
+  position: relative !important;
+  min-width: 0 !important;
+  background: #ffffff !important;
+  border-radius: 6px !important;
+  overflow: visible !important;
+}
+
+.xps-chart-image-shell > img {
   display: block !important;
   width: 100% !important;
   height: auto !important;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
 }
 
 .xps-chart-hotspot {
@@ -147,6 +89,17 @@
   transition: none !important;
 }
 
+.xps-chart-hotspot span {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+}
+
 .xps-chart-hotspot:hover {
   background: transparent !important;
   border: 0 !important;
@@ -156,8 +109,8 @@
 }
 
 .xps-chart-hotspot:focus-visible {
-  outline: 2px solid #f6d21b !important;
-  outline-offset: 2px !important;
+  outline: 3px solid #f6d21b !important;
+  outline-offset: 3px !important;
 }
 
 .xps-chart-hotspot.selected {
@@ -165,110 +118,79 @@
   border: 0 !important;
   box-shadow: none !important;
   transform: none !important;
-  outline: 2px solid #f6d21b !important;
-  outline-offset: 1px !important;
+  outline: 3px solid #f6d21b !important;
+  outline-offset: 3px !important;
 }
 
 .xps-color-popup {
   position: absolute !important;
-  z-index: 8 !important;
-  top: 8px !important;
-  right: 8px !important;
-  display: grid !important;
-  gap: 4px !important;
-  width: clamp(82px, 8vw, 126px) !important;
-  padding: 8px !important;
-  border: 2px solid #f6d21b !important;
-  border-radius: 8px !important;
-  background: #050505 !important;
-  color: #ffffff !important;
-  box-shadow: 0 18px 42px rgba(0, 0, 0, .38) !important;
-  animation: xps-popup-in .18s ease-out both !important;
-}
-
-.xps-color-popup-square {
-  aspect-ratio: 1 !important;
-  border-radius: 5px !important;
-  border: 1px solid rgba(255, 255, 255, .28) !important;
-  background:
-    radial-gradient(circle at 13% 18%, var(--tone-d) 0 5px, transparent 6px),
-    radial-gradient(circle at 25% 72%, var(--tone-b) 0 6px, transparent 7px),
-    radial-gradient(circle at 45% 35%, var(--tone-c) 0 7px, transparent 8px),
-    radial-gradient(circle at 64% 66%, var(--tone-d) 0 6px, transparent 7px),
-    radial-gradient(circle at 84% 27%, var(--tone-b) 0 6px, transparent 7px),
-    linear-gradient(135deg, var(--tone-a), var(--tone-b), var(--tone-c), var(--tone-d)) !important;
-}
-
-.xps-color-popup strong,
-.xps-color-popup span {
+  z-index: 20 !important;
+  width: min(72%, 330px) !important;
+  max-width: calc(100% - 16px) !important;
+  border: 4px solid #f6d21b !important;
+  border-radius: 9px !important;
+  background: #ffffff !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
+  pointer-events: none !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .44) !important;
+  animation: xps-popup-in .2s ease-out both !important;
 }
 
-.xps-color-popup strong {
-  color: #ffffff !important;
-  font-size: clamp(.58rem, .82vw, .78rem) !important;
-  font-weight: 950 !important;
-  line-height: 1 !important;
-  text-transform: uppercase !important;
-}
-
-.xps-color-popup span {
-  color: #f6d21b !important;
-  font-size: clamp(.52rem, .72vw, .68rem) !important;
-  font-weight: 950 !important;
-  line-height: 1 !important;
-  text-transform: uppercase !important;
+.xps-color-popup img {
+  position: absolute !important;
+  display: block !important;
+  max-width: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
 }
 
 @keyframes xps-popup-in {
   from {
     opacity: 0;
-    transform: translateY(8px) scale(.9);
+    transform: translate(-50%, -50%) scale(.84);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .xps-flake-chart-section {
-    grid-template-columns: 1fr !important;
+    padding: clamp(14px, 2vw, 24px) !important;
   }
 
-  .xps-flake-info {
-    align-content: start !important;
+  .xps-chart-board-grid {
+    gap: 14px !important;
   }
 
-  .selected-flake-card {
-    width: 100% !important;
+  .xps-chart-frame {
+    padding: 6px !important;
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 900px) {
   .xps-chart-board-grid {
     grid-template-columns: 1fr !important;
   }
 
   .xps-chart-frame {
-    max-width: 560px !important;
+    max-width: 680px !important;
     margin: 0 auto !important;
   }
 }
 
 @media (max-width: 760px) {
-  .xps-flake-info,
-  .xps-chart-board {
-    padding: 28px 16px !important;
+  .xps-flake-chart-section {
+    padding: 18px 12px !important;
   }
 
-  .xps-flake-info h2 {
-    font-size: 2.65rem !important;
+  .xps-chart-board-grid {
+    gap: 18px !important;
   }
 
   .xps-color-popup {
-    width: 92px !important;
+    width: min(78%, 260px) !important;
   }
 }
