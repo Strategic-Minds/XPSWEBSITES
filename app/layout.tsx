@@ -7,6 +7,7 @@ import "./nashville-chart-template.css";
 import "./phoenix-recovery.css";
 import "./phoenix-hero-lock.css";
 import "./phoenix-approved-template.css";
+import "./phoenix-nashville-chart-lock.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
