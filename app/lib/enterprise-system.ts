@@ -54,7 +54,7 @@ function isRouteableModel(model: string) {
 export function readAiGatewayConfig() {
   const primaryModel = process.env.AI_GATEWAY_PRIMARY_MODEL ?? "";
   const primaryProvider = process.env.AI_GATEWAY_PRIMARY_PROVIDER ?? "";
-  const fallbackModels = (process.env.AI_GATEWAY_FALLBACK_MODELS ?? "")
+  const fallbackModels = normalizeFallbackModels(process.env.AI_GATEWAY_FALLBACK_MODELS)
     .split(",")
     .map((model) => model.trim())
     .filter(Boolean);
@@ -69,6 +69,17 @@ export function readAiGatewayConfig() {
     groqPrimary,
     openAiFallback: fallbackModels.some((model) => model.startsWith("openai/"))
   };
+}
+
+function normalizeFallbackModels(value: string | undefined) {
+  const raw = value ?? "";
+  const prefix = "AI_GATEWAY_FALLBACK_MODELS=";
+
+  if (raw.startsWith(prefix)) {
+    return raw.slice(prefix.length);
+  }
+
+  return raw;
 }
 
 export function getFrontendAutomationStatus() {
