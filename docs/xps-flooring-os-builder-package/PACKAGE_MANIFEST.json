@@ -1,0 +1,42 @@
+{
+  "package": "XPS Flooring OS Builder Package",
+  "status": "docs_only_branch",
+  "created_at": "2026-06-17",
+  "drive": {
+    "root_title": "XPS WEBSITES",
+    "root_id": "1SFRjoMbAVdank3Xl2OCTk5Qk2UnuGaIu",
+    "package_folder_id": "1tOm-uuO9Yvq3C43kq2sMB7Cg0SAuvZxr",
+    "package_folder_url": "https://drive.google.com/drive/folders/1tOm-uuO9Yvq3C43kq2sMB7Cg0SAuvZxr",
+    "zip_file_id": "1AhjWh03ZBqlXWDHVBvGbFrhy09WJW7EN"
+  },
+  "github": {
+    "repo": "Strategic-Minds/XPSWEBSITES",
+    "branch": "docs/xps-flooring-os-builder-package",
+    "base_sha": "9c1a1d93966e4e1830cc16af35fd6c9f04de7143"
+  },
+  "supabase": {
+    "project": "Strategic Minds Advisory",
+    "ref": "prhppuuwcnmfdhwsagug",
+    "execution": "not_executed"
+  },
+  "vercel": {
+    "project": "xpswebsites",
+    "project_id": "prj_Pb24DYvWhwMzYLNKMaTkRzcxVGvt",
+    "team_id": "team_aFdds8lsbHMwe2ip4aQdbQ3d",
+    "production_deploy": "not_performed",
+    "production_cron_launch": "not_performed"
+  },
+  "blocked_actions": [
+    "github_main_branch_change",
+    "supabase_migration_execution",
+    "edge_function_deployment",
+    "real_twilio_sms",
+    "customer_sms_enablement",
+    "production_contract_generation",
+    "payment_processing",
+    "live_customer_messages",
+    "drive_permission_change",
+    "production_cron_launch"
+  ],
+  "next_gate": "Approve branch-safe code implementation or Supabase/Vercel sandbox execution separately."
+}
