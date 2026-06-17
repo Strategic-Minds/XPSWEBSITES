@@ -2,7 +2,8 @@
 
 import { CSSProperties, useMemo, useState } from "react";
 
-type ChartId = "flake" | "metallic" | "quartz";
+type ChartId = "flake" | "metallic" | "quartz" | "solid" | "glitter" | "stain";
+type ChartKind = "image" | "generated";
 
 type ChartArea = {
   left: string;
@@ -20,10 +21,13 @@ type ChartOption = {
 
 type ChartBoard = {
   id: ChartId;
-  width: number;
-  height: number;
-  image: string;
-  alt: string;
+  kind: ChartKind;
+  title: string;
+  subtitle: string;
+  width?: number;
+  height?: number;
+  image?: string;
+  alt?: string;
   options: ChartOption[];
 };
 
@@ -58,6 +62,10 @@ function gridArea(index: number): ChartArea {
   const columns = [chartAreas.col1, chartAreas.col2, chartAreas.col3];
   const rows = [chartAreas.row1, chartAreas.row2, chartAreas.row3, chartAreas.row4];
   return area(columns[index % 3], rows[Math.floor(index / 3)]);
+}
+
+function colorOption(name: string, code: string | undefined, palette: [string, string, string, string]): ChartOption {
+  return { name, code, palette, area: gridArea(0) };
 }
 
 const flakeOptions: ChartOption[] = [
@@ -102,10 +110,133 @@ const quartzOptions: ChartOption[] = [
   { name: "Brick", code: "Quartz", palette: ["#8b4d42", "#b87868", "#d6a293", "#64322c"], area: gridArea(8) }
 ];
 
+const solidOptions: ChartOption[] = [
+  colorOption("White", "FLV-0060", ["#f2f0ec", "#ffffff", "#d7d7d1", "#f9f8f4"]),
+  colorOption("Light Gray", "FLV-2000", ["#c9ced1", "#dce1e2", "#aeb5ba", "#f4f5f4"]),
+  colorOption("Medium Gray", "FLV-2010", ["#aaaeb4", "#c0c3c8", "#868b91", "#e2e3e4"]),
+  colorOption("Cement Gray", "FLV-2040", ["#9aa5ad", "#b4bdc4", "#76828a", "#d7dce0"]),
+  colorOption("Natural Gray", "FLV-2030", ["#a5a9ae", "#c2c5c8", "#85898f", "#e0e1e2"]),
+  colorOption("Warm Gray", "FLV-2020", ["#aaa9a2", "#c5c3ba", "#85847c", "#e2e0d7"]),
+  colorOption("Dark Gray", "FLV-2060", ["#7d858b", "#969da3", "#5e666b", "#c7ccd0"]),
+  colorOption("Charcoal", "FLV-2070", ["#626a70", "#7d858b", "#42494f", "#b2b8bc"]),
+  colorOption("Black", "FLV-9990", ["#101115", "#2d2f34", "#000000", "#73767c"]),
+  colorOption("Beige", "FLV-1000", ["#d1b6a7", "#e4cdbc", "#b49280", "#f0ded2"]),
+  colorOption("Tan", "FLV-1020", ["#aa9682", "#c2ae9a", "#887562", "#ddccbc"]),
+  colorOption("Khaki", "FLV-1050", ["#a59282", "#bca998", "#827061", "#d8c8b8"]),
+  colorOption("Toffee", "FLV-1080", ["#908780", "#aaa19a", "#6e6661", "#cfc7c0"]),
+  colorOption("Safety Yellow", "FLV-6010", ["#f3b407", "#ffc728", "#cf9300", "#ffe08a"]),
+  colorOption("Mint Green", "FLV-5000", ["#bdd8d8", "#d0e7e5", "#92b5b6", "#effafa"]),
+  colorOption("Kelly Green", "FLV-5030", ["#7ea247", "#97ba5e", "#5e7e2f", "#c4dc90"]),
+  colorOption("Bright Green", "FLV-5050", ["#08a37c", "#24bd96", "#007c5e", "#80d7c2"]),
+  colorOption("Forest Green", "FLV-5080", ["#527765", "#6f927d", "#385948", "#a3bcae"]),
+  colorOption("Light Blue", "FLV-7000", ["#9bc9da", "#b6dcec", "#72a8bd", "#d8f0f7"]),
+  colorOption("Neutral Blue", "FLV-7040", ["#6d8aa0", "#86a3b9", "#4d6a80", "#b9cedc"]),
+  colorOption("Deep Blue", "FLV-7070", ["#14085e", "#2a197b", "#07022d", "#6251b1"]),
+  colorOption("Brick Red", "FLV-8070", ["#8d3933", "#a94e45", "#64241f", "#d28d83"]),
+  colorOption("Safety Red", "FLV-8320", ["#bd2530", "#dc3d4a", "#8f1520", "#ee8990"])
+];
+
+const glitterOptions: ChartOption[] = [
+  colorOption("Clear Radiance", "Glitter", ["#f7fbff", "#cfdbe6", "#ffffff", "#eff6ff"]),
+  colorOption("Silver Sparkle", "Glitter", ["#bcc7d4", "#f4f7fb", "#7e8b98", "#d9e2eb"]),
+  colorOption("Azalea", "Glitter", ["#c1167e", "#f04bb0", "#7e064b", "#ff94d6"]),
+  colorOption("Red Dragon", "Glitter", ["#b6203c", "#eb5368", "#7d0d22", "#ff9aa6"]),
+  colorOption("Victorian Red", "Glitter", ["#9b1d22", "#c4484d", "#661014", "#e49a94"]),
+  colorOption("Red Hots", "Glitter", ["#bd2744", "#e45b73", "#7e1029", "#f5a2b0"]),
+  colorOption("Rusty Penny", "Glitter", ["#a65a37", "#ce835b", "#6b2d17", "#e3ae8b"]),
+  colorOption("Orange Citrus", "Glitter", ["#b7633d", "#df8b5e", "#7b381d", "#f2b88e"]),
+  colorOption("True Copper", "Glitter", ["#b06a49", "#dc9b75", "#753c24", "#f0c6a6"]),
+  colorOption("Storybrooke Brown", "Glitter", ["#60453c", "#8b6c61", "#2f211d", "#b89d91"]),
+  colorOption("Peach Fuzz", "Glitter", ["#c08c62", "#e3ba8a", "#8a5832", "#f2d5ab"]),
+  colorOption("Nutmeg", "Glitter", ["#9a7149", "#c19964", "#6a4829", "#dfc08b"]),
+  colorOption("Desert Sand", "Glitter", ["#b4935b", "#d4bb7e", "#806336", "#ead8aa"]),
+  colorOption("Sandstone Gold", "Glitter", ["#b79c54", "#dcc677", "#806d2f", "#f1dda0"]),
+  colorOption("Crown", "Glitter", ["#c8a428", "#f0cf48", "#806410", "#ffe17c"]),
+  colorOption("Sunstruck Gold", "Glitter", ["#d0aa1b", "#f5d43d", "#92730c", "#ffe982"])
+];
+
+const stainOptions: ChartOption[] = [
+  colorOption("Gold", "Ameripolish", ["#b98222", "#dca947", "#795213", "#edc872"]),
+  colorOption("Sand", "Ameripolish", ["#ccb58e", "#e0c9a3", "#9d8057", "#f1dfbe"]),
+  colorOption("Raw Sienna", "Ameripolish", ["#ad6e2c", "#ce8e4c", "#7a4216", "#e7b77e"]),
+  colorOption("Terra Cotta", "Ameripolish", ["#a04b32", "#c76d51", "#67301e", "#e19a82"]),
+  colorOption("Caramel", "Ameripolish", ["#b46f2d", "#d9934f", "#7d4215", "#e7b67c"]),
+  colorOption("Mahogany", "Ameripolish", ["#673020", "#8b4b38", "#3d1a10", "#b48272"]),
+  colorOption("Saddle Brown", "Ameripolish", ["#6c3f22", "#9a6843", "#3f2413", "#c49c72"]),
+  colorOption("Burnt Sienna", "Ameripolish", ["#8e4a23", "#b36c3c", "#5b2b13", "#d79a6a"]),
+  colorOption("Chestnut", "Ameripolish", ["#6f3d22", "#9a6040", "#422113", "#c79370"]),
+  colorOption("Walnut", "Ameripolish", ["#55351f", "#7c563a", "#2f1e12", "#ad8665"]),
+  colorOption("Chocolate Brown", "Ameripolish", ["#3e291e", "#604232", "#221710", "#987667"]),
+  colorOption("Sepia", "Ameripolish", ["#4b3c2a", "#74634b", "#292013", "#a9977a"]),
+  colorOption("Maroon", "Ameripolish", ["#60233a", "#8d435d", "#381020", "#bb7c93"]),
+  colorOption("Eggplant", "Ameripolish", ["#3d253f", "#67476a", "#221326", "#9a7aa0"]),
+  colorOption("Slate Blue", "Ameripolish", ["#556d7a", "#7892a1", "#344651", "#adc1cb"]),
+  colorOption("Patriot Blue", "Ameripolish", ["#203a6b", "#42659a", "#101d39", "#7f9dc5"]),
+  colorOption("Turquoise", "Ameripolish", ["#0f9a91", "#35c0b6", "#08645f", "#8be0d9"]),
+  colorOption("Green", "Ameripolish", ["#4f8a41", "#72aa5d", "#2d5725", "#aad293"]),
+  colorOption("Pine Green", "Ameripolish", ["#23563e", "#3f765a", "#123223", "#7eaa91"]),
+  colorOption("Forest Green", "Ameripolish", ["#183e2d", "#355e48", "#0b2117", "#73917f"]),
+  colorOption("Midnight Black", "Ameripolish", ["#141414", "#333333", "#000000", "#777777"]),
+  colorOption("Black", "Ameripolish", ["#050505", "#242424", "#000000", "#646464"]),
+  colorOption("Gray", "Ameripolish", ["#737778", "#969b9c", "#4b4f50", "#c4c8c9"]),
+  colorOption("Red", "Ameripolish", ["#9e2430", "#c94653", "#64131b", "#e28b95"])
+];
+
 const chartBoards: ChartBoard[] = [
-  { id: "flake", width: 1536, height: 2048, image: flakeChartImage, alt: "XPS top 12 epoxy flake color chart", options: flakeOptions },
-  { id: "metallic", width: 1536, height: 2048, image: metallicChartImage, alt: "XPS top metallic colors chart", options: metallicOptions },
-  { id: "quartz", width: 1536, height: 2048, image: quartzChartImage, alt: "XPS top quartz colors chart", options: quartzOptions }
+  {
+    id: "flake",
+    kind: "image",
+    title: "Top Flake Colors",
+    subtitle: "Full-broadcast flake finish options.",
+    width: 1536,
+    height: 2048,
+    image: flakeChartImage,
+    alt: "XPS top 12 epoxy flake color chart",
+    options: flakeOptions
+  },
+  {
+    id: "metallic",
+    kind: "image",
+    title: "Top Metallic Colors",
+    subtitle: "Decorative metallic epoxy finish options.",
+    width: 1536,
+    height: 2048,
+    image: metallicChartImage,
+    alt: "XPS top metallic colors chart",
+    options: metallicOptions
+  },
+  {
+    id: "quartz",
+    kind: "image",
+    title: "Top Quartz Colors",
+    subtitle: "Quartz texture finish options.",
+    width: 1536,
+    height: 2048,
+    image: quartzChartImage,
+    alt: "XPS top quartz colors chart",
+    options: quartzOptions
+  },
+  {
+    id: "solid",
+    kind: "generated",
+    title: "Solid Color Epoxy Base Coats",
+    subtitle: "Solid color epoxy is typically used as the base coat during the application process.",
+    options: solidOptions
+  },
+  {
+    id: "glitter",
+    kind: "generated",
+    title: "Top Glitter Additives",
+    subtitle: "Glitter is an additive, but it can also be used to create an overall sparkle look.",
+    options: glitterOptions
+  },
+  {
+    id: "stain",
+    kind: "generated",
+    title: "Concrete Dye & Stain Colors",
+    subtitle: "Concrete dye and stain options for polished or decorative concrete color direction.",
+    options: stainOptions
+  }
 ];
 
 function finishStyle(option: ChartOption): FinishStyle {
@@ -122,12 +253,14 @@ function hotspotStyle(option: ChartOption): CSSProperties {
 }
 
 function popupStyle(chart: ChartBoard, option: ChartOption): CSSProperties {
+  const chartWidth = chart.width ?? 1536;
+  const chartHeight = chart.height ?? 2048;
   const left = parseFloat(option.area.left);
   const top = parseFloat(option.area.top);
   const width = parseFloat(option.area.width);
   const height = parseFloat(option.area.height);
-  const cropWidth = (width / 100) * chart.width;
-  const cropHeight = (height / 100) * chart.height;
+  const cropWidth = (width / 100) * chartWidth;
+  const cropHeight = (height / 100) * chartHeight;
 
   return {
     left: `${left + width / 2}%`,
@@ -212,38 +345,88 @@ export function FinishVisualizer() {
 
               return (
                 <div className={`xps-chart-frame ${boardIsActive ? "active" : ""}`} key={board.id}>
-                  <div className="xps-chart-image-shell" onPointerLeave={() => clearSample(board)}>
-                    <img src={board.image} alt={board.alt} />
-                    {board.options.map((option) => {
-                      const selected = isSelected(board, option);
+                  <div className="xps-chart-image-shell" data-chart={board.id} onPointerLeave={() => clearSample(board)}>
+                    {board.kind === "image" ? (
+                      <>
+                        <img src={board.image} alt={board.alt} />
+                        {board.options.map((option) => {
+                          const selected = isSelected(board, option);
 
-                      return (
-                        <button
-                          key={`${board.id}-${option.name}`}
-                          type="button"
-                          className={`xps-chart-hotspot ${selected ? "selected" : ""}`}
-                          style={hotspotStyle(option)}
-                          aria-pressed={selected}
-                          aria-label={`Enlarge ${option.name}${option.code ? ` ${option.code}` : ""}`}
-                          onClick={() => selectSample(board, option)}
-                        >
-                          <span>{option.name}</span>
-                        </button>
-                      );
-                    })}
-                    {board.options.map((option) => (
-                      isSelected(board, option) ? (
-                        <div
-                          className="xps-color-popup"
-                          style={popupStyle(board, option)}
-                          aria-label={`${option.name} enlarged sample`}
-                          key={`${board.id}-${option.name}-popup`}
-                        >
-                          <img src={board.image} alt="" style={popupImageStyle(option)} aria-hidden="true" />
-                          <span className="xps-color-popup-label">{option.name}</span>
+                          return (
+                            <button
+                              key={`${board.id}-${option.name}`}
+                              type="button"
+                              className={`xps-chart-hotspot ${selected ? "selected" : ""}`}
+                              style={hotspotStyle(option)}
+                              aria-pressed={selected}
+                              aria-label={`Enlarge ${option.name}${option.code ? ` ${option.code}` : ""}`}
+                              onClick={() => selectSample(board, option)}
+                            >
+                              <span>{option.name}</span>
+                            </button>
+                          );
+                        })}
+                        {board.options.map((option) => (
+                          isSelected(board, option) ? (
+                            <div
+                              className="xps-color-popup"
+                              style={popupStyle(board, option)}
+                              aria-label={`${option.name} enlarged sample`}
+                              key={`${board.id}-${option.name}-popup`}
+                            >
+                              <img src={board.image} alt="" style={popupImageStyle(option)} aria-hidden="true" />
+                              <span className="xps-color-popup-label">{option.name}</span>
+                            </div>
+                          ) : null
+                        ))}
+                      </>
+                    ) : (
+                      <div className="xps-generated-chart" data-chart={board.id}>
+                        <div className="xps-generated-topbar">
+                          <span>Color Charts</span>
+                          <span className="xps-generated-icon" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /><i /><i /></span>
                         </div>
-                      ) : null
-                    ))}
+                        <div className="xps-generated-content">
+                          <h3>{board.title}</h3>
+                          <p>{board.subtitle}</p>
+                          <div className="xps-generated-swatches">
+                            {board.options.map((option) => {
+                              const selected = isSelected(board, option);
+
+                              return (
+                                <button
+                                  key={`${board.id}-${option.name}`}
+                                  type="button"
+                                  className={`xps-generated-swatch ${selected ? "selected" : ""}`}
+                                  style={finishStyle(option)}
+                                  aria-pressed={selected}
+                                  aria-label={`Enlarge ${option.name}${option.code ? ` ${option.code}` : ""}`}
+                                  onClick={() => selectSample(board, option)}
+                                >
+                                  <span className="xps-swatch-tile" aria-hidden="true" />
+                                  <span className="xps-swatch-label">
+                                    <strong>{option.name}</strong>
+                                    {option.code ? <small>{option.code}</small> : null}
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        {board.options.map((option) => (
+                          isSelected(board, option) ? (
+                            <div
+                              className={`xps-generated-popup ${board.id}`}
+                              style={finishStyle(option)}
+                              aria-label={`${option.name} enlarged sample`}
+                              key={`${board.id}-${option.name}-popup`}
+                            >
+                              <span className="xps-color-popup-label">{option.name}</span>
+                            </div>
+                          ) : null
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               );
