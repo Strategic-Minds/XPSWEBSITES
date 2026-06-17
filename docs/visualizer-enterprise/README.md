@@ -9,6 +9,7 @@ This pack upgrades the floor visualizer from a limited MVP path into an Enterpri
 - Skip a throwaway limited MVP.
 - Do not skip validation gates.
 - Build Enterprise V1 behind feature flags and release progressively.
+- The six uploaded Phoenix/XPS mockups are now locked as pixel-target frontend acceptance baselines.
 - Keep manual masking as the guaranteed fallback.
 - Enable AI segmentation, 3D scenes, quote attachment, analytics, storage, voice, document automation, and CRM only behind explicit flags, budget controls, consent gates, and approval policy.
 
@@ -23,6 +24,18 @@ This pack upgrades the floor visualizer from a limited MVP path into an Enterpri
 - Cron route: `/api/cron/enterprise-visualizer-validation`
 - Ops cron route: `/api/cron/enterprise-ops-tick`
 - Cron cadence: `*/5 * * * *`
+- CRM folder: `XPS_ENTERPRISE_VISUALIZER_CRM`, folder ID `1hRvRfg4k4HfM1-vPF34LySDcU5WxG_Rm`
+- CRM Sheet: `XPS Enterprise Visualizer CRM`, spreadsheet ID `1jizwt6Cf0wBNltNfhldyekkoa1kR0J7Ugm4_rzbLWvs`
+- Mockup baseline folder: https://drive.google.com/drive/folders/1RlIkclW2H8Cm1q-cpc26HGQ1XkTnujES
+
+## Pixel-Perfect Mockup Targets
+
+- Public quote landing desktop/mobile.
+- Floor Design Center desktop/mobile.
+- Project Design and Quote Center desktop/mobile.
+- Customer Dashboard desktop/mobile.
+- Customer Project Detail desktop/mobile.
+- Installer PWA / Job Tracker and desktop command center.
 
 ## Finish Families
 
@@ -49,6 +62,8 @@ This pack upgrades the floor visualizer from a limited MVP path into an Enterpri
 - `11-automation-validation-healing-system.md`
 - `12-env-and-integration-contract.md`
 - `13-branch-reconciliation-report.md`
+- `14-pixel-perfect-frontend-automation-packet.md`
+- `15-blocker-fix-and-automation-matrix.md`
 
 ## Source Links
 
@@ -62,3 +77,7 @@ This pack upgrades the floor visualizer from a limited MVP path into an Enterpri
 ## Governance
 
 Do not promote production, persist customer photos, train AI on customer images, create unbounded paid AI usage, mutate databases, mutate billing, send email, place calls, send SMS, create calendar events, write Drive project folders, publish social content, or activate live CRM/customer messaging without explicit approval.
+
+## Next Build Lane
+
+Implement the pixel-perfect frontend lane using `14-pixel-perfect-frontend-automation-packet.md` and validate against `15-blocker-fix-and-automation-matrix.md`. All work must stay branch-safe, preview-first, and evidence-backed until the production approval gate is cleared.
