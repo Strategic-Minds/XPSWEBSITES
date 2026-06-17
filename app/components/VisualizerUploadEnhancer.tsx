@@ -328,14 +328,14 @@ export function VisualizerUploadEnhancer() {
           return;
         }
 
-        const recognition = new SpeechRecognition();
+        const recognition: SpeechRecognitionLike = new SpeechRecognition();
         recognition.lang = "en-US";
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
         voiceButton.classList.add("listening");
         voiceStatus.textContent = "Listening. Say a chart color name or code, such as Gravel FB-414 or Copper metallic.";
 
-        recognition.onresult = (event) => {
+        recognition.onresult = (event: SpeechRecognitionEventLike) => {
           const transcript = event.results[0]?.[0]?.transcript || "";
           const sample = findSpokenSample(transcript);
 
