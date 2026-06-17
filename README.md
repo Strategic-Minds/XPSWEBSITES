@@ -2,7 +2,7 @@
 
 Autonomous website factory starter for Xtreme Polishing Systems connected local market sites.
 
-The first location is Phoenix Epoxy Pros. The scaffold is based on the Nashville Resin Worx reference pattern and now includes the production-readiness layer for integrations, pricing, Supabase, legal templates, receipt tracking, location registry, Metricool operations, and QA.
+The first location is Phoenix Epoxy Pros. The scaffold is based on the Nashville Resin Worx reference pattern and now includes the production-readiness layer for integrations, pricing, Supabase, legal templates, receipt tracking, location registry, Metricool operations, Twilio SMS lead alerts, and QA.
 
 ## Current Default Inputs
 
@@ -30,16 +30,29 @@ The first location is Phoenix Epoxy Pros. The scaffold is based on the Nashville
 
 The production-ready scaffold package contains:
 
-- `apps/phoenix-epoxy-pros-site`: public funnel website PWA
+- `apps/phoenix-epoxy-pros-site`: public funnel website PWA with Twilio SMS lead alerts and opt-in customer confirmations
 - `apps/phoenix-job-ops-app`: separate customer/company job operations PWA
 - `packages/factory-config`: reusable location, brand, asset, and owner-input configuration
 - `packages/backend-template`: backend records, estimating, timeline, and receipt template logic
-- `supabase/migrations`: Supabase database schema
+- `supabase/migrations`: Supabase database schema with SMS consent/status lead fields
 - `schemas`: automation receipt schema and event map
 - `tests/e2e`: Playwright owner-preview tests
 - `.github/workflows`: validation workflows
 - `factory`: Auto Builder packets, manifests, location configs, and readiness checklists
 - `docs`: builder, branding, backend, legal, receipt, and owner handoff documentation
+
+## Twilio SMS Setup
+
+Set these variables in Vercel or the approved Auto Builder vault before production launch:
+
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_AUTH_TOKEN`
+- `TWILIO_MESSAGING_SERVICE_SID` or `TWILIO_FROM_PHONE_NUMBER`
+- `TWILIO_OWNER_NOTIFY_TO`
+- `TWILIO_ENABLE_CUSTOMER_SMS=true` after SMS consent language is approved
+- `TWILIO_STATUS_CALLBACK_URL` if delivery callbacks are required
+
+Do not store live Twilio credentials in Drive or Git.
 
 ## Auto Builder Handoff
 
@@ -59,6 +72,6 @@ Use this repo as the control repo and ingest the production-ready scaffold packa
 npm run validate
 ```
 
-This checks factory files, Supabase migration, receipt schema, PWA manifests, placeholder files, and app-level validation scripts without requiring live integrations.
+This checks factory files, Supabase migration, receipt schema, PWA manifests, placeholder files, Twilio SMS wiring, and app-level validation scripts without requiring live integrations.
 
 Full production builds require dependencies and environment variables from `.env.example`. Do not store live secrets in Drive or Git.
