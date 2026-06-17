@@ -1,9 +1,9 @@
-/* XPS color chart lock: three matched image boards with real crop popups only. */
+/* XPS color chart lock: three equal standardized boards with real crop popups only. */
 
 .xps-flake-chart-section {
   display: block !important;
   margin: 0 !important;
-  padding: clamp(18px, 2.4vw, 36px) !important;
+  padding: clamp(18px, 2.4vw, 34px) !important;
   background: #d9dddd !important;
   color: #101214 !important;
 }
@@ -37,12 +37,13 @@
   z-index: 1 !important;
   width: 100% !important;
   min-width: 0 !important;
+  aspect-ratio: 3 / 4 !important;
   margin: 0 !important;
-  padding: 8px !important;
-  border: 4px solid #101214 !important;
-  border-radius: 10px !important;
-  background: #101214 !important;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, .24), inset 0 0 0 2px #f6d21b !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .22) !important;
   overflow: visible !important;
 }
 
@@ -51,28 +52,28 @@
 }
 
 .xps-chart-frame::before {
-  content: "" !important;
-  display: block !important;
-  height: 8px !important;
-  margin: 0 0 8px !important;
-  border-radius: 4px !important;
-  background: #f6d21b !important;
+  content: none !important;
+  display: none !important;
 }
 
 .xps-chart-image-shell {
   position: relative !important;
+  width: 100% !important;
   min-width: 0 !important;
-  background: #ffffff !important;
-  border-radius: 6px !important;
+  aspect-ratio: 3 / 4 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
   overflow: visible !important;
 }
 
 .xps-chart-image-shell > img {
   display: block !important;
   width: 100% !important;
-  height: auto !important;
-  border-radius: 4px !important;
-  background: #ffffff !important;
+  height: 100% !important;
+  aspect-ratio: 3 / 4 !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  background: transparent !important;
 }
 
 .xps-chart-hotspot {
@@ -125,7 +126,7 @@
 .xps-color-popup {
   position: absolute !important;
   z-index: 20 !important;
-  width: min(72%, 330px) !important;
+  width: min(76%, 360px) !important;
   max-width: calc(100% - 16px) !important;
   border: 4px solid #f6d21b !important;
   border-radius: 9px !important;
@@ -138,11 +139,42 @@
 
 .xps-color-popup img {
   position: absolute !important;
+  z-index: 1 !important;
   display: block !important;
   max-width: none !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
+}
+
+.xps-color-popup-label {
+  position: absolute !important;
+  z-index: 2 !important;
+  right: 8px !important;
+  bottom: 7px !important;
+  max-width: calc(100% - 16px) !important;
+  padding: 4px 7px !important;
+  border-radius: 4px !important;
+  background: rgba(255, 255, 255, .86) !important;
+  color: #050505 !important;
+  font-size: clamp(.62rem, .82vw, .8rem) !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, .22) !important;
+}
+
+.xps-chart-disclaimer {
+  width: min(100%, 1380px) !important;
+  margin: clamp(16px, 2vw, 26px) auto 0 !important;
+  color: #101214 !important;
+  text-align: center !important;
+  font-size: clamp(.9rem, 1.2vw, 1.1rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.45 !important;
 }
 
 @keyframes xps-popup-in {
@@ -163,10 +195,6 @@
 
   .xps-chart-board-grid {
     gap: 14px !important;
-  }
-
-  .xps-chart-frame {
-    padding: 6px !important;
   }
 }
 
@@ -191,6 +219,11 @@
   }
 
   .xps-color-popup {
-    width: min(78%, 260px) !important;
+    width: min(82%, 280px) !important;
+  }
+
+  .xps-chart-disclaimer {
+    text-align: left !important;
+    font-size: .9rem !important;
   }
 }
