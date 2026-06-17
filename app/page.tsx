@@ -10,7 +10,8 @@ const images = {
   garage: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581",
   commercial: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-commercial.webp?v=1781648591",
   patio: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-patio.webp?v=1781648601",
-  repair: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-repair.webp?v=1781648616"
+  repair: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-repair.webp?v=1781648616",
+  flakeColorChart: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/xps-top-12-epoxy-flake-color-chart.webp?v=1780952839"
 };
 
 const navLinks = [
@@ -104,18 +105,18 @@ const processSteps = [
 ];
 
 const colorChips = [
-  { name: "Domino", detail: "Black, white, gray", tone: "swatch-domino" },
-  { name: "Nightfall", detail: "Charcoal heavy blend", tone: "swatch-nightfall" },
-  { name: "Gravel", detail: "Mid-gray neutral", tone: "swatch-gravel" },
-  { name: "Tuxedo", detail: "High contrast flake", tone: "swatch-tuxedo" },
-  { name: "Shoreline", detail: "Light gray, tan, white", tone: "swatch-shoreline" },
-  { name: "Wombat", detail: "Warm gray blend", tone: "swatch-wombat" },
-  { name: "Saddle Tan", detail: "Tan and stone mix", tone: "swatch-saddle" },
-  { name: "Outback", detail: "Desert warm blend", tone: "swatch-outback" },
-  { name: "Creekbed", detail: "Natural stone tone", tone: "swatch-creekbed" },
-  { name: "Stonewash", detail: "Cool blue-gray", tone: "swatch-stonewash" },
-  { name: "Cabin Fever", detail: "Brown and charcoal", tone: "swatch-cabin" },
-  { name: "Custom Blend", detail: "Matched to project", tone: "swatch-custom" }
+  "Domino",
+  "Nightfall",
+  "Gravel",
+  "Tuxedo",
+  "Shoreline",
+  "Wombat",
+  "Saddle Tan",
+  "Cabin Fever",
+  "Outback",
+  "Biscuit",
+  "Custom Blend",
+  "Chestnut"
 ];
 
 const gallery = [
@@ -234,8 +235,9 @@ export default function HomePage() {
             <span className="section-kicker">Color chart</span>
             <h2>Pick the finish family before the quote call.</h2>
             <p>
-              Use the chart as a direction-setting tool. Final availability, chip size, texture, and topcoat sheen can be
-              confirmed once the surface condition and project scope are reviewed.
+              This section now uses the XPS top 12 epoxy flake chart from the approved Nashville reference. Use it as
+              the starting point for color direction before final chip size, texture, sheen, and availability are
+              confirmed during estimate review.
             </p>
             <div className="color-tabs" aria-label="Finish systems">
               <span>Flake</span>
@@ -245,15 +247,25 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="color-grid" aria-label="Epoxy flake color chart preview">
-            {colorChips.map((color) => (
-              <article className={`color-swatch ${color.tone}`} key={color.name}>
-                <div className="swatch-preview" aria-hidden="true" />
-                <strong>{color.name}</strong>
-                <small>{color.detail}</small>
-              </article>
-            ))}
-          </div>
+          <figure className="flake-chart-panel">
+            <div className="flake-chart-header">
+              <span>Top 12 flake blends</span>
+              <strong>XPS Epoxy Flake Color Chart</strong>
+            </div>
+            <img
+              src={images.flakeColorChart}
+              alt="XPS top 12 epoxy flake color chart with Domino, Nightfall, Gravel, Tuxedo, Shoreline, Wombat, Saddle Tan, Cabin Fever, Outback, Biscuit, Custom Blend, and Chestnut"
+            />
+            <figcaption>
+              Shown as the early finish-selection reference. Final samples should be confirmed against the real floor,
+              lighting, project scope, and material availability.
+            </figcaption>
+            <div className="flake-name-row" aria-label="Popular flake blend quick picks">
+              {colorChips.map((color) => (
+                <span key={color}>{color}</span>
+              ))}
+            </div>
+          </figure>
 
           <aside className="visualizer-callout">
             <strong>Need to see it on a floor?</strong>
