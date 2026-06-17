@@ -12,6 +12,7 @@ import "./phoenix-nashville-chart-lock.css";
 import "./xps-flake-chart-lock.css";
 import "./vizual-x/vizual-x.css";
 import "./visualizer-upload-frame.css";
+import "./visualizer-upload-frame-priority.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
