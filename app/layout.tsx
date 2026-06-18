@@ -12,6 +12,7 @@ import "./xps-flake-chart-lock.css";
 import "./vizual-x/vizual-x.css";
 import "./portal-sign-in.css";
 import "./xps-home-revision.css";
+import "./digital-estimator-intake.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
