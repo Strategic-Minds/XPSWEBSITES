@@ -32,7 +32,8 @@ export function PhoenixLeadForm() {
       phone: readFormValue(formData, "phone"),
       email: readFormValue(formData, "email"),
       zipCode: readFormValue(formData, "zipCode"),
-      projectType: readFormValue(formData, "projectType")
+      projectType: readFormValue(formData, "projectType"),
+      asapServiceRequested: formData.get("asapServiceRequested") === "yes" ? "yes" : "no"
     };
 
     if (!lead.fullName || !lead.phone || !lead.email || !lead.zipCode || !lead.projectType) {
@@ -84,6 +85,11 @@ export function PhoenixLeadForm() {
             <option key={project}>{project}</option>
           ))}
         </select>
+      </label>
+
+      <label className="asap-check hero-asap-check">
+        <input name="asapServiceRequested" type="checkbox" value="yes" />
+        <span>Request ASAP service</span>
       </label>
 
       <input className="hidden-field" name="budget" value="Digital Bid estimate request" readOnly />
