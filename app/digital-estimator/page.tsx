@@ -11,6 +11,7 @@ type LeadBasics = {
   phone: string;
   zipCode: string;
   projectType: string;
+  asapServiceRequested: string;
 };
 
 const projectTypes = [
@@ -50,7 +51,8 @@ const emptyLead: LeadBasics = {
   email: "",
   phone: "",
   zipCode: "",
-  projectType: ""
+  projectType: "",
+  asapServiceRequested: "no"
 };
 
 function readStoredLead() {
@@ -60,6 +62,10 @@ function readStoredLead() {
   } catch {
     return {};
   }
+}
+
+function formValue(formData: FormData, key: string) {
+  return String(formData.get(key) || "").trim();
 }
 
 export default function DigitalEstimatorPage() {
@@ -81,7 +87,8 @@ export default function DigitalEstimatorPage() {
       email: params.get("email") || storedLead.email || "",
       phone: params.get("phone") || storedLead.phone || "",
       zipCode: params.get("zipCode") || storedLead.zipCode || "",
-      projectType: params.get("projectType") || storedLead.projectType || ""
+      projectType: params.get("projectType") || storedLead.projectType || "",
+      asapServiceRequested: params.get("asapServiceRequested") || storedLead.asapServiceRequested || "no"
     });
   }, []);
 
@@ -100,9 +107,15 @@ export default function DigitalEstimatorPage() {
     setMessage("Uploading your estimator package...");
 
     const formData = new FormData(event.currentTarget);
+    const asapServiceRequested = lead.asapServiceRequested === "yes" ? "yes" : "no";
+    const timeline = asapServiceRequested === "yes"
+      ? `ASAP service request - ${formValue(formData, "preferredTimeline") || "24-hour digital estimator request"}`
+      : formValue(formData, "preferredTimeline") || "24-hour digital estimator request";
+
     formData.set("source", "xps_digital_estimator");
     formData.set("campaign", "15_percent_digital_estimator_coupon");
-    formData.set("timeline", "24-hour digital estimator request");
+    formData.set("timeline", timeline);
+    formData.set("asapServiceRequested", asapServiceRequested);
     formData.set("desiredFinish", desiredFinish);
     formData.set("desiredColor", desiredColor);
     formData.set("notificationEmail", "jeremy@shopxps.com");
@@ -119,8 +132,38 @@ export default function DigitalEstimatorPage() {
         throw new Error(result.message || "Estimator submission failed.");
       }
 
+      const dashboardLead = {
+        fullName: formValue(formData, "fullName"),
+        address: formValue(formData, "address"),
+        email: formValue(formData, "email"),
+        phone: formValue(formData, "phone"),
+        zipCode: formValue(formData, "zipCode"),
+        projectType: formValue(formData, "projectType"),
+        floorMeasurements: formValue(formData, "floorMeasurements"),
+        existingFloorCovering: formValue(formData, "existingFloorCovering"),
+        concreteCondition: formValue(formData, "concreteCondition"),
+        desiredFinish,
+        desiredColor,
+        asapServiceRequested,
+        asapNotes: formValue(formData, "asapNotes"),
+        preferredTimeline: formValue(formData, "preferredTimeline"),
+        submittedAt: new Date().toISOString(),
+        score: result.score || "new"
+      };
+
+      window.sessionStorage.setItem("xpsClientDashboard", JSON.stringify(dashboardLead));
       setSubmitState("sent");
-      setMessage("Received. Your 15% coupon is attached. The estimator package is routed for review, and the proposal path will continue by email with warranty and job tracker information.");
+      setMessage("Received. Opening your client dashboard now...");
+
+      const params = new URLSearchParams({
+        fullName: dashboardLead.fullName,
+        email: dashboardLead.email,
+        phone: dashboardLead.phone,
+        zipCode: dashboardLead.zipCode,
+        projectType: dashboardLead.projectType,
+        asap: dashboardLead.asapServiceRequested
+      });
+      window.location.assign(`/client-dashboard?${params.toString()}`);
     } catch (error) {
       setSubmitState("error");
       setMessage(error instanceof Error ? error.message : "Estimator submission failed.");
@@ -148,6 +191,7 @@ export default function DigitalEstimatorPage() {
             <span>Multiple floor images</span>
             <span>15% coupon</span>
             <span>24-hour email estimate</span>
+            <span>ASAP request option</span>
           </div>
         </div>
 
@@ -221,6 +265,33 @@ export default function DigitalEstimatorPage() {
                 {colorOptions.map((color) => <option key={color}>{color}</option>)}
               </select>
             </label>
+            <label className="digital-estimator-field">
+              <span>Preferred Timeline</span>
+              <select name="preferredTimeline" defaultValue="24-hour digital estimator request" required>
+                <option>ASAP - urgent review requested</option>
+                <option>24-hour digital estimator request</option>
+                <option>This week</option>
+                <option>2-4 weeks</option>
+                <option>Planning ahead</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="digital-estimator-asap digital-estimator-wide">
+            <label className="asap-check">
+              <input
+                name="asapServiceRequested"
+                type="checkbox"
+                value="yes"
+                checked={lead.asapServiceRequested === "yes"}
+                onChange={(event) => updateLead("asapServiceRequested", event.target.checked ? "yes" : "no")}
+              />
+              <span>Request ASAP service</span>
+            </label>
+            <label className="digital-estimator-field">
+              <span>ASAP Notes</span>
+              <textarea name="asapNotes" rows={3} placeholder="Tell us if this is urgent, if a business is down, or if you need the floor scheduled quickly." />
+            </label>
           </div>
 
           <label className="digital-estimator-field digital-estimator-wide">
@@ -236,7 +307,7 @@ export default function DigitalEstimatorPage() {
 
           <div className="digital-estimator-flow-note digital-estimator-wide">
             <strong>What happens next</strong>
-            <span>Jeremy reviews the estimator package, your proposal is sent by email, then the payment link and temporary job tracker sign-in follow after approval and payment.</span>
+            <span>Jeremy reviews the estimator package, your proposal is sent by email, then the payment link and temporary job tracker sign-in follow after approval and payment. After you submit, this page opens your client dashboard.</span>
           </div>
 
           <button className="gold-button digital-estimator-submit" type="submit" disabled={submitState === "sending"}>
