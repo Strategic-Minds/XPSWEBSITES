@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { InstantChatWidget } from "./components/InstantChatWidget";
 import "./globals.css";
 import "./approved-hero.css";
 import "./phoenix-final-revision.css";
@@ -33,7 +34,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <InstantChatWidget />
+      </body>
     </html>
   );
 }
