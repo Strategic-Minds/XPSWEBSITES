@@ -111,6 +111,28 @@
   line-height: 1.4;
 }
 
+.digital-estimator-flow-note {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid rgba(246, 184, 0, .44);
+  border-radius: 8px;
+  background: #fff9e3;
+  color: #151515;
+}
+
+.digital-estimator-flow-note strong {
+  color: #5f4500;
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.digital-estimator-flow-note span {
+  color: #3d3d3d;
+  line-height: 1.45;
+}
+
 .digital-estimator-submit {
   width: 100%;
   min-height: 56px;
@@ -128,6 +150,131 @@
 
 .digital-estimator-panel .portal-login-status.error {
   color: #9b1616;
+}
+
+.xps-visualizer-launch,
+.floor-visualizer-strip,
+a[href="/vizual-x"],
+a[href="#visualizer"] {
+  display: none !important;
+}
+
+.job-tracker-preview-page .portal-login-hero {
+  align-items: start;
+  min-height: auto;
+}
+
+.job-tracker-summary-panel {
+  display: grid;
+  gap: 14px;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.job-tracker-summary-panel h2 {
+  margin: 0;
+  font-family: var(--display, Impact, sans-serif);
+  font-size: clamp(36px, 4vw, 58px);
+  line-height: .95;
+  text-transform: uppercase;
+}
+
+.job-tracker-summary-panel ul,
+.job-tracker-timeline {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.job-tracker-summary-panel li,
+.job-tracker-timeline li {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid #dedede;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.job-tracker-summary-panel strong,
+.job-tracker-timeline strong {
+  color: #111111;
+  font-size: 13px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.job-tracker-summary-panel span,
+.job-tracker-timeline span {
+  color: #5e5e5e;
+  line-height: 1.45;
+}
+
+.job-tracker-dashboard {
+  padding: clamp(48px, 7vw, 88px) clamp(18px, 5vw, 72px);
+  background: #f7f8f8;
+  color: #151515;
+}
+
+.job-tracker-dashboard-inner {
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) minmax(360px, 1fr);
+  gap: clamp(22px, 5vw, 64px);
+  width: min(100%, 1320px);
+  margin: 0 auto;
+}
+
+.job-tracker-ticket {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding: clamp(20px, 3vw, 34px);
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.job-tracker-ticket h2 {
+  margin: 0;
+  font-family: var(--display, Impact, sans-serif);
+  font-size: clamp(42px, 5vw, 76px);
+  line-height: .92;
+  text-transform: uppercase;
+}
+
+.job-tracker-ticket dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 10px 18px;
+  margin: 0;
+}
+
+.job-tracker-ticket dt {
+  color: #6d6d6d;
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.job-tracker-ticket dd {
+  margin: 0;
+  color: #151515;
+  font-weight: 800;
+}
+
+.job-tracker-status-pill {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 36px;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: #f6b800;
+  color: #050505;
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
 }
 
 /* Temporary fix for clipped first-screen quote forms on desktop and mobile. */
@@ -176,7 +323,8 @@
 }
 
 @media (max-width: 1050px) {
-  .digital-estimator-hero {
+  .digital-estimator-hero,
+  .job-tracker-dashboard-inner {
     grid-template-columns: 1fr;
   }
 
@@ -196,5 +344,9 @@
 
   .digital-estimator-panel {
     padding: 16px;
+  }
+
+  .job-tracker-ticket dl {
+    grid-template-columns: 1fr;
   }
 }
