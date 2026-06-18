@@ -22,7 +22,8 @@ const images = {
 
 const navLinks = [
   { label: "Before / After", href: "#before-after" },
-  { label: "Reviews", href: "#reviews" }
+  { label: "Reviews", href: "#reviews" },
+  { label: "Portal Sign In", href: "/customer-portal" }
 ];
 
 const services = [
@@ -156,7 +157,7 @@ export default function HomePage() {
         <nav className="mobile-action-rail" aria-label="Mobile quick actions">
           <a href="#estimate"><span className="action-icon">01</span>Estimate</a>
           <a href="#process"><span className="action-icon">02</span>Process</a>
-          <a href="#color-chart"><span className="action-icon">03</span>Visualizer</a>
+          <a href="/customer-portal"><span className="action-icon">03</span>Portal</a>
           <a href={phoneHref}><span className="action-icon">04</span>Call</a>
         </nav>
       </section>
@@ -167,7 +168,7 @@ export default function HomePage() {
           <a href="#estimate"><span>1</span><strong>Pick Your Surface</strong><small>Garage, commercial, patio, repair, metallic, flake, or quartz.</small></a>
           <a href="#estimate"><span>2</span><strong>Send Photos</strong><small>Share size, current floor condition, and clear pictures.</small></a>
           <a href="#color-chart"><span>3</span><strong>Choose Finish</strong><small>Use the visualizer before comparing flake, metallic, and quartz.</small></a>
-          <a href="/customer-portal"><span>4</span><strong>Track Next Steps</strong><small>Preview job tracking, documents, messages, and care guides.</small></a>
+          <a href="/customer-portal"><span>4</span><strong>Portal Sign In</strong><small>Sign in to access your project portal after setup.</small></a>
         </div>
       </section>
 
@@ -283,7 +284,7 @@ export default function HomePage() {
           <a href="#color-chart">Visualizer</a>
           <a href="#gallery">Gallery</a>
           <a href="/visualizer">Visualizer Route</a>
-          <a href="/customer-portal">Customer Portal</a>
+          <a href="/customer-portal">Portal Sign In</a>
           <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
         </nav>
