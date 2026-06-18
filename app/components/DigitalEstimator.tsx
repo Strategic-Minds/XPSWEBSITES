@@ -16,7 +16,7 @@ const projectTypes = [
 ];
 
 const estimatorSteps = [
-  "Start here with name, email, phone, ZIP, and project type.",
+  "Start here with name, email, phone, ZIP, project type, and ASAP request if needed.",
   "The full Digital Bid form opens with your details already filled in.",
   "Upload multiple floor photos, measurements, current covering, finish choice, and inspiration pictures.",
   "Jeremy receives the package for review, then sends the proposal, payment path, warranty information, and tracker access steps."
@@ -37,7 +37,8 @@ export function DigitalEstimator() {
       email: String(formData.get("email") || "").trim(),
       phone: String(formData.get("phone") || "").trim(),
       zipCode: String(formData.get("zipCode") || "").trim(),
-      projectType: String(formData.get("projectType") || "").trim()
+      projectType: String(formData.get("projectType") || "").trim(),
+      asapServiceRequested: formData.get("asapServiceRequested") === "yes" ? "yes" : "no"
     };
 
     if (!lead.fullName || !lead.email || !lead.phone || !lead.zipCode || !lead.projectType) {
@@ -102,6 +103,11 @@ export function DigitalEstimator() {
               <option key={project}>{project}</option>
             ))}
           </select>
+        </label>
+
+        <label className="asap-check">
+          <input name="asapServiceRequested" type="checkbox" value="yes" />
+          <span>Request ASAP service</span>
         </label>
 
         <button className="gold-button form-submit" type="submit" disabled={startState === "opening"}>
