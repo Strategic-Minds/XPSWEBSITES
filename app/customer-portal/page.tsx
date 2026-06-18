@@ -3,7 +3,8 @@
 import { FormEvent, useState } from "react";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://prhppuuwcnmfdhwsagug.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_kGj9PTt1biObaT6q1uOTHw_nEJI1Rov";
+const SUPABASE_AUTH_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByaHBwdXV3Y25tZmRod3NhZ3VnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyOTc3NTUsImV4cCI6MjA5Mzg3Mzc1NX0.c80sEMbJG_-bG4Zgto1ltZyWgVz4eNEmMC69-Ei_CiQ";
 
 type PortalSession = {
   email: string;
@@ -18,6 +19,16 @@ const trackerItems = [
   ["Schedule", "Prep, install, topcoat, inspection, and care-guide checkpoints live here."],
   ["Warranty", "Warranty details, closeout photos, and maintenance instructions stay organized." ]
 ];
+
+function authErrorMessage(result: Record<string, unknown>) {
+  const raw = String(result.error_description || result.msg || result.error || "Portal sign-in failed.");
+
+  if (raw.toLowerCase().includes("api key")) {
+    return "Portal connection is using an invalid Supabase public key. Refresh the preview after deployment finishes, then try again.";
+  }
+
+  return raw;
+}
 
 export default function CustomerPortalPreviewPage() {
   const [loginState, setLoginState] = useState<LoginState>("idle");
@@ -37,7 +48,8 @@ export default function CustomerPortalPreviewPage() {
       const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
         method: "POST",
         headers: {
-          apikey: SUPABASE_PUBLISHABLE_KEY,
+          apikey: SUPABASE_AUTH_KEY,
+          Authorization: `Bearer ${SUPABASE_AUTH_KEY}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ email, password })
@@ -45,7 +57,7 @@ export default function CustomerPortalPreviewPage() {
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok || !result.access_token) {
-        throw new Error(result.error_description || result.msg || "Portal sign-in failed.");
+        throw new Error(authErrorMessage(result));
       }
 
       setSession({ email, accessToken: result.access_token });
