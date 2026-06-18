@@ -80,7 +80,7 @@ export function InstantChatWidget() {
               <span>Instant Chat</span>
               <strong>Need help with your floor?</strong>
             </div>
-            <button type="button" aria-label="Close instant chat" onClick={() => setChatState("idle")}>×</button>
+            <button type="button" aria-label="Close instant chat" onClick={() => setChatState("idle")}>x</button>
           </div>
 
           <form onSubmit={handleSubmit}>
