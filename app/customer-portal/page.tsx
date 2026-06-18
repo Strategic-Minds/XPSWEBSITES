@@ -2,8 +2,8 @@
 
 import { FormEvent, useState } from "react";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://prhppuuwcnmfdhwsagug.supabase.co";
-const SUPABASE_AUTH_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+const SUPABASE_URL = "https://prhppuuwcnmfdhwsagug.supabase.co";
+const SUPABASE_AUTH_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByaHBwdXV3Y25tZmRod3NhZ3VnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyOTc3NTUsImV4cCI6MjA5Mzg3Mzc1NX0.c80sEMbJG_-bG4Zgto1ltZyWgVz4eNEmMC69-Ei_CiQ";
 
 type PortalSession = {
