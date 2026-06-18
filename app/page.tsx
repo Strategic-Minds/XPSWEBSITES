@@ -1,3 +1,4 @@
+import { DigitalEstimator } from "./components/DigitalEstimator";
 import { FinishVisualizer } from "./components/FinishVisualizer";
 import { PhoenixLeadForm } from "./components/PhoenixLeadForm";
 
@@ -22,7 +23,8 @@ const images = {
 
 const navLinks = [
   { label: "Before / After", href: "#before-after" },
-  { label: "Reviews", href: "#reviews" }
+  { label: "Job Tracker", href: "#job-tracker" },
+  { label: "15% Estimator", href: "#digital-estimator" }
 ];
 
 const services = [
@@ -59,11 +61,11 @@ const trustItems = [
   },
   {
     title: "Finish System Guidance",
-    text: "Compare flake, metallic, and quartz before choosing the look, texture, and performance path."
+    text: "Compare flake, metallic, quartz, solid color, glitter, and stain options before choosing the performance path."
   },
   {
-    title: "Proposal & Schedule Path",
-    text: "Get the next step for prep, materials, pricing direction, sample confirmation, and scheduling."
+    title: "Portal-Ready Project Setup",
+    text: "Estimator requests can move into job tracking, warranty information, and email delivery after signup."
   }
 ];
 
@@ -119,10 +121,10 @@ const gallery = [
   { title: "Concrete Repair", image: images.repair }
 ];
 
-const checkpoints = [
-  ["Concrete Condition", "Existing coating, cracks, stains, spalling, and moisture risk need to be understood before a real recommendation."],
-  ["System Choice", "Flake, metallic, and quartz solve different problems. The finish should match traffic, texture, and visual goals."],
-  ["Topcoat & Texture", "The final feel depends on sheen, anti-slip needs, chip size, broadcast amount, and how the space will be used."]
+const jobTrackerFeatures = [
+  ["Immediate Tracking From Signup", "Clients can see their project intake, estimate status, finish selections, schedule checkpoints, and next required action as soon as portal access is created."],
+  ["Unique Client Project Timeline", "Photos, measurements, desired finish, warranty information, care instructions, messages, approvals, and documents stay attached to one job record instead of scattered texts."],
+  ["Built For Trust Before Install Day", "The tracker shows what has been received, what is being reviewed, what is approved, and what happens next so clients never wonder where the job stands."]
 ];
 
 export default function HomePage() {
@@ -136,7 +138,9 @@ export default function HomePage() {
           {navLinks.map((link) => (
             <a href={link.href} key={link.label}>{link.label}</a>
           ))}
-          <a className="header-call" href={phoneHref}>Call</a>
+          <a className="header-call phone-icon-link" href={phoneHref} aria-label={`Call ${phone}`}>
+            <span className="phone-icon" aria-hidden="true" />
+          </a>
         </nav>
         <a className="gold-button header-cta" href="#estimate">Get Quote</a>
         <span className="mobile-menu-mark" aria-hidden="true"><span /><span /><span /></span>
@@ -156,8 +160,8 @@ export default function HomePage() {
         <nav className="mobile-action-rail" aria-label="Mobile quick actions">
           <a href="#estimate"><span className="action-icon">01</span>Estimate</a>
           <a href="#process"><span className="action-icon">02</span>Process</a>
-          <a href="#color-chart"><span className="action-icon">03</span>Visualizer</a>
-          <a href={phoneHref}><span className="action-icon">04</span>Call</a>
+          <a href="#color-chart"><span className="action-icon">03</span>Colors</a>
+          <a href={phoneHref}><span className="mobile-phone-icon" aria-hidden="true" />Call</a>
         </nav>
       </section>
 
@@ -165,9 +169,9 @@ export default function HomePage() {
         <SectionIntro kicker="Start here" title="Four taps to get moving" />
         <div className="app-step-list">
           <a href="#estimate"><span>1</span><strong>Pick Your Surface</strong><small>Garage, commercial, patio, repair, metallic, flake, or quartz.</small></a>
-          <a href="#estimate"><span>2</span><strong>Send Photos</strong><small>Share size, current floor condition, and clear pictures.</small></a>
-          <a href="#color-chart"><span>3</span><strong>Choose Finish</strong><small>Use the visualizer before comparing flake, metallic, and quartz.</small></a>
-          <a href="/customer-portal"><span>4</span><strong>Track Next Steps</strong><small>Preview job tracking, documents, messages, and care guides.</small></a>
+          <a href="#digital-estimator"><span>2</span><strong>Send Photos</strong><small>Upload floor images, measurements, covering type, finish, and desired color.</small></a>
+          <a href="#color-chart"><span>3</span><strong>Choose Finish</strong><small>Compare the color charts before locking your finish direction.</small></a>
+          <a href="/customer-portal"><span>4</span><strong>Track Next Steps</strong><small>Open job tracking, documents, messages, and care guides.</small></a>
         </div>
       </section>
 
@@ -227,6 +231,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="xps-visualizer-launch" id="visualizer" aria-label="XPS floor visualizer">
+        <div>
+          <span className="section-kicker">XPS Floor Visualizer</span>
+          <h2>Upload your floor photo and preview the finish before the estimate.</h2>
+          <p>
+            Use the XPS Vizual-X studio to upload an existing floor image, outline the floor area, test a finish direction,
+            and bring that selection back into the Digital Estimator request.
+          </p>
+          <div className="visualizer-launch-actions">
+            <a className="gold-button" href="/vizual-x">Open Floor Visualizer</a>
+            <a className="dark-button" href="#digital-estimator">Use 15% Digital Estimator</a>
+          </div>
+        </div>
+        <div className="visualizer-launch-preview" aria-hidden="true">
+          <span />
+          <strong>Photo Upload</strong>
+          <strong>Floor Outline</strong>
+          <strong>Finish Preview</strong>
+        </div>
+      </section>
+
       <FinishVisualizer />
 
       <section className="gallery-section" id="gallery">
@@ -242,17 +267,23 @@ export default function HomePage() {
         <a className="gold-button" href="#estimate">Quote A Similar Project</a>
       </section>
 
-      <section className="section reviews-section" id="reviews">
-        <SectionIntro kicker="Quote checkpoints" title="What needs to be right before pricing" />
+      <section className="section reviews-section job-tracker-section" id="job-tracker">
+        <SectionIntro kicker="Job Tracker" title="A client portal that starts tracking the moment they sign up" />
         <div className="review-grid">
-          {checkpoints.map(([title, text]) => (
-            <article className="review-card" key={title}>
+          {jobTrackerFeatures.map(([title, text]) => (
+            <article className="review-card job-tracker-card" key={title}>
               <h3>{title}</h3>
               <p>{text}</p>
             </article>
           ))}
         </div>
+        <div className="job-tracker-cta">
+          <p>Every qualified estimate can become a tracked project with uploads, finish approvals, warranty documents, progress checkpoints, and email updates in one place.</p>
+          <a className="gold-button" href="/customer-portal">View Portal Sign In</a>
+        </div>
       </section>
+
+      <DigitalEstimator />
 
       <section className="section faq-section">
         <SectionIntro kicker="Common questions" title="Plan your epoxy floor estimate" />
@@ -280,16 +311,17 @@ export default function HomePage() {
         <nav aria-label="Footer navigation">
           <a href="#services">Services</a>
           <a href="#process">Process</a>
-          <a href="#color-chart">Visualizer</a>
-          <a href="#gallery">Gallery</a>
-          <a href="/visualizer">Visualizer Route</a>
+          <a href="#color-chart">Color Charts</a>
+          <a href="#digital-estimator">15% Estimator</a>
+          <a href="#job-tracker">Job Tracker</a>
+          <a href="/vizual-x">Floor Visualizer</a>
           <a href="/customer-portal">Customer Portal</a>
           <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
         </nav>
       </footer>
 
-      <a className="mobile-call" href={phoneHref}>Call {phone}</a>
+      <a className="mobile-call" href={phoneHref}><span className="mobile-phone-icon" aria-hidden="true" />Call {phone}</a>
     </main>
   );
 }
