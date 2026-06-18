@@ -2,58 +2,42 @@
 
 import { FormEvent, useState } from "react";
 
-type PortalSession = {
-  email: string;
-};
-
-type LoginState = "idle" | "signing-in" | "signed-in" | "error";
+type IntakeState = "idle" | "saving" | "ready" | "error";
 
 const trackerItems = [
-  ["Estimate", "Digital Estimator package received and ready for review."],
-  ["Finish", "Color-chart selections and visualizer notes stay attached to the job."],
-  ["Schedule", "Prep, install, topcoat, inspection, and care-guide checkpoints live here."],
-  ["Warranty", "Warranty details, closeout photos, and maintenance instructions stay organized." ]
+  ["Estimate", "Start with your contact details, then answer the job questions on the Digital Estimator page."],
+  ["Upload", "Attach current floor photos, measurements, existing covering details, and finish preferences."],
+  ["Discount", "Your 15% digital estimator coupon stays attached to the request."],
+  ["24 Hours", "The estimate, warranty information, and job tracker setup path are delivered by email." ]
 ];
 
 export default function CustomerPortalPreviewPage() {
-  const [loginState, setLoginState] = useState<LoginState>("idle");
-  const [session, setSession] = useState<PortalSession | null>(null);
-  const [message, setMessage] = useState("Use the portal credentials assigned to your project account.");
+  const [intakeState, setIntakeState] = useState<IntakeState>("idle");
+  const [message, setMessage] = useState("Enter your contact details to start the Digital Estimator flow.");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setLoginState("signing-in");
-    setMessage("Checking secure portal access...");
+    setIntakeState("saving");
+    setMessage("Opening your estimator intake...");
 
     const formData = new FormData(event.currentTarget);
-    const email = String(formData.get("email") || "").trim();
-    const password = String(formData.get("password") || "");
+    const lead = {
+      fullName: String(formData.get("fullName") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      zipCode: String(formData.get("zipCode") || "").trim()
+    };
 
-    try {
-      const response = await fetch("/api/customer-portal/sign-in", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || "Portal sign-in failed.");
-      }
-
-      setSession({ email: result.email || email });
-      setLoginState("signed-in");
-      setMessage("Signed in. Job tracker preview is unlocked.");
-    } catch (error) {
-      setLoginState("error");
-      setMessage(error instanceof Error ? error.message : "Portal sign-in failed.");
+    if (!lead.fullName || !lead.email || !lead.phone || !lead.zipCode) {
+      setIntakeState("error");
+      setMessage("Name, email, phone, and ZIP code are required.");
+      return;
     }
-  }
 
-  function signOut() {
-    setSession(null);
-    setLoginState("idle");
-    setMessage("Use the portal credentials assigned to your project account.");
+    window.sessionStorage.setItem("xpsEstimatorLead", JSON.stringify(lead));
+    const params = new URLSearchParams(lead);
+    setIntakeState("ready");
+    window.location.assign(`/digital-estimator?${params.toString()}`);
   }
 
   return (
@@ -65,51 +49,50 @@ export default function CustomerPortalPreviewPage() {
         <a className="portal-home-link" href="/">Back to website</a>
       </header>
 
-      <section className="portal-login-hero" aria-label="Customer portal sign in">
+      <section className="portal-login-hero" aria-label="Digital estimator intake">
         <div className="portal-login-copy">
-          <span className="section-kicker">Customer Job Tracker</span>
-          <h1>Track your floor from estimate to warranty.</h1>
+          <span className="section-kicker">15% Digital Estimator</span>
+          <h1>Start the estimate without a password.</h1>
           <p>
-            Sign in to view estimate status, uploaded floor images, finish selections, schedule checkpoints, warranty
-            information, care guides, messages, and next required actions in one branded project portal.
+            This temporary portal entry collects the basics, then moves you into the Digital Estimator where your floor
+            images, measurements, color selections, warranty path, and job tracker setup stay connected.
           </p>
-          <div className="portal-proof-row" aria-label="Portal highlights">
-            <span>Immediate tracking</span>
-            <span>Finish approvals</span>
-            <span>Warranty records</span>
+          <div className="portal-proof-row" aria-label="Estimator highlights">
+            <span>15% coupon</span>
+            <span>24-hour estimate</span>
+            <span>Job tracker setup</span>
           </div>
         </div>
 
-        <div className="portal-login-panel">
-          {!session ? (
-            <form onSubmit={handleSubmit}>
-              <p className="portal-panel-eyebrow">Secure portal sign in</p>
-              <h2>Open Job Tracker</h2>
-              <label className="portal-field">
-                <span>Email</span>
-                <input name="email" type="email" autoComplete="email" required />
-              </label>
-              <label className="portal-field">
-                <span>Password</span>
-                <input name="password" type="password" autoComplete="current-password" required />
-              </label>
-              <button className="gold-button" type="submit" disabled={loginState === "signing-in"}>
-                {loginState === "signing-in" ? "Signing in..." : "Sign In"}
-              </button>
-              <p className={`portal-login-status ${loginState}`} aria-live="polite">{message}</p>
-            </form>
-          ) : (
-            <div className="portal-session-card">
-              <p className="portal-panel-eyebrow">Signed in</p>
-              <h2>Welcome back</h2>
-              <p>{session.email}</p>
-              <button className="gold-button" type="button" onClick={signOut}>Sign Out</button>
-            </div>
-          )}
+        <div className="portal-login-panel portal-intake-panel">
+          <form onSubmit={handleSubmit}>
+            <p className="portal-panel-eyebrow">Temporary customer entry</p>
+            <h2>Open Digital Estimator</h2>
+            <label className="portal-field">
+              <span>Full Name</span>
+              <input name="fullName" type="text" autoComplete="name" required />
+            </label>
+            <label className="portal-field">
+              <span>Email</span>
+              <input name="email" type="email" autoComplete="email" required />
+            </label>
+            <label className="portal-field">
+              <span>Phone</span>
+              <input name="phone" type="tel" autoComplete="tel" required />
+            </label>
+            <label className="portal-field">
+              <span>ZIP Code</span>
+              <input name="zipCode" type="text" inputMode="numeric" autoComplete="postal-code" required />
+            </label>
+            <button className="gold-button" type="submit" disabled={intakeState === "saving"}>
+              {intakeState === "saving" ? "Opening..." : "Continue"}
+            </button>
+            <p className={`portal-login-status ${intakeState}`} aria-live="polite">{message}</p>
+          </form>
         </div>
       </section>
 
-      <section className="portal-tracker-preview" aria-label="Job tracker preview">
+      <section className="portal-tracker-preview" aria-label="Digital estimator preview">
         <div className="portal-tracker-board">
           {trackerItems.map(([title, text], index) => (
             <article key={title} className="portal-tracker-item">
