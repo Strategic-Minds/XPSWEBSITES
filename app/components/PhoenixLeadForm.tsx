@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 
 const projectTypes = [
   "Garage Floors",
@@ -13,35 +13,48 @@ const projectTypes = [
   "Business Starter Training"
 ];
 
-type SubmitState = "idle" | "sending" | "sent" | "error";
+type SubmitState = "idle" | "opening" | "error";
+
+function readFormValue(formData: FormData, key: string) {
+  return String(formData.get(key) || "").trim();
+}
 
 export function PhoenixLeadForm() {
-  const formRef = useRef<HTMLFormElement>(null);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [message, setMessage] = useState("Send the basics and the Digital Bid form will open prefilled.");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitState("sending");
 
-    try {
-      const formData = new FormData(event.currentTarget);
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        body: formData
-      });
+    const formData = new FormData(event.currentTarget);
+    const lead = {
+      fullName: readFormValue(formData, "fullName"),
+      phone: readFormValue(formData, "phone"),
+      email: readFormValue(formData, "email"),
+      zipCode: readFormValue(formData, "zipCode"),
+      projectType: readFormValue(formData, "projectType")
+    };
 
-      if (!response.ok) throw new Error("Lead endpoint failed");
-
-      await response.json();
-      setSubmitState("sent");
-      formRef.current?.reset();
-    } catch {
+    if (!lead.fullName || !lead.phone || !lead.email || !lead.zipCode || !lead.projectType) {
       setSubmitState("error");
+      setMessage("Name, phone, email, ZIP code, and project type are required.");
+      return;
     }
+
+    setSubmitState("opening");
+    setMessage("Opening your prefilled Digital Bid form...");
+
+    window.sessionStorage.setItem("xpsEstimatorLead", JSON.stringify(lead));
+    const params = new URLSearchParams();
+    Object.entries(lead).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+    });
+
+    window.location.assign(`/digital-estimator?${params.toString()}`);
   }
 
   return (
-    <form ref={formRef} className="estimate-card" id="estimate" onSubmit={handleSubmit} encType="multipart/form-data">
+    <form className="estimate-card" id="estimate" onSubmit={handleSubmit} encType="multipart/form-data">
       <div className="form-head">
         <h2>Get Quote</h2>
       </div>
@@ -59,7 +72,7 @@ export function PhoenixLeadForm() {
       </label>
 
       <label className="form-field">
-        <input name="zipCode" placeholder="Zip Code" inputMode="numeric" autoComplete="postal-code" />
+        <input name="zipCode" placeholder="Zip Code" inputMode="numeric" autoComplete="postal-code" required />
       </label>
 
       <label className="form-field">
@@ -73,18 +86,15 @@ export function PhoenixLeadForm() {
         </select>
       </label>
 
-      <input className="hidden-field" name="budget" value="Online estimate request" readOnly />
+      <input className="hidden-field" name="budget" value="Digital Bid estimate request" readOnly />
       <input className="hidden-field" name="website" tabIndex={-1} autoComplete="off" />
 
-      <button className="gold-button form-submit" type="submit" disabled={submitState === "sending"}>
-        {submitState === "sending" ? "Sending..." : "Get Quote"}
+      <button className="gold-button form-submit" type="submit" disabled={submitState === "opening"}>
+        {submitState === "opening" ? "Opening..." : "Start Digital Bid"}
       </button>
 
       <p className={`form-status ${submitState}`} aria-live="polite">
-        {submitState === "sent" && "Request received. We will review your project details next."}
-        {submitState === "error" && "The form did not send. Please call or try again."}
-        {submitState === "idle" && "Send the basics and we will review the project next."}
-        {submitState === "sending" && "Sending your estimate request..."}
+        {message}
       </p>
     </form>
   );
