@@ -25,7 +25,8 @@ export default function CustomerPortalPreviewPage() {
       fullName: String(formData.get("fullName") || "").trim(),
       email: String(formData.get("email") || "").trim(),
       phone: String(formData.get("phone") || "").trim(),
-      zipCode: String(formData.get("zipCode") || "").trim()
+      zipCode: String(formData.get("zipCode") || "").trim(),
+      asapServiceRequested: formData.get("asapServiceRequested") === "yes" ? "yes" : "no"
     };
 
     if (!lead.fullName || !lead.email || !lead.phone || !lead.zipCode) {
@@ -60,6 +61,7 @@ export default function CustomerPortalPreviewPage() {
           <div className="portal-proof-row" aria-label="Estimator highlights">
             <span>15% coupon</span>
             <span>24-hour estimate</span>
+            <span>ASAP request</span>
             <span>Job tracker setup</span>
           </div>
         </div>
@@ -83,6 +85,10 @@ export default function CustomerPortalPreviewPage() {
             <label className="portal-field">
               <span>ZIP Code</span>
               <input name="zipCode" type="text" inputMode="numeric" autoComplete="postal-code" required />
+            </label>
+            <label className="asap-check">
+              <input name="asapServiceRequested" type="checkbox" value="yes" />
+              <span>Request ASAP service</span>
             </label>
             <button className="gold-button" type="submit" disabled={intakeState === "saving"}>
               {intakeState === "saving" ? "Opening..." : "Continue"}
