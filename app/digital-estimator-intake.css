@@ -1,0 +1,200 @@
+.portal-intake-panel .portal-field input,
+.portal-intake-panel .portal-field select,
+.portal-intake-panel .portal-field textarea {
+  background: #ffffff !important;
+  color: #111111 !important;
+  border: 1px solid #d7d7d7 !important;
+  box-shadow: none !important;
+}
+
+.digital-estimator-page {
+  min-height: 100svh;
+  background: #070707;
+}
+
+.digital-estimator-hero {
+  align-items: start;
+  min-height: calc(100svh - 86px);
+  padding-bottom: clamp(54px, 8vw, 110px);
+}
+
+.digital-estimator-panel {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 720px);
+  padding: clamp(18px, 2.4vw, 30px);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 8px;
+  background: rgba(248, 248, 248, .96);
+  color: #121212;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, .42);
+}
+
+.digital-estimator-form-head h2 {
+  margin: 0 0 6px;
+  color: #050505;
+  font-family: var(--display, Impact, sans-serif);
+  font-size: clamp(34px, 4vw, 58px);
+  line-height: .9;
+  text-transform: uppercase;
+}
+
+.digital-estimator-grid-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.digital-estimator-field,
+.digital-estimator-file {
+  display: grid;
+  gap: 7px;
+}
+
+.digital-estimator-field span,
+.digital-estimator-file span {
+  color: #2b2b2b;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.digital-estimator-field input,
+.digital-estimator-field select,
+.digital-estimator-field textarea,
+.digital-estimator-file input {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 14px;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111111;
+  font: inherit;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(0, 0, 0, .03);
+}
+
+.digital-estimator-field textarea {
+  min-height: 118px;
+  padding: 13px 14px;
+  resize: vertical;
+}
+
+.digital-estimator-field input:focus,
+.digital-estimator-field select:focus,
+.digital-estimator-field textarea:focus,
+.digital-estimator-file input:focus {
+  border-color: var(--gold, #f6b800);
+  box-shadow: 0 0 0 3px rgba(246, 184, 0, .22);
+}
+
+.digital-estimator-wide {
+  grid-column: 1 / -1;
+}
+
+.digital-estimator-file {
+  padding: 14px;
+  border: 1px dashed #c9c9c9;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.digital-estimator-file input {
+  padding: 12px;
+  border-style: solid;
+}
+
+.digital-estimator-file small {
+  color: #5e5e5e;
+  line-height: 1.4;
+}
+
+.digital-estimator-submit {
+  width: 100%;
+  min-height: 56px;
+  margin-top: 4px;
+}
+
+.digital-estimator-panel .portal-login-status {
+  margin: 0;
+  color: #444444;
+}
+
+.digital-estimator-panel .portal-login-status.sent {
+  color: #0b6b28;
+}
+
+.digital-estimator-panel .portal-login-status.error {
+  color: #9b1616;
+}
+
+/* Temporary fix for clipped first-screen quote forms on desktop and mobile. */
+#estimate,
+#quote,
+.estimate,
+.quote,
+.hero,
+.hero-section,
+.hero-quote,
+.quote-section,
+.quote-panel,
+.quote-card,
+.quote-form,
+.estimate-form,
+.lead-form,
+.get-quote-form,
+[class*="quote"],
+[class*="Quote"],
+[class*="estimate"],
+[class*="Estimate"] {
+  overflow: visible !important;
+}
+
+.hero,
+.hero-section,
+.home-hero,
+.approved-hero,
+.phoenix-hero,
+[class*="hero"],
+[class*="Hero"] {
+  min-height: auto !important;
+}
+
+.quote-panel,
+.quote-card,
+.quote-form,
+.estimate-form,
+.lead-form,
+.get-quote-form,
+[class*="quote"] form,
+[class*="Quote"] form,
+[class*="estimate"] form,
+[class*="Estimate"] form {
+  max-height: none !important;
+}
+
+@media (max-width: 1050px) {
+  .digital-estimator-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .digital-estimator-panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .digital-estimator-grid-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .digital-estimator-hero {
+    padding-inline: 16px;
+  }
+
+  .digital-estimator-panel {
+    padding: 16px;
+  }
+}
