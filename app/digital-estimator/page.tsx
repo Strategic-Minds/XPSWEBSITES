@@ -10,7 +10,19 @@ type LeadBasics = {
   email: string;
   phone: string;
   zipCode: string;
+  projectType: string;
 };
+
+const projectTypes = [
+  "Garage Floors",
+  "Commercial Floors",
+  "Patios & Outdoor Spaces",
+  "Floor Repair",
+  "Polished Concrete",
+  "Decorative Concrete",
+  "Epoxy Training Classes",
+  "Business Starter Training"
+];
 
 const finishOptions = [
   "Full Broadcast Flake",
@@ -37,8 +49,18 @@ const emptyLead: LeadBasics = {
   address: "",
   email: "",
   phone: "",
-  zipCode: ""
+  zipCode: "",
+  projectType: ""
 };
+
+function readStoredLead() {
+  try {
+    const stored = window.sessionStorage.getItem("xpsEstimatorLead");
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
 
 export default function DigitalEstimatorPage() {
   const [lead, setLead] = useState<LeadBasics>(emptyLead);
@@ -51,15 +73,15 @@ export default function DigitalEstimatorPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const stored = window.sessionStorage.getItem("xpsEstimatorLead");
-    const storedLead = stored ? JSON.parse(stored) : {};
+    const storedLead = readStoredLead();
 
     setLead({
       fullName: params.get("fullName") || storedLead.fullName || "",
       address: storedLead.address || "",
       email: params.get("email") || storedLead.email || "",
       phone: params.get("phone") || storedLead.phone || "",
-      zipCode: params.get("zipCode") || storedLead.zipCode || ""
+      zipCode: params.get("zipCode") || storedLead.zipCode || "",
+      projectType: params.get("projectType") || storedLead.projectType || ""
     });
   }, []);
 
@@ -83,6 +105,8 @@ export default function DigitalEstimatorPage() {
     formData.set("timeline", "24-hour digital estimator request");
     formData.set("desiredFinish", desiredFinish);
     formData.set("desiredColor", desiredColor);
+    formData.set("notificationEmail", "jeremy@shopxps.com");
+    formData.set("proposalWorkflow", "Email estimate to Jeremy, send proposal to customer, send payment link, then send temporary job tracker sign-in after payment.");
 
     try {
       const response = await fetch("/api/leads", {
@@ -96,7 +120,7 @@ export default function DigitalEstimatorPage() {
       }
 
       setSubmitState("sent");
-      setMessage("Received. Your 15% coupon is attached, and your estimate path will be emailed within 24 hours with warranty and job tracker information.");
+      setMessage("Received. Your 15% coupon is attached. The estimator package is routed for review, and the proposal path will continue by email with warranty and job tracker information.");
     } catch (error) {
       setSubmitState("error");
       setMessage(error instanceof Error ? error.message : "Estimator submission failed.");
@@ -109,7 +133,7 @@ export default function DigitalEstimatorPage() {
         <a href="/" aria-label="Back to Phoenix Epoxy Pros">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
-        <a className="portal-home-link" href="/customer-portal">Back to entry</a>
+        <a className="portal-home-link" href="/job-tracker">View job tracker</a>
       </header>
 
       <section className="portal-login-hero digital-estimator-hero" aria-label="Digital estimator form">
@@ -117,12 +141,12 @@ export default function DigitalEstimatorPage() {
           <span className="section-kicker">15% off with Digital Estimator</span>
           <h1>Upload the floor details. Get the estimate in 24 hours.</h1>
           <p>
-            Send photos, measurements, current floor covering, desired finish, and color direction. We will reply by
-            email with the estimate, warranty information, and the proprietary job tracker setup path.
+            Send photos, measurements, current floor covering, desired finish, and color direction. Your estimator package
+            is prepared for review, proposal delivery, payment link follow-up, and temporary job tracker access after payment.
           </p>
           <div className="portal-proof-row" aria-label="Estimator guarantees">
-            <span>Floor images</span>
-            <span>Warranty info</span>
+            <span>Multiple floor images</span>
+            <span>15% coupon</span>
             <span>24-hour email estimate</span>
           </div>
         </div>
@@ -130,7 +154,7 @@ export default function DigitalEstimatorPage() {
         <form className="digital-estimator-panel" onSubmit={handleSubmit}>
           <div className="digital-estimator-form-head">
             <p className="portal-panel-eyebrow">Professional estimate intake</p>
-            <h2>Digital Estimator</h2>
+            <h2>Digital Bid System</h2>
           </div>
 
           <div className="digital-estimator-grid-fields">
@@ -153,6 +177,13 @@ export default function DigitalEstimatorPage() {
             <label className="digital-estimator-field">
               <span>ZIP Code</span>
               <input name="zipCode" inputMode="numeric" value={lead.zipCode} onChange={(event) => updateLead("zipCode", event.target.value)} required />
+            </label>
+            <label className="digital-estimator-field">
+              <span>Project Type</span>
+              <select name="projectType" value={lead.projectType} onChange={(event) => updateLead("projectType", event.target.value)} required>
+                <option value="" disabled>Choose project type</option>
+                {projectTypes.map((project) => <option key={project}>{project}</option>)}
+              </select>
             </label>
             <label className="digital-estimator-field">
               <span>Floor Measurements</span>
@@ -194,17 +225,22 @@ export default function DigitalEstimatorPage() {
 
           <label className="digital-estimator-field digital-estimator-wide">
             <span>Project Notes</span>
-            <textarea name="notes" rows={4} placeholder="Tell us about cracks, coatings, moisture, timeline, access, or color chart selections." />
+            <textarea name="notes" rows={4} placeholder="Tell us about cracks, coatings, moisture, timeline, access, color chart selections, or floors you want us to match." />
           </label>
 
           <label className="digital-estimator-file digital-estimator-wide">
             <span>Attach Job Images</span>
             <input name="attachments" type="file" accept="image/png,image/jpeg,image/webp,application/pdf" multiple />
-            <small>Upload current floor photos, measurements, and any reference images you want included.</small>
+            <small>Upload multiple current floor pictures. Also upload a picture or screenshot of any floors you currently like that you found on our site or online.</small>
           </label>
 
+          <div className="digital-estimator-flow-note digital-estimator-wide">
+            <strong>What happens next</strong>
+            <span>Jeremy reviews the estimator package, your proposal is sent by email, then the payment link and temporary job tracker sign-in follow after approval and payment.</span>
+          </div>
+
           <button className="gold-button digital-estimator-submit" type="submit" disabled={submitState === "sending"}>
-            {submitState === "sending" ? "Submitting..." : "Submit Digital Estimator"}
+            {submitState === "sending" ? "Submitting..." : "Submit Digital Bid"}
           </button>
           <p className={`portal-login-status ${submitState}`} aria-live="polite">{message}</p>
         </form>
