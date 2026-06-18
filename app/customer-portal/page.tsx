@@ -2,13 +2,8 @@
 
 import { FormEvent, useState } from "react";
 
-const SUPABASE_URL = "https://prhppuuwcnmfdhwsagug.supabase.co";
-const SUPABASE_AUTH_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InByaHBwdXV3Y25tZmRod3NhZ3VnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyOTc3NTUsImV4cCI6MjA5Mzg3Mzc1NX0.c80sEMbJG_-bG4Zgto1ltZyWgVz4eNEmMC69-Ei_CiQ";
-
 type PortalSession = {
   email: string;
-  accessToken: string;
 };
 
 type LoginState = "idle" | "signing-in" | "signed-in" | "error";
@@ -20,16 +15,6 @@ const trackerItems = [
   ["Warranty", "Warranty details, closeout photos, and maintenance instructions stay organized." ]
 ];
 
-function authErrorMessage(result: Record<string, unknown>) {
-  const raw = String(result.error_description || result.msg || result.error || "Portal sign-in failed.");
-
-  if (raw.toLowerCase().includes("api key")) {
-    return "Portal connection is using an invalid Supabase public key. Refresh the preview after deployment finishes, then try again.";
-  }
-
-  return raw;
-}
-
 export default function CustomerPortalPreviewPage() {
   const [loginState, setLoginState] = useState<LoginState>("idle");
   const [session, setSession] = useState<PortalSession | null>(null);
@@ -38,29 +23,25 @@ export default function CustomerPortalPreviewPage() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoginState("signing-in");
-    setMessage("Checking Supabase portal access...");
+    setMessage("Checking secure portal access...");
 
     const formData = new FormData(event.currentTarget);
     const email = String(formData.get("email") || "").trim();
     const password = String(formData.get("password") || "");
 
     try {
-      const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      const response = await fetch("/api/customer-portal/sign-in", {
         method: "POST",
-        headers: {
-          apikey: SUPABASE_AUTH_KEY,
-          Authorization: `Bearer ${SUPABASE_AUTH_KEY}`,
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
       const result = await response.json().catch(() => ({}));
 
-      if (!response.ok || !result.access_token) {
-        throw new Error(authErrorMessage(result));
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || "Portal sign-in failed.");
       }
 
-      setSession({ email, accessToken: result.access_token });
+      setSession({ email: result.email || email });
       setLoginState("signed-in");
       setMessage("Signed in. Job tracker preview is unlocked.");
     } catch (error) {
@@ -102,7 +83,7 @@ export default function CustomerPortalPreviewPage() {
         <div className="portal-login-panel">
           {!session ? (
             <form onSubmit={handleSubmit}>
-              <p className="portal-panel-eyebrow">Supabase sign in</p>
+              <p className="portal-panel-eyebrow">Secure portal sign in</p>
               <h2>Open Job Tracker</h2>
               <label className="portal-field">
                 <span>Email</span>
