@@ -23,7 +23,7 @@ const images = {
 
 const navLinks = [
   { label: "Before / After", href: "#before-after" },
-  { label: "Job Tracker", href: "#job-tracker" },
+  { label: "Job Tracker", href: "/job-tracker" },
   { label: "15% Estimator", href: "#digital-estimator" }
 ];
 
@@ -65,7 +65,7 @@ const trustItems = [
   },
   {
     title: "Portal-Ready Project Setup",
-    text: "Estimator requests can move into job tracking, warranty information, and email delivery after signup."
+    text: "Estimator requests can move into proposal delivery, payment links, warranty information, and job tracking after approval."
   }
 ];
 
@@ -75,7 +75,7 @@ const processSteps = [
     title: "Sign Up & Schedule Job",
     image: images.processSignUp,
     text: "Start the estimate, send project basics, and choose the first finish direction.",
-    points: ["Free estimate intake", "Floor visualizer direction", "Scheduling path"]
+    points: ["Free estimate intake", "Digital Bid handoff", "Scheduling path"]
   },
   {
     number: "2",
@@ -122,8 +122,8 @@ const gallery = [
 ];
 
 const jobTrackerFeatures = [
-  ["Immediate Tracking From Signup", "Clients can see their project intake, estimate status, finish selections, schedule checkpoints, and next required action as soon as portal access is created."],
-  ["Unique Client Project Timeline", "Photos, measurements, desired finish, warranty information, care instructions, messages, approvals, and documents stay attached to one job record instead of scattered texts."],
+  ["Immediate Tracking From Signup", "Clients can see their project intake, estimate status, finish selections, schedule checkpoints, and next required action as soon as tracker access is created."],
+  ["Unique Client Project Timeline", "Photos, measurements, desired finish, warranty information, care instructions, messages, approvals, proposal details, and documents stay attached to one job record instead of scattered texts."],
   ["Built For Trust Before Install Day", "The tracker shows what has been received, what is being reviewed, what is approved, and what happens next so clients never wonder where the job stands."]
 ];
 
@@ -168,10 +168,10 @@ export default function HomePage() {
       <section className="mobile-steps" aria-label="Mobile estimate steps">
         <SectionIntro kicker="Start here" title="Four taps to get moving" />
         <div className="app-step-list">
-          <a href="#estimate"><span>1</span><strong>Pick Your Surface</strong><small>Garage, commercial, patio, repair, metallic, flake, or quartz.</small></a>
-          <a href="#digital-estimator"><span>2</span><strong>Send Photos</strong><small>Upload floor images, measurements, covering type, finish, and desired color.</small></a>
+          <a href="#estimate"><span>1</span><strong>Start Digital Bid</strong><small>Name, email, phone, ZIP, and project type prefill the bid form.</small></a>
+          <a href="#digital-estimator"><span>2</span><strong>Send Photos</strong><small>Upload floor images, measurements, covering type, finish, desired color, and inspiration photos.</small></a>
           <a href="#color-chart"><span>3</span><strong>Choose Finish</strong><small>Compare the color charts before locking your finish direction.</small></a>
-          <a href="/customer-portal"><span>4</span><strong>Track Next Steps</strong><small>Open job tracking, documents, messages, and care guides.</small></a>
+          <a href="/job-tracker"><span>4</span><strong>Track Next Steps</strong><small>Open job tracking, documents, messages, proposal status, and care guides.</small></a>
         </div>
       </section>
 
@@ -231,27 +231,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="xps-visualizer-launch" id="visualizer" aria-label="XPS floor visualizer">
-        <div>
-          <span className="section-kicker">XPS Floor Visualizer</span>
-          <h2>Upload your floor photo and preview the finish before the estimate.</h2>
-          <p>
-            Use the XPS Vizual-X studio to upload an existing floor image, outline the floor area, test a finish direction,
-            and bring that selection back into the Digital Estimator request.
-          </p>
-          <div className="visualizer-launch-actions">
-            <a className="gold-button" href="/vizual-x">Open Floor Visualizer</a>
-            <a className="dark-button" href="#digital-estimator">Use 15% Digital Estimator</a>
-          </div>
-        </div>
-        <div className="visualizer-launch-preview" aria-hidden="true">
-          <span />
-          <strong>Photo Upload</strong>
-          <strong>Floor Outline</strong>
-          <strong>Finish Preview</strong>
-        </div>
-      </section>
-
       <FinishVisualizer />
 
       <section className="gallery-section" id="gallery">
@@ -278,8 +257,8 @@ export default function HomePage() {
           ))}
         </div>
         <div className="job-tracker-cta">
-          <p>Every qualified estimate can become a tracked project with uploads, finish approvals, warranty documents, progress checkpoints, and email updates in one place.</p>
-          <a className="gold-button" href="/customer-portal">View Portal Sign In</a>
+          <p>Every qualified estimate can become a tracked project with uploads, finish approvals, proposal status, warranty documents, progress checkpoints, and email updates in one place.</p>
+          <a className="gold-button" href="/job-tracker">View Job Tracker System</a>
         </div>
       </section>
 
@@ -306,15 +285,14 @@ export default function HomePage() {
       <footer className="site-footer">
         <div>
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
-          <p>Phoenix epoxy floor estimates, visualizer direction, finish system planning, and customer project portal.</p>
+          <p>Phoenix epoxy floor estimates, digital bid intake, finish system planning, proposal handoff, and customer project tracking.</p>
         </div>
         <nav aria-label="Footer navigation">
           <a href="#services">Services</a>
           <a href="#process">Process</a>
           <a href="#color-chart">Color Charts</a>
           <a href="#digital-estimator">15% Estimator</a>
-          <a href="#job-tracker">Job Tracker</a>
-          <a href="/vizual-x">Floor Visualizer</a>
+          <a href="/job-tracker">Job Tracker</a>
           <a href="/customer-portal">Customer Portal</a>
           <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
