@@ -1,64 +1,76 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 
-type SubmitState = "idle" | "sending" | "sent" | "error";
+type StartState = "idle" | "opening" | "ready" | "error";
 
-const finishOptions = [
-  "Full broadcast flake",
-  "Metallic epoxy",
-  "Quartz system",
-  "Solid color epoxy",
-  "Polished concrete dye or stain",
-  "Not sure yet"
+const projectTypes = [
+  "Garage Floors",
+  "Commercial Floors",
+  "Patios & Outdoor Spaces",
+  "Floor Repair",
+  "Polished Concrete",
+  "Decorative Concrete",
+  "Epoxy Training Classes",
+  "Business Starter Training"
+];
+
+const estimatorSteps = [
+  "Start here with name, email, phone, ZIP, and project type.",
+  "The full Digital Bid form opens with your details already filled in.",
+  "Upload multiple floor photos, measurements, current covering, finish choice, and inspiration pictures.",
+  "Jeremy receives the package for review, then sends the proposal, payment path, warranty information, and tracker access steps."
 ];
 
 export function DigitalEstimator() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [startState, setStartState] = useState<StartState>("idle");
+  const [message, setMessage] = useState("Start the Digital Bid here and finish the upload on the dedicated estimator page.");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitState("sending");
+    setStartState("opening");
+    setMessage("Opening the Digital Bid System...");
 
-    try {
-      const formData = new FormData(event.currentTarget);
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        body: formData
-      });
+    const formData = new FormData(event.currentTarget);
+    const lead = {
+      fullName: String(formData.get("fullName") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      zipCode: String(formData.get("zipCode") || "").trim(),
+      projectType: String(formData.get("projectType") || "").trim()
+    };
 
-      if (!response.ok) throw new Error("Digital estimator endpoint failed");
-
-      await response.json();
-      setSubmitState("sent");
-      formRef.current?.reset();
-    } catch {
-      setSubmitState("error");
+    if (!lead.fullName || !lead.email || !lead.phone || !lead.zipCode || !lead.projectType) {
+      setStartState("error");
+      setMessage("Please enter your name, email, phone, ZIP code, and project type to continue.");
+      return;
     }
+
+    window.sessionStorage.setItem("xpsEstimatorLead", JSON.stringify(lead));
+    const params = new URLSearchParams(lead);
+    setStartState("ready");
+    window.location.assign(`/digital-estimator?${params.toString()}`);
   }
 
   return (
     <section className="digital-estimator-section" id="digital-estimator" aria-label="Digital Estimator 15 percent offer">
       <div className="digital-estimator-copy">
         <span className="section-kicker">15% Digital Estimator Offer</span>
-        <h2>Save 15% when you use the Digital Estimator system.</h2>
+        <h2>Save 15% by starting your bid online.</h2>
         <p>
-          Upload your existing floor images, measurements, current covering, desired finish, and color-chart choice.
-          We review it and deliver an estimate by email within 24 hours with warranty information and job tracker access.
+          The Digital Bid System keeps the estimate package clean from the first click: contact details, floor images,
+          measurements, existing covering, desired finish, desired color, warranty notes, proposal handoff, and job tracker setup.
         </p>
         <ul>
-          <li>Attach existing floor photos or PDFs.</li>
-          <li>Send measurements, current covering, and desired finish.</li>
-          <li>Choose a color from the home-page charts.</li>
-          <li>Receive the estimate, warranty info, and portal path by email.</li>
+          {estimatorSteps.map((step) => (
+            <li key={step}>{step}</li>
+          ))}
         </ul>
       </div>
 
-      <form ref={formRef} className="digital-estimator-form" onSubmit={handleSubmit} encType="multipart/form-data">
-        <input type="hidden" name="source" value="xps_digital_estimator" />
+      <form className="digital-estimator-form" onSubmit={handleSubmit}>
+        <input type="hidden" name="source" value="xps_homepage_digital_estimator_start" />
         <input type="hidden" name="campaign" value="15_percent_digital_estimator" />
-        <input type="hidden" name="timeline" value="24 hour digital estimate" />
 
         <div className="field-row">
           <label className="form-field">
@@ -74,55 +86,32 @@ export function DigitalEstimator() {
         <div className="field-row">
           <label className="form-field">
             <span>Phone</span>
-            <input name="phone" required autoComplete="tel" />
+            <input name="phone" type="tel" required autoComplete="tel" />
           </label>
           <label className="form-field">
-            <span>Floor measurements</span>
-            <input name="floorMeasurements" placeholder="Example: 22 x 24 garage" required />
+            <span>ZIP code</span>
+            <input name="zipCode" inputMode="numeric" required autoComplete="postal-code" />
           </label>
         </div>
 
         <label className="form-field">
-          <span>Existing floor covering</span>
-          <input name="existingFloorCovering" placeholder="Bare concrete, old epoxy, tile, carpet, paint, etc." required />
+          <span>Project type</span>
+          <select name="projectType" required defaultValue="">
+            <option value="" disabled>Choose project type</option>
+            {projectTypes.map((project) => (
+              <option key={project}>{project}</option>
+            ))}
+          </select>
         </label>
 
-        <div className="field-row">
-          <label className="form-field">
-            <span>Desired floor finish</span>
-            <select name="desiredFinish" required defaultValue="">
-              <option value="" disabled>Choose finish</option>
-              {finishOptions.map((finish) => (
-                <option key={finish}>{finish}</option>
-              ))}
-            </select>
-          </label>
-          <label className="form-field">
-            <span>Desired color from charts</span>
-            <input name="desiredColor" placeholder="Example: Domino FB-411" required />
-          </label>
-        </div>
-
-        <label className="form-field">
-          <span>Floor images, measurements, or documents</span>
-          <input name="attachments" type="file" accept="image/png,image/jpeg,image/webp,application/pdf" multiple required />
-        </label>
-
-        <label className="form-field">
-          <span>Anything else we should know?</span>
-          <textarea name="notes" rows={4} placeholder="Cracks, moisture, timeline, vehicles, business hours, or warranty questions." />
-        </label>
-
-        <button className="gold-button form-submit" type="submit" disabled={submitState === "sending"}>
-          {submitState === "sending" ? "Sending..." : "Submit Digital Estimate"}
+        <button className="gold-button form-submit" type="submit" disabled={startState === "opening"}>
+          {startState === "opening" ? "Opening..." : "Start Digital Bid"}
         </button>
 
-        <p className={`form-status ${submitState}`} aria-live="polite">
-          {submitState === "idle" && "Attach the details once and we will review the estimate package."}
-          {submitState === "sending" && "Uploading your digital estimate request..."}
-          {submitState === "sent" && "Request received. Watch your email for the 24-hour estimate path."}
-          {submitState === "error" && "The upload did not send. Please call or try again."}
-        </p>
+        <p className={`form-status ${startState}`} aria-live="polite">{message}</p>
+        <small className="digital-estimator-footnote">
+          On the next page you can upload multiple job photos and any floor examples you like from this site or online.
+        </small>
       </form>
     </section>
   );
