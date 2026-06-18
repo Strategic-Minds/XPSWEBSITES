@@ -9,6 +9,9 @@ import "./phoenix-hero-lock.css";
 import "./phoenix-approved-template.css";
 import "./phoenix-nashville-chart-lock.css";
 import "./xps-flake-chart-lock.css";
+import "./vizual-x/vizual-x.css";
+import "./portal-sign-in.css";
+import "./xps-home-revision.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
