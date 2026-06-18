@@ -1,5 +1,5 @@
-import { FinishVisualizer } from "./components/FinishVisualizer";
 import { PhoenixLeadForm } from "./components/PhoenixLeadForm";
+import { XpsVisualizerSection } from "./components/XpsVisualizerSection";
 
 const phone = "772-209-0266";
 const phoneHref = "tel:17722090266";
@@ -22,7 +22,7 @@ const images = {
 
 const navLinks = [
   { label: "Before / After", href: "#before-after" },
-  { label: "Reviews", href: "#reviews" },
+  { label: "Job Tracker", href: "#job-tracker" },
   { label: "Portal Sign In", href: "/customer-portal" }
 ];
 
@@ -60,12 +60,19 @@ const trustItems = [
   },
   {
     title: "Finish System Guidance",
-    text: "Compare flake, metallic, and quartz before choosing the look, texture, and performance path."
+    text: "Compare flake, metallic, quartz, solid base coats, glitter, and stain directions before choosing the look."
   },
   {
     title: "Proposal & Schedule Path",
-    text: "Get the next step for prep, materials, pricing direction, sample confirmation, and scheduling."
+    text: "Get the next step for prep, materials, pricing direction, warranty notes, and job tracker setup."
   }
+];
+
+const estimatorBenefits = [
+  ["Upload Existing Floor Images", "Send clear photos, marked-up measurements, sketches, or PDFs so the estimator can review the current surface."],
+  ["Confirm Measurements & Covering", "Include square footage, floor measurements, cracks, stains, existing coating, tile, glue, or bare concrete notes."],
+  ["Choose Finish & Color", "Select flake, metallic, quartz, solid color, glitter, or stain direction from the color charts on this page."],
+  ["24-Hour Email Estimate", "Receive an estimate by email with warranty direction and a job tracker setup path after review."]
 ];
 
 const processSteps = [
@@ -73,8 +80,8 @@ const processSteps = [
     number: "1",
     title: "Sign Up & Schedule Job",
     image: images.processSignUp,
-    text: "Start the estimate, send project basics, and choose the first finish direction.",
-    points: ["Free estimate intake", "Floor visualizer direction", "Scheduling path"]
+    text: "Start the digital estimator, send project basics, and choose the first finish direction.",
+    points: ["15% off digital estimator", "Floor visualizer direction", "Job tracker setup"]
   },
   {
     number: "2",
@@ -108,8 +115,8 @@ const processSteps = [
     number: "6",
     title: "Final Inspection",
     image: images.processFinalInspection,
-    text: "The finished floor is reviewed for quality, cure guidance, and care instructions.",
-    points: ["Walkthrough", "Care guide", "Follow-up notes"]
+    text: "The finished floor is reviewed for quality, cure guidance, warranty notes, and care instructions.",
+    points: ["Walkthrough", "Care guide", "Portal record"]
   }
 ];
 
@@ -120,10 +127,10 @@ const gallery = [
   { title: "Concrete Repair", image: images.repair }
 ];
 
-const checkpoints = [
-  ["Concrete Condition", "Existing coating, cracks, stains, spalling, and moisture risk need to be understood before a real recommendation."],
-  ["System Choice", "Flake, metallic, and quartz solve different problems. The finish should match traffic, texture, and visual goals."],
-  ["Topcoat & Texture", "The final feel depends on sheen, anti-slip needs, chip size, broadcast amount, and how the space will be used."]
+const jobTrackerFeatures = [
+  ["Immediate Job Tracking", "Clients get a project record from the moment they submit the digital estimator, not after the job is already underway."],
+  ["Everything In One Place", "Photos, measurements, desired finish, color choice, estimate notes, warranty direction, documents, and messages stay connected."],
+  ["Clear Next Steps", "The tracker shows what has been received, what is being reviewed, what is waiting on approval, and what happens next."]
 ];
 
 export default function HomePage() {
@@ -137,7 +144,12 @@ export default function HomePage() {
           {navLinks.map((link) => (
             <a href={link.href} key={link.label}>{link.label}</a>
           ))}
-          <a className="header-call" href={phoneHref}>Call</a>
+          <a className="header-call" href={phoneHref} aria-label={`Call Phoenix Epoxy Pros at ${phone}`}>
+            <svg className="phone-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.61a2 2 0 0 1-.45 2.11L8 9.69a16 16 0 0 0 6.31 6.31l1.25-1.25a2 2 0 0 1 2.11-.45c.84.27 1.71.47 2.61.59A2 2 0 0 1 22 16.92Z" />
+            </svg>
+            <span>Call</span>
+          </a>
         </nav>
         <a className="gold-button header-cta" href="#estimate">Get Quote</a>
         <span className="mobile-menu-mark" aria-hidden="true"><span /><span /><span /></span>
@@ -166,9 +178,9 @@ export default function HomePage() {
         <SectionIntro kicker="Start here" title="Four taps to get moving" />
         <div className="app-step-list">
           <a href="#estimate"><span>1</span><strong>Pick Your Surface</strong><small>Garage, commercial, patio, repair, metallic, flake, or quartz.</small></a>
-          <a href="#estimate"><span>2</span><strong>Send Photos</strong><small>Share size, current floor condition, and clear pictures.</small></a>
-          <a href="#color-chart"><span>3</span><strong>Choose Finish</strong><small>Use the visualizer before comparing flake, metallic, and quartz.</small></a>
-          <a href="/customer-portal"><span>4</span><strong>Portal Sign In</strong><small>Sign in to access your project portal after setup.</small></a>
+          <a href="#estimate"><span>2</span><strong>Send Photos</strong><small>Upload existing floor images, measurements, and current covering notes.</small></a>
+          <a href="#color-chart"><span>3</span><strong>Choose Finish</strong><small>Use the XPS visualizer and compare the color charts below.</small></a>
+          <a href="/customer-portal"><span>4</span><strong>Job Tracker Sign In</strong><small>Sign in to access your project portal after setup.</small></a>
         </div>
       </section>
 
@@ -176,6 +188,28 @@ export default function HomePage() {
         {trustItems.map((item) => (
           <p key={item.title}><strong>{item.title}</strong><span>{item.text}</span></p>
         ))}
+      </section>
+
+      <section className="digital-estimator-section" id="digital-estimator" aria-labelledby="digital-estimator-title">
+        <div className="digital-estimator-copy">
+          <span className="section-kicker">Digital estimator offer</span>
+          <h2 id="digital-estimator-title">Save 15% When You Use The Digital Estimator</h2>
+          <p>
+            Upload your existing floor images, measurements, current floor covering, desired finish, and desired color.
+            Phoenix Epoxy Pros will return a guaranteed estimate by email within 24 hours with warranty information and
+            job tracker setup.
+          </p>
+          <a className="gold-button" href="#estimate">Start Digital Estimate</a>
+        </div>
+        <div className="estimator-checklist" aria-label="Digital estimator checklist">
+          {estimatorBenefits.map(([title, text], index) => (
+            <article className="estimator-step" key={title}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="section services-section" id="services">
@@ -228,7 +262,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <FinishVisualizer />
+      <XpsVisualizerSection />
 
       <section className="gallery-section" id="gallery">
         <SectionIntro kicker="Project gallery" title="Real surface directions for real concrete" dark />
@@ -243,15 +277,19 @@ export default function HomePage() {
         <a className="gold-button" href="#estimate">Quote A Similar Project</a>
       </section>
 
-      <section className="section reviews-section" id="reviews">
-        <SectionIntro kicker="Quote checkpoints" title="What needs to be right before pricing" />
-        <div className="review-grid">
-          {checkpoints.map(([title, text]) => (
+      <section className="section reviews-section job-tracker-section" id="job-tracker">
+        <SectionIntro kicker="Proprietary job tracker" title="Immediate tracking from the moment they sign up" />
+        <div className="review-grid job-tracker-grid">
+          {jobTrackerFeatures.map(([title, text]) => (
             <article className="review-card" key={title}>
               <h3>{title}</h3>
               <p>{text}</p>
             </article>
           ))}
+        </div>
+        <div className="job-tracker-cta">
+          <a className="gold-button" href="/customer-portal">Portal Sign In</a>
+          <a className="dark-button" href="#estimate">Start Digital Estimator</a>
         </div>
       </section>
 
@@ -260,15 +298,15 @@ export default function HomePage() {
         <div className="faq-grid">
           <details open>
             <summary>What should I send for an estimate?</summary>
-            <p>Send the project type, rough square footage, timeline, surface condition, coating history, and clear photos of the floor.</p>
+            <p>Send the project type, rough square footage, timeline, surface condition, coating history, clear photos of the floor, measurements, desired finish, and desired color.</p>
           </details>
           <details>
             <summary>Should I choose flake, metallic, or quartz?</summary>
             <p>Flake is usually best for garages and patios, metallic is best for decorative statement floors, and quartz is best for traction-heavy or commercial spaces.</p>
           </details>
           <details>
-            <summary>Why does prep matter so much?</summary>
-            <p>Most coating failures start with poor surface preparation. Grinding, repair, cleaning, and the right base coat are what help the system bond correctly.</p>
+            <summary>How does the job tracker help?</summary>
+            <p>The job tracker keeps project status, estimate details, finish selections, warranty information, documents, messages, and next steps connected behind the customer portal.</p>
           </details>
         </div>
       </section>
@@ -276,14 +314,14 @@ export default function HomePage() {
       <footer className="site-footer">
         <div>
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
-          <p>Phoenix epoxy floor estimates, visualizer direction, finish system planning, and customer project portal.</p>
+          <p>Phoenix epoxy floor estimates, XPS visualizer direction, finish system planning, and customer job tracker portal.</p>
         </div>
         <nav aria-label="Footer navigation">
           <a href="#services">Services</a>
           <a href="#process">Process</a>
-          <a href="#color-chart">Visualizer</a>
+          <a href="#visualizer">XPS Visualizer</a>
           <a href="#gallery">Gallery</a>
-          <a href="/visualizer">Visualizer Route</a>
+          <a href="#digital-estimator">15% Digital Estimator</a>
           <a href="/customer-portal">Portal Sign In</a>
           <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
