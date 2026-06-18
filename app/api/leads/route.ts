@@ -8,9 +8,10 @@ function value(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
 }
 
-function scoreLead(timeline: string, hasFiles: boolean, hasDigitalEstimatorFields: boolean) {
+function scoreLead(timeline: string, hasFiles: boolean, hasDigitalEstimatorFields: boolean, asapServiceRequested: boolean) {
   const normalized = timeline.toLowerCase();
-  if ((normalized.includes("asap") || normalized.includes("24") || normalized.includes("30")) && hasFiles && hasDigitalEstimatorFields) return "hot";
+  if (asapServiceRequested) return "hot";
+  if ((normalized.includes("asap") || normalized.includes("urgent") || normalized.includes("24") || normalized.includes("30")) && hasFiles && hasDigitalEstimatorFields) return "hot";
   if (normalized.includes("90") || hasFiles || hasDigitalEstimatorFields) return "warm";
   return "cold";
 }
@@ -92,6 +93,9 @@ async function persistLead(formData: FormData, attachmentResults: unknown[], sco
       zipCode: value(formData, "zipCode"),
       projectType: value(formData, "projectType"),
       timeline: value(formData, "timeline"),
+      preferredTimeline: value(formData, "preferredTimeline"),
+      asapServiceRequested: value(formData, "asapServiceRequested") === "yes",
+      asapNotes: value(formData, "asapNotes"),
       floorMeasurements: value(formData, "floorMeasurements"),
       existingFloorCovering: value(formData, "existingFloorCovering"),
       concreteCondition: value(formData, "concreteCondition"),
@@ -101,7 +105,7 @@ async function persistLead(formData: FormData, attachmentResults: unknown[], sco
       attachments: attachmentResults,
       notificationEmail,
       proposalWorkflow: value(formData, "proposalWorkflow"),
-      portalPath: "/job-tracker"
+      portalPath: "/client-dashboard"
     }
   };
 
@@ -134,6 +138,9 @@ async function notifyOwner(formData: FormData, attachmentResults: unknown[], sco
   const from = process.env.LEADS_FROM_EMAIL || process.env.RESEND_FROM_EMAIL || "Phoenix Epoxy Pros <onboarding@resend.dev>";
   const details = [
     row("Score", score),
+    row("ASAP service requested", value(formData, "asapServiceRequested") === "yes" ? "Yes" : "No"),
+    row("Preferred timeline", value(formData, "preferredTimeline") || value(formData, "timeline")),
+    row("ASAP notes", value(formData, "asapNotes")),
     row("Full name", value(formData, "fullName")),
     row("Address", value(formData, "address")),
     row("Email", value(formData, "email")),
@@ -150,6 +157,7 @@ async function notifyOwner(formData: FormData, attachmentResults: unknown[], sco
     row("Persistence", JSON.stringify(persistence))
   ].join("");
 
+  const subjectPrefix = value(formData, "asapServiceRequested") === "yes" ? "ASAP XPS Request" : "New XPS Digital Bid Request";
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -159,8 +167,8 @@ async function notifyOwner(formData: FormData, attachmentResults: unknown[], sco
     body: JSON.stringify({
       from,
       to: [to],
-      subject: `New XPS Digital Bid Request - ${value(formData, "fullName") || "Website Lead"}`,
-      html: `<h1>New XPS Digital Bid Request</h1><p>A customer submitted the 15% Digital Estimator intake.</p><table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:14px;">${details}</table>`
+      subject: `${subjectPrefix} - ${value(formData, "fullName") || "Website Lead"}`,
+      html: `<h1>${escapeHtml(subjectPrefix)}</h1><p>A customer submitted a website request.</p><table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;font-family:Arial,sans-serif;font-size:14px;">${details}</table>`
     })
   });
 
@@ -183,7 +191,8 @@ export async function POST(request: Request) {
     value(formData, "desiredFinish") ||
     value(formData, "desiredColor")
   );
-  const score = scoreLead(timeline, files.length > 0, hasDigitalEstimatorFields);
+  const asapServiceRequested = value(formData, "asapServiceRequested") === "yes";
+  const score = scoreLead(timeline, files.length > 0, hasDigitalEstimatorFields, asapServiceRequested);
   const attachmentResults = await Promise.all(files.map(uploadAttachment));
   const persistence = await persistLead(formData, attachmentResults, score);
   const notification = await notifyOwner(formData, attachmentResults, score, persistence);
@@ -193,8 +202,9 @@ export async function POST(request: Request) {
     score,
     persistence,
     notification,
+    dashboardPath: "/client-dashboard",
     message: hasDigitalEstimatorFields
-      ? "Digital estimator request received. Phoenix Epoxy Pros will review the uploads and email the proposal path next."
-      : "Estimate request received. Phoenix Epoxy Pros will review the project details and photos next."
+      ? "Digital estimator request received. Opening the client dashboard next."
+      : "Request received. Phoenix Epoxy Pros will review the details and follow up next."
   });
 }
