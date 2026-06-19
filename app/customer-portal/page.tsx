@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { MobileNavigation } from "../components/MobileNavigation";
 
 type IntakeState = "idle" | "saving" | "ready" | "error";
 
@@ -43,10 +44,11 @@ export default function CustomerPortalPreviewPage() {
 
   return (
     <main className="portal-login-page">
-      <header className="portal-login-header">
+      <header className="portal-login-header branded-page-header">
         <a href="/" aria-label="Back to Phoenix Epoxy Pros">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
+        <MobileNavigation />
         <a className="portal-home-link" href="/">Back to website</a>
       </header>
 
