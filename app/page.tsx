@@ -1,5 +1,6 @@
 import { DigitalEstimator } from "./components/DigitalEstimator";
 import { FinishVisualizer } from "./components/FinishVisualizer";
+import { MobileNavigation } from "./components/MobileNavigation";
 import { PhoenixLeadForm } from "./components/PhoenixLeadForm";
 
 const phone = "772-209-0266";
@@ -22,9 +23,10 @@ const images = {
 };
 
 const navLinks = [
-  { label: "Before / After", href: "#before-after" },
-  { label: "Job Tracker", href: "/job-tracker" },
-  { label: "15% Estimator", href: "#digital-estimator" }
+  { label: "Digital Bid", href: "/digital-bid" },
+  { label: "Portal System", href: "/portal-system" },
+  { label: "About Us", href: "/about-us" },
+  { label: "Gallery", href: "/gallery" }
 ];
 
 const services = [
@@ -142,8 +144,8 @@ export default function HomePage() {
             <span className="phone-icon" aria-hidden="true" />
           </a>
         </nav>
-        <a className="gold-button header-cta" href="#estimate">Get Quote</a>
-        <span className="mobile-menu-mark" aria-hidden="true"><span /><span /><span /></span>
+        <a className="gold-button header-cta" href="/digital-estimator">Get Quote</a>
+        <MobileNavigation />
       </header>
 
       <section className="hero" id="home" aria-label="Phoenix Epoxy Pros estimate hero">
@@ -158,7 +160,7 @@ export default function HomePage() {
         </div>
 
         <nav className="mobile-action-rail" aria-label="Mobile quick actions">
-          <a href="#estimate"><span className="action-icon">01</span>Estimate</a>
+          <a href="/digital-estimator"><span className="action-icon">01</span>Estimate</a>
           <a href="#process"><span className="action-icon">02</span>Process</a>
           <a href="#color-chart"><span className="action-icon">03</span>Colors</a>
           <a href={phoneHref}><span className="mobile-phone-icon" aria-hidden="true" />Call</a>
@@ -185,7 +187,7 @@ export default function HomePage() {
         <SectionIntro kicker="Services" title="Phoenix epoxy floors built around the right system" />
         <div className="services-grid">
           {services.map((service) => (
-            <a className="service-card" href="#estimate" key={service.title}>
+            <a className="service-card" href="/digital-estimator" key={service.title}>
               <img src={service.image} alt={`${service.title} project example`} />
               <div>
                 <h2>{service.title}</h2>
@@ -205,7 +207,7 @@ export default function HomePage() {
             A good epoxy or polyaspartic system starts before the coating is poured. The slab needs the right profile,
             repairs, cleaning, base coat, broadcast, and topcoat for the way the floor will actually be used.
           </p>
-          <a className="gold-button" href="#estimate">Start My Quote</a>
+          <a className="gold-button" href="/digital-estimator">Start My Quote</a>
         </div>
         <img src={images.beforeAfter} alt="Before and after Phoenix epoxy garage floor comparison" />
       </section>
@@ -237,13 +239,13 @@ export default function HomePage() {
         <SectionIntro kicker="Project gallery" title="Real surface directions for real concrete" dark />
         <div className="gallery-strip">
           {gallery.map((item) => (
-            <a href="#estimate" key={item.title}>
+            <a href="/digital-estimator" key={item.title}>
               <img src={item.image} alt={`${item.title} example`} />
               <span>{item.title}</span>
             </a>
           ))}
         </div>
-        <a className="gold-button" href="#estimate">Quote A Similar Project</a>
+        <a className="gold-button" href="/gallery">View Full Gallery</a>
       </section>
 
       <section className="section reviews-section job-tracker-section" id="job-tracker">
@@ -258,7 +260,7 @@ export default function HomePage() {
         </div>
         <div className="job-tracker-cta">
           <p>Every qualified estimate can become a tracked project with uploads, finish approvals, proposal status, warranty documents, progress checkpoints, and email updates in one place.</p>
-          <a className="gold-button" href="/job-tracker">View Job Tracker System</a>
+          <a className="gold-button" href="/portal-system">View Portal System</a>
         </div>
       </section>
 
@@ -288,12 +290,12 @@ export default function HomePage() {
           <p>Phoenix epoxy floor estimates, digital bid intake, finish system planning, proposal handoff, and customer project tracking.</p>
         </div>
         <nav aria-label="Footer navigation">
-          <a href="#services">Services</a>
-          <a href="#process">Process</a>
-          <a href="#color-chart">Color Charts</a>
-          <a href="#digital-estimator">15% Estimator</a>
+          <a href="/digital-bid">Digital Bid</a>
+          <a href="/portal-system">Portal System</a>
+          <a href="/about-us">About Us</a>
+          <a href="/contact-us">Contact Us</a>
+          <a href="/gallery">Gallery</a>
           <a href="/job-tracker">Job Tracker</a>
-          <a href="/customer-portal">Customer Portal</a>
           <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
         </nav>
