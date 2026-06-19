@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { MobileNavigation } from "../components/MobileNavigation";
 
 type SubmitState = "idle" | "sending" | "sent" | "error";
 
@@ -200,10 +201,11 @@ export default function DigitalEstimatorPage() {
 
   return (
     <main className="portal-login-page digital-estimator-page">
-      <header className="portal-login-header">
+      <header className="portal-login-header branded-page-header">
         <a href="/" aria-label="Back to Phoenix Epoxy Pros">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
+        <MobileNavigation />
         <a className="portal-home-link" href="/job-tracker">View job tracker</a>
       </header>
 
