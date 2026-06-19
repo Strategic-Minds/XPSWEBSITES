@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -180,7 +181,9 @@ async function persistLead(leadPackage: ReturnType<typeof buildLeadPackage>): Pr
     return { stored: false, mode: "not-configured", reason: "Supabase write key is not configured." };
   }
 
+  const leadId = randomUUID();
   const payload = {
+    lead_id: leadId,
     source: leadPackage.source,
     campaign: leadPackage.campaign,
     status: leadPackage.asapServiceRequested ? "asap_new" : "new",
@@ -194,7 +197,7 @@ async function persistLead(leadPackage: ReturnType<typeof buildLeadPackage>): Pr
       Authorization: `Bearer ${key}`,
       apikey: key,
       "Content-Type": "application/json",
-      Prefer: "return=representation"
+      Prefer: "return=minimal"
     },
     body: JSON.stringify(payload)
   });
@@ -205,8 +208,7 @@ async function persistLead(leadPackage: ReturnType<typeof buildLeadPackage>): Pr
     return { stored: false, mode: `${mode}-error`, error };
   }
 
-  const rows = await response.json().catch(() => []);
-  return { stored: true, mode, leadId: Array.isArray(rows) ? rows[0]?.lead_id || null : null };
+  return { stored: true, mode, leadId };
 }
 
 async function buildEmailAttachments(files: File[]) {
