@@ -1,0 +1,145 @@
+/* Hero lock: replace the broken cropped logo-panel image with controlled geometry. */
+
+@media (min-width: 761px) {
+  .hero {
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+  }
+
+  .hero-stage {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: clamp(540px, 32vw, 640px) !important;
+    min-height: 540px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    isolation: isolate !important;
+  }
+
+  .hero-photo {
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 1 !important;
+    overflow: hidden !important;
+  }
+
+  .hero-photo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center 52% !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
+  .hero-logo-panel {
+    position: absolute !important;
+    inset: 0 auto 0 0 !important;
+    z-index: 3 !important;
+    display: block !important;
+    width: clamp(390px, 26vw, 510px) !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    clip-path: polygon(0 0, 56% 0, 100% 100%, 0 100%) !important;
+    background:
+      linear-gradient(76deg, transparent 0 71%, #f6b800 71.4% 72.4%, transparent 72.8%),
+      #ffffff !important;
+  }
+
+  .hero-logo-panel img {
+    display: none !important;
+  }
+
+  .hero-logo-panel::before {
+    content: "PHOENIX";
+    position: absolute;
+    left: clamp(28px, 3.6vw, 68px);
+    top: 48%;
+    transform: translateY(-50%);
+    color: #050505;
+    font-family: var(--display);
+    font-size: clamp(58px, 5.6vw, 98px);
+    font-weight: 950;
+    line-height: .78;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    text-shadow: none;
+  }
+
+  .hero-logo-panel::after {
+    content: "EPOXY PROS";
+    position: absolute;
+    left: clamp(32px, 3.9vw, 74px);
+    top: calc(48% + clamp(42px, 4.6vw, 74px));
+    color: #d9a400;
+    font-family: var(--display);
+    font-size: clamp(31px, 3.2vw, 56px);
+    font-weight: 950;
+    line-height: .9;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    text-shadow: none;
+  }
+
+  .estimate-card {
+    top: clamp(44px, 4.6vw, 78px) !important;
+    right: clamp(44px, 5vw, 86px) !important;
+    width: clamp(318px, 22vw, 370px) !important;
+    max-width: calc(100% - 56px) !important;
+    z-index: 5 !important;
+  }
+}
+
+@media (min-width: 1500px) {
+  .hero-stage {
+    height: clamp(560px, 31.5vw, 650px) !important;
+    min-height: 560px !important;
+  }
+
+  .hero-logo-panel {
+    width: clamp(430px, 25.5vw, 520px) !important;
+  }
+
+  .estimate-card {
+    right: clamp(56px, 5.2vw, 96px) !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 761px) {
+  .hero-stage {
+    height: 540px !important;
+    min-height: 540px !important;
+  }
+
+  .hero-logo-panel {
+    width: 390px !important;
+  }
+
+  .hero-logo-panel::before {
+    left: 32px;
+    font-size: 62px;
+  }
+
+  .hero-logo-panel::after {
+    left: 34px;
+    top: calc(48% + 48px);
+    font-size: 35px;
+  }
+
+  .estimate-card {
+    top: 50px !important;
+    right: 24px !important;
+    width: 300px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-logo-panel img {
+    display: none !important;
+  }
+}
