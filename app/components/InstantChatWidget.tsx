@@ -1,12 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 type ChatState = "idle" | "open" | "sending" | "sent" | "error";
 
 function readStoredLead() {
   try {
-    const stored = window.sessionStorage.getItem("xpsEstimatorLead") || window.sessionStorage.getItem("xpsClientDashboard");
+    const stored = window.sessionStorage.getItem("xpsClientDashboard") || window.sessionStorage.getItem("xpsEstimatorLead");
     return stored ? JSON.parse(stored) : {};
   } catch {
     return {};
@@ -17,11 +17,38 @@ function readValue(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim();
 }
 
+function projectContext(storedLead: Record<string, string>) {
+  const context = [
+    storedLead.projectType ? `Project: ${storedLead.projectType}` : "",
+    storedLead.address ? `Address: ${storedLead.address}` : "",
+    storedLead.zipCode ? `ZIP: ${storedLead.zipCode}` : "",
+    storedLead.floorMeasurements ? `Measurements: ${storedLead.floorMeasurements}` : "",
+    storedLead.existingFloorCovering ? `Existing floor: ${storedLead.existingFloorCovering}` : "",
+    storedLead.concreteCondition ? `Concrete condition: ${storedLead.concreteCondition}` : "",
+    storedLead.desiredFinish ? `Desired finish: ${storedLead.desiredFinish}` : "",
+    storedLead.desiredColor ? `Desired color: ${storedLead.desiredColor}` : "",
+    storedLead.preferredTimeline ? `Preferred timeline: ${storedLead.preferredTimeline}` : "",
+    storedLead.leadId ? `Lead ID: ${storedLead.leadId}` : ""
+  ].filter(Boolean);
+
+  return context.length ? `\n\nDashboard context:\n${context.join("\n")}` : "";
+}
+
 export function InstantChatWidget() {
   const [chatState, setChatState] = useState<ChatState>("idle");
   const [message, setMessage] = useState("Send a quick message and we will follow up by phone or email.");
 
   const isOpen = chatState !== "idle";
+
+  useEffect(() => {
+    function openChat() {
+      setChatState("open");
+      setMessage("Send a quick message and we will follow up by phone or email.");
+    }
+
+    window.addEventListener("xps:open-chat", openChat);
+    return () => window.removeEventListener("xps:open-chat", openChat);
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,6 +61,7 @@ export function InstantChatWidget() {
     const fullName = readValue(formData, "fullName") || storedLead.fullName || "Website visitor";
     const email = readValue(formData, "email") || storedLead.email || "";
     const phone = readValue(formData, "phone") || storedLead.phone || "";
+    const asapServiceRequested = readValue(formData, "asapServiceRequested") === "yes" ? "yes" : storedLead.asapServiceRequested === "yes" ? "yes" : "no";
 
     if (!chatMessage) {
       setChatState("error");
@@ -46,10 +74,18 @@ export function InstantChatWidget() {
     formData.set("fullName", fullName);
     formData.set("email", email);
     formData.set("phone", phone);
+    formData.set("address", storedLead.address || "");
     formData.set("projectType", readValue(formData, "projectType") || storedLead.projectType || "Instant Chat");
     formData.set("zipCode", readValue(formData, "zipCode") || storedLead.zipCode || "");
-    formData.set("timeline", readValue(formData, "asapServiceRequested") === "yes" ? "ASAP instant chat request" : "Instant chat request");
-    formData.set("notes", `Instant chat request: ${chatMessage}`);
+    formData.set("floorMeasurements", storedLead.floorMeasurements || "");
+    formData.set("existingFloorCovering", storedLead.existingFloorCovering || "");
+    formData.set("concreteCondition", storedLead.concreteCondition || "");
+    formData.set("desiredFinish", storedLead.desiredFinish || "");
+    formData.set("desiredColor", storedLead.desiredColor || "");
+    formData.set("preferredTimeline", storedLead.preferredTimeline || "Instant chat request");
+    formData.set("asapServiceRequested", asapServiceRequested);
+    formData.set("timeline", asapServiceRequested === "yes" ? "ASAP instant chat request" : "Instant chat request");
+    formData.set("notes", `Instant chat request: ${chatMessage}${projectContext(storedLead)}`);
     formData.set("notificationEmail", "jeremy@shopxps.com");
 
     try {
@@ -64,7 +100,7 @@ export function InstantChatWidget() {
       }
 
       setChatState("sent");
-      setMessage("Message received. The XPS team will follow up from here.");
+      setMessage(result.notification?.sent ? "Message sent. The XPS team will follow up from here." : "Message saved for review. The XPS team will follow up from here.");
     } catch (error) {
       setChatState("error");
       setMessage(error instanceof Error ? error.message : "Chat request failed.");
@@ -72,7 +108,7 @@ export function InstantChatWidget() {
   }
 
   return (
-    <aside className={`instant-chat-widget ${isOpen ? "open" : "closed"}`} aria-label="Instant chat request">
+    <aside id="instant-chat" className={`instant-chat-widget ${isOpen ? "open" : "closed"}`} aria-label="Instant chat request">
       {isOpen ? (
         <div className="instant-chat-panel">
           <div className="instant-chat-head">
@@ -94,8 +130,16 @@ export function InstantChatWidget() {
                 <input name="fullName" autoComplete="name" />
               </label>
               <label>
+                <span>Email</span>
+                <input name="email" type="email" autoComplete="email" />
+              </label>
+              <label>
                 <span>Phone</span>
                 <input name="phone" type="tel" autoComplete="tel" />
+              </label>
+              <label>
+                <span>ZIP</span>
+                <input name="zipCode" inputMode="numeric" autoComplete="postal-code" />
               </label>
             </div>
             <label className="instant-chat-asap">
