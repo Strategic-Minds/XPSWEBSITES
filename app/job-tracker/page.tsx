@@ -1,3 +1,5 @@
+import { MobileNavigation } from "../components/MobileNavigation";
+
 const summaryItems = [
   ["Digital Bid", "Customer details, uploads, measurements, floor condition, finish, and color choices stay attached to one estimate record."],
   ["Proposal Path", "Jeremy reviews the package, sends the proposal by email, and keeps warranty information tied to the estimate."],
@@ -33,10 +35,11 @@ const trackerAdvantages = [
 export default function JobTrackerPage() {
   return (
     <main className="portal-login-page job-tracker-preview-page">
-      <header className="portal-login-header">
+      <header className="portal-login-header branded-page-header">
         <a href="/" aria-label="Back to Phoenix Epoxy Pros">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
+        <MobileNavigation />
         <a className="portal-home-link" href="/digital-estimator">Start digital bid</a>
       </header>
 
