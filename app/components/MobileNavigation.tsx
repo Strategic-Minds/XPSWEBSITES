@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const phone = "772-209-0266";
 const phoneHref = "tel:17722090266";
@@ -16,6 +17,11 @@ const mobileLinks = [
 export function MobileNavigation() {
   const [open, setOpen] = useState(false);
   const drawerId = useId();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) {
@@ -28,15 +34,16 @@ export function MobileNavigation() {
       }
     }
 
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [open]);
+
+  function closeMenu() {
+    setOpen(false);
+  }
 
   return (
     <div className={`mobile-menu-root ${open ? "is-open" : ""}`}>
@@ -54,31 +61,35 @@ export function MobileNavigation() {
         <strong>Menu</strong>
       </button>
 
-      {open ? <button className="mobile-menu-backdrop" type="button" aria-label="Close menu" onClick={() => setOpen(false)} /> : null}
+      {open ? (
+        <>
+          <button className="mobile-menu-backdrop" type="button" aria-label="Close menu" onClick={closeMenu} />
 
-      <nav className="mobile-menu-drawer" id={drawerId} aria-label="Mobile navigation">
-        <div className="mobile-menu-drawer-head">
-          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
-          <button type="button" aria-label="Close menu" onClick={() => setOpen(false)}>Close</button>
-        </div>
+          <nav className="mobile-menu-drawer" id={drawerId} aria-label="Mobile navigation">
+            <div className="mobile-menu-drawer-head">
+              <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
+              <button type="button" aria-label="Close menu" onClick={closeMenu}>Close</button>
+            </div>
 
-        <div className="mobile-menu-links">
-          {mobileLinks.map((link) => (
-            <a href={link.href} key={link.label} onClick={() => setOpen(false)}>
-              <strong>{link.label}</strong>
-              <span>{link.description}</span>
-            </a>
-          ))}
-        </div>
+            <div className="mobile-menu-links">
+              {mobileLinks.map((link) => (
+                <a href={link.href} key={link.label} onClick={closeMenu}>
+                  <strong>{link.label}</strong>
+                  <span>{link.description}</span>
+                </a>
+              ))}
+            </div>
 
-        <div className="mobile-menu-actions">
-          <a className="gold-button" href="/digital-estimator" onClick={() => setOpen(false)}>Start Digital Bid</a>
-          <a className="mobile-menu-call" href={phoneHref} onClick={() => setOpen(false)}>
-            <span className="phone-icon" aria-hidden="true" />
-            Call {phone}
-          </a>
-        </div>
-      </nav>
+            <div className="mobile-menu-actions">
+              <a className="gold-button" href="/digital-estimator" onClick={closeMenu}>Start Digital Bid</a>
+              <a className="mobile-menu-call" href={phoneHref} onClick={closeMenu}>
+                <span className="phone-icon" aria-hidden="true" />
+                Call {phone}
+              </a>
+            </div>
+          </nav>
+        </>
+      ) : null}
     </div>
   );
 }
