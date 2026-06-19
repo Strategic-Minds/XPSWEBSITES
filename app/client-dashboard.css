@@ -36,12 +36,21 @@
   background: #070707;
 }
 
+.client-dashboard-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .client-dashboard-hero,
 .client-dashboard-summary,
-.client-dashboard-timeline {
+.client-dashboard-workflow,
+.client-dashboard-command,
+.client-dashboard-assets {
   display: grid;
-  gap: clamp(22px, 5vw, 68px);
-  padding: clamp(54px, 7vw, 92px) clamp(18px, 5vw, 72px);
+  gap: clamp(20px, 4vw, 54px);
+  padding: clamp(48px, 7vw, 90px) clamp(18px, 5vw, 72px);
 }
 
 .client-dashboard-hero {
@@ -50,28 +59,40 @@
   min-height: calc(100svh - 86px);
   color: #ffffff;
   background:
-    linear-gradient(90deg, rgba(5, 5, 5, .92), rgba(5, 5, 5, .64)),
+    linear-gradient(90deg, rgba(5, 5, 5, .93), rgba(5, 5, 5, .62)),
     url("/images/hero-garage-approved.webp?v=approved-final-20260617") center / cover;
 }
 
 .client-dashboard-copy {
-  max-width: 820px;
+  max-width: 840px;
 }
 
 .client-dashboard-copy h1,
 .client-dashboard-summary h2,
-.client-dashboard-timeline h2,
-.client-dashboard-card h2,
-.client-dashboard-asap-card h2 {
+.client-dashboard-workflow h2,
+.client-dashboard-assets h2 {
   margin: 0;
   font-family: var(--display, Impact, sans-serif);
-  font-size: clamp(42px, 6vw, 86px);
-  line-height: .9;
+  font-size: clamp(40px, 5.6vw, 82px);
+  line-height: .92;
   text-transform: uppercase;
 }
 
-.client-dashboard-copy p {
-  max-width: 720px;
+.client-dashboard-card h2,
+.client-dashboard-asap-card h2,
+.client-dashboard-color-card h2,
+.client-dashboard-actions-card h2,
+.client-dashboard-upload-list h2 {
+  margin: 0;
+  font-family: var(--display, Impact, sans-serif);
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: .95;
+  text-transform: uppercase;
+}
+
+.client-dashboard-copy p,
+.client-dashboard-workflow-head p {
+  max-width: 740px;
   color: rgba(255, 255, 255, .8);
   font-size: 18px;
   line-height: 1.6;
@@ -79,7 +100,11 @@
 
 .client-dashboard-card,
 .client-dashboard-summary article,
-.client-dashboard-asap-card {
+.client-dashboard-asap-card,
+.client-dashboard-color-card,
+.client-dashboard-metric-card,
+.client-dashboard-upload-list,
+.client-dashboard-actions-card {
   display: grid;
   gap: 18px;
   align-content: start;
@@ -88,7 +113,7 @@
   border-radius: 8px;
   background: #ffffff;
   color: #111111;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .32);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .24);
 }
 
 .client-dashboard-card .job-tracker-status-pill.asap {
@@ -118,8 +143,101 @@
   overflow-wrap: anywhere;
 }
 
+.client-dashboard-command {
+  grid-template-columns: 1.25fr repeat(3, minmax(190px, .45fr));
+  background: #f7f8f8;
+  color: #111111;
+}
+
+.dashboard-color-row {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.dashboard-color-swatch {
+  width: 84px;
+  height: 84px;
+  border: 4px solid #ffffff;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .18), 0 12px 26px rgba(0, 0, 0, .18);
+}
+
+.client-dashboard-color-card p,
+.client-dashboard-metric-card p,
+.client-dashboard-asap-card p,
+.client-dashboard-upload-list p,
+.client-dashboard-actions-card label span {
+  margin: 0;
+  color: #4c4c4c;
+  line-height: 1.48;
+}
+
+.client-dashboard-metric-card strong {
+  color: #111111;
+  font-family: var(--display, Impact, sans-serif);
+  font-size: clamp(28px, 3.3vw, 46px);
+  line-height: .95;
+  text-transform: uppercase;
+}
+
+.client-dashboard-workflow {
+  grid-template-columns: minmax(280px, .52fr) minmax(0, 1fr);
+  align-items: start;
+  background: #101214;
+  color: #ffffff;
+}
+
+.client-workflow-step-list {
+  display: grid;
+  gap: 12px;
+}
+
+.client-workflow-step {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  min-height: 74px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .06);
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.client-workflow-step.active {
+  border-color: rgba(246, 184, 0, .75);
+  background: rgba(246, 184, 0, .14);
+}
+
+.client-workflow-step span {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 8px;
+  background: #f6b800;
+  color: #050505;
+  font-weight: 950;
+}
+
+.client-workflow-step strong {
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.client-workflow-step small {
+  color: rgba(255, 255, 255, .74);
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
 .client-dashboard-summary {
-  grid-template-columns: minmax(0, 1fr) minmax(320px, .52fr);
+  grid-template-columns: minmax(0, 1fr) minmax(320px, .46fr);
   background: #f7f8f8;
   color: #111111;
 }
@@ -149,15 +267,80 @@
 }
 
 .client-dashboard-grid span,
-.client-dashboard-asap-card p,
 .client-dashboard-note {
   color: #4b4b4b;
   line-height: 1.45;
 }
 
-.client-dashboard-timeline {
-  grid-template-columns: minmax(0, .56fr) minmax(360px, .85fr);
-  background: #101214;
+.dashboard-chat-button {
+  justify-self: start;
+}
+
+.client-dashboard-assets {
+  grid-template-columns: minmax(320px, .64fr) minmax(0, 1fr);
+  background: #ffffff;
+  color: #111111;
+}
+
+.client-dashboard-upload-list,
+.client-dashboard-actions-card {
+  border-color: #e3e3e3;
+  box-shadow: none;
+}
+
+.client-dashboard-upload-list ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.client-dashboard-upload-list li {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #f7f8f8;
+}
+
+.client-dashboard-upload-list li strong {
+  overflow-wrap: anywhere;
+}
+
+.client-dashboard-upload-list li span {
+  color: #5b5b5b;
+  font-size: 13px;
+}
+
+.client-dashboard-actions-card label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  background: #f7f8f8;
+}
+
+.client-dashboard-actions-card input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #f6b800;
+}
+
+.dashboard-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gold-button.secondary {
+  border-color: #111111;
+  background: #111111;
   color: #ffffff;
 }
 
@@ -199,7 +382,7 @@
 }
 
 .instant-chat-panel {
-  width: min(390px, calc(100vw - 28px));
+  width: min(430px, calc(100vw - 28px));
   padding: 16px;
   border: 1px solid rgba(246, 184, 0, .54);
   border-radius: 8px;
@@ -298,10 +481,17 @@
   color: #9b1616;
 }
 
+@media (max-width: 1150px) {
+  .client-dashboard-command {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 1050px) {
   .client-dashboard-hero,
   .client-dashboard-summary,
-  .client-dashboard-timeline {
+  .client-dashboard-workflow,
+  .client-dashboard-assets {
     grid-template-columns: 1fr;
   }
 
@@ -313,14 +503,31 @@
 @media (max-width: 720px) {
   .client-dashboard-hero,
   .client-dashboard-summary,
-  .client-dashboard-timeline {
+  .client-dashboard-workflow,
+  .client-dashboard-command,
+  .client-dashboard-assets {
     padding-inline: 16px;
   }
 
+  .client-dashboard-command,
   .client-dashboard-grid,
   .instant-chat-fields,
-  .client-dashboard-card dl {
+  .client-dashboard-card dl,
+  .client-workflow-step {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-color-row {
+    grid-template-columns: 64px 1fr;
+  }
+
+  .dashboard-color-swatch {
+    width: 64px;
+    height: 64px;
+  }
+
+  .client-workflow-step small {
+    justify-self: start;
   }
 
   .instant-chat-widget {
