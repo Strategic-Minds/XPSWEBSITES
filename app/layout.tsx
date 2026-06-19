@@ -14,6 +14,7 @@ import "./portal-sign-in.css";
 import "./xps-home-revision.css";
 import "./digital-estimator-intake.css";
 import "./client-dashboard.css";
+import "./branded-pages.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
