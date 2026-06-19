@@ -1,15 +1,28 @@
 {
-  "schema_version": "2026-06-16",
+  "schema_version": "2026-06-17",
   "project": "Phoenix Epoxy Pros",
-  "status": "ready_for_auto_builder_ingestion_and_production_readiness",
+  "status": "ready_for_auto_builder_ingestion_with_twilio_sms",
   "full_scaffold_package": {
-    "title": "xpswebsites-phoenix-production-ready-scaffold-final-v2.zip",
+    "title": "xpswebsites-phoenix-production-ready-scaffold-twilio-v3.zip",
     "drive_file_id": "1uzNsNoK18ynpJXPtAiKnz-UG8fwCry9E",
     "url": "https://drive.google.com/file/d/1uzNsNoK18ynpJXPtAiKnz-UG8fwCry9E/view?usp=drivesdk",
-    "sha256": "2f174d4c23de84448f4ee2ef246a9af8f55bdc777a005ac1c6c41b730e31f0e9",
-    "file_count": 94,
+    "sha256": "c19ebb14edcba2774c5de433560190a9bd50816ae47e96367ecab3b1aaea2f1d",
+    "file_count": 95,
     "validated_locally": true,
     "validation_command": "npm run validate"
+  },
+  "integrations": {
+    "twilio_sms": {
+      "status": "wired_with_env_placeholders",
+      "lead_owner_alerts": true,
+      "customer_confirmation_requires_opt_in": true,
+      "required_env": [
+        "TWILIO_ACCOUNT_SID",
+        "TWILIO_AUTH_TOKEN",
+        "TWILIO_MESSAGING_SERVICE_SID or TWILIO_FROM_PHONE_NUMBER",
+        "TWILIO_OWNER_NOTIFY_TO"
+      ]
+    }
   },
   "readiness_checklist": {
     "title": "Phoenix Epoxy Pros - Pre-Generation Readiness Checklist",
