@@ -14,7 +14,7 @@ The first location is Phoenix Epoxy Pros. The scaffold is based on the Nashville
 - Reference repo: https://github.com/Strategic-Minds/NASHVILLERESINWORX
 - Phoenix Drive packet: https://drive.google.com/drive/folders/1wdvro-T90CqXjcLtyACFXnlJ9vOqxuTk
 - Readiness checklist: https://docs.google.com/spreadsheets/d/1WbzhWAbXYBXXBlqn7GsgKcfkPvl0gHcbwSt3VyOHiK4
-- Production-ready scaffold package: https://drive.google.com/file/d/1uzNsNoK18ynpJXPtAiKnz-UG8fwCry9E/view?usp=drivesdk
+
 
 ## Production-Readiness Drive Artifacts
 
