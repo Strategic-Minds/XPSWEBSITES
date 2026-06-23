@@ -1,11 +1,15 @@
 // app/lib/supabase.ts
-// Supabase client — browser + server + service role
-
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || '';
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'placeholder-anon-key';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
+
+// Check if Supabase is actually configured (not just placeholders)
+export const isSupabaseConfigured = (): boolean =>
+  Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+  );
 
 // Browser client (anon)
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -14,10 +18,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
-
-// Check if Supabase is configured
-export const isSupabaseConfigured = (): boolean =>
-  Boolean(supabaseUrl && supabaseAnonKey && supabaseServiceKey);
 
 // Upload a file to Supabase Storage
 export async function uploadLeadFile(
