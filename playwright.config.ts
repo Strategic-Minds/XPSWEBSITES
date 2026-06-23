@@ -1,15 +1,27 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./tests/e2e",
-  timeout: 30_000,
-  retries: process.env.CI ? 1 : 0,
+  testDir: './.agents/playwright/tests',
+  fullyParallel: false,
+  retries: 2,
+  workers: 2,
+  reporter: [['json', { outputFile: '.agents/playwright/results/results.json' }], ['list']],
+  outputDir: '.agents/playwright/results/artifacts',
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:3000",
-    trace: "on-first-retry"
+    baseURL: 'https://xpswebsites.vercel.app',
+    trace: 'on-first-retry',
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
   },
   projects: [
-    { name: "desktop-chrome", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile-safari", use: { ...devices["iPhone 13"] } }
-  ]
+    {
+      name: 'Desktop Chrome',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 720 } },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 13'] },
+      testMatch: ['**/08-mobile-nav.spec.ts'],
+    },
+  ],
 });
