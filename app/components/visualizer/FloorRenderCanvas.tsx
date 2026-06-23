@@ -86,7 +86,7 @@ export function FloorRenderCanvas({ canvasRef, imageUrl, maskPoints, selectedFin
 
   return (
     <div className="ev-canvas-frame">
-      <canvas aria-label="Floor visualizer preview canvas" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp} ref={canvasRef} />
+      <canvas aria-label="Floor visualizer preview canvas" onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handlePointerUp} ref={canvasRef as React.RefObject<HTMLCanvasElement>} />
       <div className="ev-canvas-help">
         {imageUrl ? "Click around the floor edge, then drag yellow points to refine the mask." : "Upload a floor photo to begin."}
       </div>
