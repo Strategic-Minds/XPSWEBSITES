@@ -146,17 +146,42 @@ export async function POST(req: NextRequest) {
   const emailSent = await sendOwnerEmail(lead, leadId, score);
   receipt.emailSent = emailSent;
 
-  // Non-blocking WhatsApp notify
+  // Non-blocking WhatsApp notify (customer confirmation + owner alert)
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
-  if (appUrl && lead.whatsappConsent && lead.phone) {
-    fetch(`${appUrl}/api/whatsapp/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+  if (appUrl) {
+    const wa = (payload: object) =>
+      fetch(`${appUrl}/api/whatsapp/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(() => null);
+
+    // Trigger 1: Customer confirmation
+    if (lead.whatsappConsent && lead.phone) {
+      wa({
         to: lead.phone,
-        message: `Hi ${lead.fullName.split(' ')[0]}! Your Phoenix Epoxy Pros estimate request was received. Jeremy will send your detailed estimate within 24 hours. — XPS Digital`,
-      }),
-    }).catch(() => null);
+        template: 'xps_lead_submitted',
+        params: { name: lead.fullName.split(' ')[0], projectType: lead.projectType },
+        leadId,
+      });
+    }
+
+    // Trigger 2: Owner admin alert
+    const ownerPhone = process.env.TWILIO_OWNER_NOTIFY_TO || '';
+    if (ownerPhone) {
+      wa({
+        to: ownerPhone,
+        template: 'xps_admin_new_lead',
+        params: {
+          name: lead.fullName,
+          projectType: lead.projectType,
+          zip: lead.zipCode,
+          score: String(score),
+          asap: String(lead.asapRequested),
+        },
+        leadId,
+      });
+    }
   }
 
   return NextResponse.json({

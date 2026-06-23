@@ -1,101 +1,161 @@
 // app/api/whatsapp/send/route.ts
-// WhatsApp message sender via Twilio WhatsApp API
+// WhatsApp messaging via Twilio — all 9 customer/crew/admin touchpoints
+// Feature-flagged: WHATSAPP_ENABLED=true required (graceful no-op when not set)
 
 import { NextRequest, NextResponse } from 'next/server';
 
-const isWhatsAppConfigured = () =>
+const ENABLED = process.env.WHATSAPP_ENABLED === 'true';
+
+const isConfigured = () =>
   Boolean(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_WHATSAPP_FROM);
+
+// ── 9 canonical message templates (per master spec) ──────────────────────────
+const TEMPLATES: Record<string, (p: Record<string, string>) => string> = {
+  // 1. Customer confirmation on lead submit
+  xps_lead_submitted: (p) =>
+    `Hi ${p.name || 'there'}! ✅ Your Phoenix Epoxy Pros estimate for *${p.projectType || 'your project'}* was received. Jeremy will send your detailed proposal within 24 hours. Questions? Reply here. — XPS`,
+
+  // 2. Owner/admin new lead alert
+  xps_admin_new_lead: (p) =>
+    `🔔 *New XPS Lead*\nName: ${p.name}\nProject: ${p.projectType}\nZIP: ${p.zip}\nScore: ${p.score || '?'}/100${p.asap === 'true' ? '\n⚡ ASAP REQUESTED' : ''}`,
+
+  // 3. Proposal sent to customer
+  xps_proposal_sent: (p) =>
+    `Hi ${p.name}! 📋 Your Phoenix Epoxy Pros proposal for *${p.projectType}* has been sent to ${p.email}. Review it and reply with any questions. — XPS Team`,
+
+  // 4. Payment link sent
+  xps_payment_link: (p) =>
+    `Hi ${p.name}! 💳 Your payment link is ready:\n${p.link}\nOnce received we will lock in your installation date. — XPS Team`,
+
+  // 5. Job Tracker portal access granted
+  xps_tracker_access: (p) =>
+    `Hi ${p.name}! 🔑 Your XPS Job Tracker is now active. Track your project 24/7 here:\n${p.link}\n— Phoenix Epoxy Pros`,
+
+  // 6. Crew assignment notification
+  xps_crew_assignment: (p) =>
+    `📋 *Job Assignment — XPS*\nCustomer: ${p.customerName}\nAddress: ${p.address}\nDate: ${p.date} @ ${p.time || 'TBD'}\nFinish: ${p.finish || 'See portal'}\nSq Ft: ${p.sqft || 'TBD'}`,
+
+  // 7. Change order alert to owner
+  xps_change_order_alert: (p) =>
+    `⚠️ *Change Order Request*\nCrew: ${p.crewLeader}\nJob: ${p.customerName}\nDescription: ${p.description}\nAmount: $${p.amount}\n\nReply APPROVE or DENY.`,
+
+  // 8. Color approval request to customer
+  xps_color_approval_request: (p) =>
+    `Hi ${p.name}! 🎨 *Color Confirmation Needed*\nFinish: ${p.finish}\nColor: ${p.color}\n\nReply *YES* to approve before installation. If no response by ${p.deadline || '8am day-of'}, we proceed with selected color. — XPS`,
+
+  // 9. Job completion + review request
+  xps_job_complete: (p) =>
+    `Hi ${p.name}! 🎉 Your XPS epoxy floor is complete! We hope you love it.\n\nWould you leave us a quick Google review?\n${p.reviewLink || 'https://g.page/phoenix-epoxy-pros/review'}\n\nThank you for choosing Phoenix Epoxy Pros! — Jeremy`,
+};
+
+interface SendPayload {
+  to: string;
+  template?: string;
+  message?: string;
+  params?: Record<string, string>;
+  leadId?: string;
+  jobId?: string;
+}
+
+function normalizePhone(raw: string): string {
+  const digits = raw.replace(/\D/g, '');
+  return digits.startsWith('1') ? `+${digits}` : `+1${digits}`;
+}
+
+async function sendViaTwilio(to: string, body: string): Promise<{ ok: boolean; sid?: string; error?: string }> {
+  const sid = process.env.TWILIO_ACCOUNT_SID!;
+  const token = process.env.TWILIO_AUTH_TOKEN!;
+  const from = process.env.TWILIO_WHATSAPP_FROM!;
+  const toWA = `whatsapp:${to}`;
+  const fromWA = from.startsWith('whatsapp:') ? from : `whatsapp:${from}`;
+
+  const resp = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${sid}:${token}`).toString('base64')}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({ From: fromWA, To: toWA, Body: body }).toString(),
+  });
+
+  const data = await resp.json() as { sid?: string; message?: string; code?: number };
+  if (!resp.ok) return { ok: false, error: data.message || `Twilio HTTP ${resp.status}` };
+  return { ok: true, sid: data.sid };
+}
 
 export async function POST(req: NextRequest) {
   const timestamp = new Date().toISOString();
 
-  let body: { to?: string; message?: string; template?: string; params?: Record<string, string>; leadId?: string };
+  let payload: SendPayload;
   try {
-    body = await req.json();
+    payload = await req.json() as SendPayload;
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  if (!body.to || (!body.message && !body.template)) {
-    return NextResponse.json({ error: 'Missing required fields: to, message or template' }, { status: 400 });
+  const { to, template, message, params = {}, leadId, jobId } = payload;
+
+  if (!to || (!template && !message)) {
+    return NextResponse.json(
+      { error: 'Required: to + (template or message)' },
+      { status: 400 }
+    );
   }
 
-  // Normalize phone number
-  const to = body.to.replace(/\D/g, '');
-  const toE164 = to.startsWith('1') ? `+${to}` : `+1${to}`;
-
-  if (!isWhatsAppConfigured()) {
+  // Feature flag check — graceful no-op (not an error)
+  if (!ENABLED) {
     return NextResponse.json({
       status: 'disabled',
-      message: 'WhatsApp not configured — set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_FROM',
+      message: 'WHATSAPP_ENABLED is not set to true',
       timestamp,
-      to: toE164,
+      to,
+      template: template || null,
+      leadId: leadId || null,
+      jobId: jobId || null,
     });
   }
 
-  const accountSid = process.env.TWILIO_ACCOUNT_SID!;
-  const authToken = process.env.TWILIO_AUTH_TOKEN!;
-  const from = process.env.TWILIO_WHATSAPP_FROM!;
+  if (!isConfigured()) {
+    return NextResponse.json({
+      status: 'not_configured',
+      message: 'Twilio credentials missing — set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_FROM',
+      timestamp,
+    }, { status: 503 });
+  }
+
+  const toE164 = normalizePhone(to);
 
   // Build message body
-  const messageBody = body.message || buildTemplateMessage(body.template!, body.params || {});
-
-  try {
-    const credentials = Buffer.from(`${accountSid}:${authToken}`).toString('base64');
-    const resp = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${credentials}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        From: `whatsapp:${from}`,
-        To: `whatsapp:${toE164}`,
-        Body: messageBody,
-      }),
-    });
-
-    const data = await resp.json();
-
-    if (!resp.ok) {
-      return NextResponse.json({
-        status: 'failed',
-        error: data.message || 'Twilio error',
-        code: data.code,
-        timestamp,
-      }, { status: 502 });
-    }
-
-    return NextResponse.json({
-      status: 'sent',
-      messageSid: data.sid,
-      to: toE164,
-      timestamp,
-    });
-  } catch (err) {
-    return NextResponse.json({
-      status: 'failed',
-      error: err instanceof Error ? err.message : 'Network error',
-      timestamp,
-    }, { status: 502 });
+  let body: string;
+  if (message) {
+    body = message;
+  } else if (template && TEMPLATES[template]) {
+    body = TEMPLATES[template](params);
+  } else {
+    return NextResponse.json({ error: `Unknown template: ${template}` }, { status: 400 });
   }
-}
 
-function buildTemplateMessage(template: string, params: Record<string, string>): string {
-  const templates: Record<string, string> = {
-    xps_lead_submitted: `Hi ${params.name || 'there'}! ✅ Your Phoenix Epoxy Pros estimate request for *${params.projectType || 'your project'}* was received. Jeremy will send your detailed estimate within 24 hours. Questions? Reply to this message. — XPS Digital`,
-    xps_admin_new_lead: `🔔 *New Lead Alert*\nName: ${params.name}\nProject: ${params.projectType}\nZIP: ${params.zip}\nScore: ${params.score}/100${params.asap === 'YES' ? '\n⚡ ASAP REQUESTED' : ''}`,
-    xps_proposal_sent: `Hi ${params.name}! 📋 Your Phoenix Epoxy Pros proposal for *${params.projectType}* has been sent to ${params.email}. Review it and reply with any questions. — XPS Team`,
-    xps_job_confirmed: `Hi ${params.name}! 🎉 Your epoxy floor installation is confirmed for *${params.date}*. Our crew will arrive at ${params.time}. See you then! — XPS Team`,
-  };
-  return templates[template] || `Phoenix Epoxy Pros: ${template}`;
+  const result = await sendViaTwilio(toE164, body);
+
+  return NextResponse.json({
+    status: result.ok ? 'sent' : 'failed',
+    sid: result.sid || null,
+    error: result.error || null,
+    to: toE164,
+    template: template || null,
+    leadId: leadId || null,
+    jobId: jobId || null,
+    timestamp,
+  }, { status: result.ok ? 200 : 502 });
 }
 
 export async function GET() {
   return NextResponse.json({
     status: 'ok',
-    endpoint: '/api/whatsapp/send',
-    configured: isWhatsAppConfigured(),
+    service: 'xps-whatsapp',
+    enabled: ENABLED,
+    configured: isConfigured(),
+    templates: Object.keys(TEMPLATES),
     timestamp: new Date().toISOString(),
   });
 }

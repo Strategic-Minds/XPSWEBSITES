@@ -1,136 +1,116 @@
-// app/customer-portal/dashboard/page.tsx — M02 spec, full client portal
-"use client";
-import { useEffect, useState } from 'react';
-import { DashboardShell, StatusBadge } from '@/components/DashboardShell';
+// app/customer-portal/dashboard/page.tsx — M02 Client Dashboard
+'use client';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { DashboardShell } from '@/components/DashboardShell';
 import { BRAND } from '@/lib/tokens';
 
-type Lead = {
-  fullName?: string; email?: string; phone?: string;
-  projectType?: string; desiredFinish?: string; desiredColor?: string;
-  address?: string; floorMeasurements?: string;
-  existingFloorCovering?: string; concreteCondition?: string;
-  asapRequested?: boolean; notes?: string;
-  attachmentCount?: number; submittedAt?: string; leadId?: string;
-};
-
 const WORKFLOW = [
-  { key: 'submitted', label: 'Request Submitted', desc: 'Photos, measurements, and finish selection received.', icon: '✅' },
-  { key: 'review', label: 'Under Review', desc: 'Jeremy is reviewing your package.', icon: '🔍' },
-  { key: 'proposal', label: 'Proposal Sent', desc: 'Check your email for scope, pricing, and warranty.', icon: '📋' },
-  { key: 'payment', label: 'Payment', desc: 'Payment link sent after proposal approval.', icon: '💳' },
-  { key: 'tracker', label: 'Job Tracker Live', desc: 'Project tracking, schedule, and progress photos.', icon: '📱' },
+  { key: 'submitted',  label: 'Request Submitted', desc: 'Your photos, measurements, and finish selection have been received.', icon: '✅' },
+  { key: 'review',     label: 'Under Review',      desc: 'Jeremy is personally reviewing your project package.',              icon: '🔍' },
+  { key: 'proposal',   label: 'Proposal Sent',     desc: 'Check your email for your detailed scope, pricing, and warranty.',   icon: '📋' },
+  { key: 'payment',    label: 'Payment',           desc: 'A secure payment link has been sent after your proposal is signed.', icon: '💳' },
+  { key: 'tracker',   label: 'Job Tracker Access', desc: 'Your personal project tracker is now live — track everything here.', icon: '🔑' },
 ];
 
-export default function ClientDashboard() {
-  const [lead, setLead] = useState<Lead>({});
-  const [activeStep, setActiveStep] = useState(1); // 0-indexed, step 1 = "Under Review"
+function ClientDashboardContent() {
+  const params = useSearchParams();
+  const [leadName, setLeadName] = useState('');
+  const [leadId,   setLeadId]   = useState('');
+  const activeStep = 1; // 0-indexed: "Under Review" = step 1
 
   useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem('xpsEstimatorLead') || sessionStorage.getItem('xpsLeadData');
-      if (stored) setLead(JSON.parse(stored));
-    } catch {}
-  }, []);
+    setLeadName(params.get('name') || sessionStorage.getItem('xps_customer_name') || '');
+    setLeadId(  params.get('lead') || sessionStorage.getItem('xps_lead_id') || '');
+    if (params.get('name')) sessionStorage.setItem('xps_customer_name', params.get('name')!);
+    if (params.get('lead')) sessionStorage.setItem('xps_lead_id', params.get('lead')!);
+  }, [params]);
 
-  const firstName = lead.fullName?.split(' ')[0] || 'there';
+  const firstName = leadName.split(' ')[0] || 'there';
 
   return (
-    <DashboardShell role="client" userName={lead.fullName || 'Client'} currentPath="/customer-portal/dashboard">
+    <DashboardShell role="client" userName={leadName || 'Client'} currentPath="/customer-portal/dashboard">
       {/* Welcome Card */}
-      <div style={{ background: '#111214', borderRadius: 8, padding: '24px 28px', marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+      <div style={{ background: '#111214', borderRadius: 12, padding: '28px 24px', marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
         <div>
-          <div style={{ fontSize: 12, color: '#c9a227', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>Welcome Back</div>
-          <h1 style={{ margin: 0, color: '#fff', fontSize: 'clamp(1.4rem,3vw,1.9rem)', fontWeight: 800 }}>Hi {firstName}! Your request is in. 🎉</h1>
-          <p style={{ color: '#9ca3af', margin: '8px 0 0', fontSize: 14 }}>
-            Jeremy will review your project details and send your proposal within 24 hours.
+          <p style={{ color: '#9ca3af', fontSize: 14, margin: '0 0 6px' }}>Welcome back,</p>
+          <h1 style={{ color: '#fff', fontSize: 'clamp(1.5rem,3vw,2rem)', fontWeight: 900, margin: '0 0 8px' }}>
+            {leadName ? `${firstName}!` : 'Your Project Portal'}
+          </h1>
+          <p style={{ color: '#9ca3af', fontSize: 15, margin: 0, maxWidth: 480 }}>
+            Your epoxy floor project is in good hands. Jeremy reviews all incoming requests personally.
           </p>
+          {leadId && <p style={{ color: '#555', fontSize: 12, marginTop: 6 }}>Project ID: {leadId}</p>}
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <a href={`tel:${BRAND.phoneHref.replace('tel:','')}`} style={{ background: '#c9a227', color: '#111', padding: '10px 18px', borderRadius: 6, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-            📞 Call Us
-          </a>
-          <a href="https://wa.me/17722090266" target="_blank" rel="noreferrer" style={{ background: '#25D366', color: '#fff', padding: '10px 18px', borderRadius: 6, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>
-            💬 WhatsApp
-          </a>
-        </div>
+        <a href="/digital-estimator" style={{ background: '#c9a227', color: '#111', fontWeight: 800, fontSize: 15, padding: '12px 24px', borderRadius: 8, textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          📋 Update My Project
+        </a>
       </div>
 
-      {/* Workflow Progress */}
-      <div style={{ background: '#fff', border: '1px solid #e2e0dc', borderRadius: 8, padding: '20px 24px', marginBottom: 24 }}>
-        <h2 style={{ margin: '0 0 20px', fontSize: 16, fontWeight: 700 }}>Your Project Journey</h2>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+      {/* Workflow Tracker */}
+      <div style={{ background: '#fff', border: '1px solid #e2e0dc', borderRadius: 12, padding: '24px', marginBottom: 24 }}>
+        <p style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', color: '#c9a227', margin: '0 0 6px' }}>Project Status</p>
+        <h2 style={{ fontSize: '1.1rem', fontWeight: 800, margin: '0 0 24px' }}>Your 5-Step Journey</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
           {WORKFLOW.map((step, i) => {
-            const isComplete = i < activeStep;
-            const isCurrent = i === activeStep;
+            const done = i < activeStep;
+            const active = i === activeStep;
+            const locked = i > activeStep;
             return (
-              <div key={step.key} style={{ flex: '1 1 140px', minWidth: 120, padding: '14px', borderRadius: 6, border: `2px solid ${isCurrent ? '#c9a227' : isComplete ? '#16a34a' : '#e2e0dc'}`, background: isCurrent ? '#fffbeb' : isComplete ? '#f0fdf4' : '#fafaf9', position: 'relative' }}>
-                <div style={{ fontSize: 22, marginBottom: 6 }}>{step.icon}</div>
-                <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color: isCurrent ? '#c9a227' : isComplete ? '#16a34a' : '#888' }}>
-                  {i + 1}. {step.label}
+              <div key={step.key} style={{ display: 'flex', alignItems: 'flex-start', gap: 16, padding: '16px 0', borderBottom: i < WORKFLOW.length - 1 ? '1px solid #f0ede8' : 'none' }}>
+                <div style={{ width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, background: done ? '#c9a227' : active ? '#111214' : '#f0ede8', color: done || active ? '#fff' : '#bbb', fontWeight: 800 }}>
+                  {done ? '✓' : step.icon}
                 </div>
-                <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.4 }}>{step.desc}</div>
-                {isCurrent && <div style={{ position: 'absolute', top: 8, right: 8, width: 8, height: 8, borderRadius: '50%', background: '#c9a227', animation: 'pulse 1.5s infinite' }} />}
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                    <span style={{ fontWeight: 700, fontSize: 15, color: locked ? '#bbb' : '#0a0b0c' }}>{step.label}</span>
+                    {done   && <span style={{ background: '#dcfce7', color: '#16a34a', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 10 }}>Complete</span>}
+                    {active && <span style={{ background: '#c9a22720', color: '#c9a227', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 10 }}>In Progress</span>}
+                  </div>
+                  <p style={{ fontSize: 14, color: locked ? '#ccc' : '#555', margin: 0, lineHeight: 1.5 }}>{step.desc}</p>
+                </div>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Project Details + Uploads */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
-        {/* Details */}
-        <div style={{ background: '#fff', border: '1px solid #e2e0dc', borderRadius: 8, padding: 20 }}>
-          <h3 style={{ margin: '0 0 14px', fontSize: 15, fontWeight: 700 }}>Project Details</h3>
-          {[
-            ['Project Type', lead.projectType || '—'],
-            ['Desired Finish', lead.desiredFinish || '—'],
-            ['Desired Color', lead.desiredColor || '—'],
-            ['Address', lead.address || '—'],
-            ['Measurements', lead.floorMeasurements ? `${lead.floorMeasurements} sq ft` : '—'],
-            ['Existing Floor', lead.existingFloorCovering || '—'],
-            ['Concrete Condition', lead.concreteCondition || '—'],
-          ].map(([label, val]) => (
-            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f5f4f0', fontSize: 14 }}>
-              <span style={{ color: '#888', fontWeight: 500 }}>{label}</span>
-              <span style={{ fontWeight: 600, textAlign: 'right', maxWidth: '60%' }}>{val}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Status Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {[
-            { label: 'Proposal Status', value: 'Under Review', note: 'Expected within 24 hours', status: 'pending', icon: '📋' },
-            { label: 'Payment Status', value: 'Pending Proposal', note: 'Payment link sent after approval', status: 'pending', icon: '💳' },
-            { label: 'Photos Submitted', value: `${lead.attachmentCount || 0} files`, note: 'Attached to your request', status: 'complete', icon: '📸' },
-            { label: 'Job Tracker', value: 'Locked', note: 'Unlocked after payment', status: 'pending', icon: '🔒' },
-          ].map((card) => (
-            <div key={card.label} style={{ background: '#fff', border: '1px solid #e2e0dc', borderRadius: 8, padding: '14px 16px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-              <span style={{ fontSize: 22, flexShrink: 0 }}>{card.icon}</span>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700 }}>{card.label}</span>
-                  <StatusBadge status={card.status} />
-                </div>
-                <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 2 }}>{card.value}</div>
-                <div style={{ fontSize: 12, color: '#9ca3af' }}>{card.note}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 15% Coupon reminder */}
-        <div style={{ background: '#fffbeb', border: '2px solid #c9a227', borderRadius: 8, padding: 20 }}>
-          <div style={{ fontSize: 32, marginBottom: 8 }}>🏷️</div>
-          <h3 style={{ margin: '0 0 8px', fontSize: 15, fontWeight: 700, color: '#b45309' }}>15% Digital Estimator Coupon</h3>
-          <p style={{ margin: '0 0 12px', fontSize: 13, color: '#92400e', lineHeight: 1.5 }}>
-            Your 15% discount has been applied to this request. It will appear on your proposal from Jeremy.
-          </p>
-          <div style={{ background: '#fef3c7', borderRadius: 4, padding: '8px 12px', fontWeight: 700, fontSize: 13, color: '#92400e' }}>
-            Guaranteed estimate within 24 hours by email
+      {/* Status Cards Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 24 }}>
+        {[
+          { label: 'Proposal Status',    value: 'Being Prepared',    sub: 'Estimate within 24 hours',   icon: '📋', color: '#2563eb' },
+          { label: 'Payment',            value: 'Pending Proposal',  sub: 'Link sent after approval',   icon: '💳', color: '#6b7280' },
+          { label: 'Job Tracker',        value: 'Unlocks at Payment',sub: 'Track your floor live',       icon: '🔑', color: '#6b7280' },
+          { label: 'Warranty',           value: 'Lifetime Coverage', sub: 'Issued at job completion',   icon: '🛡', color: '#16a34a' },
+        ].map(card => (
+          <div key={card.label} style={{ background: '#fff', border: '1.5px solid #e2e0dc', borderRadius: 10, padding: '20px' }}>
+            <div style={{ fontSize: '1.5rem', marginBottom: 10 }}>{card.icon}</div>
+            <p style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '.08em', color: '#888', margin: '0 0 4px' }}>{card.label}</p>
+            <p style={{ fontWeight: 800, fontSize: '1.1rem', margin: '0 0 4px', color: card.color }}>{card.value}</p>
+            <p style={{ fontSize: 13, color: '#888', margin: 0 }}>{card.sub}</p>
           </div>
+        ))}
+      </div>
+
+      {/* Contact + Help */}
+      <div style={{ background: '#111214', borderRadius: 12, padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+        <div>
+          <p style={{ color: '#9ca3af', fontSize: 14, margin: '0 0 4px' }}>Questions about your project?</p>
+          <p style={{ color: '#fff', fontWeight: 700, fontSize: 16, margin: 0 }}>Jeremy is available Mon–Sat · 8am–6pm</p>
+        </div>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <a href={BRAND.phoneHref} style={{ background: '#c9a227', color: '#111', fontWeight: 800, fontSize: 14, padding: '11px 20px', borderRadius: 8, textDecoration: 'none' }}>📞 Call Now</a>
+          <a href={BRAND.emailHref} style={{ border: '2px solid #333', color: '#ccc', fontWeight: 700, fontSize: 14, padding: '10px 20px', borderRadius: 8, textDecoration: 'none' }}>✉️ Email</a>
         </div>
       </div>
     </DashboardShell>
+  );
+}
+
+export default function ClientDashboard() {
+  return (
+    <Suspense fallback={<div style={{ padding: 40, textAlign: 'center' }}>Loading your portal…</div>}>
+      <ClientDashboardContent />
+    </Suspense>
   );
 }
