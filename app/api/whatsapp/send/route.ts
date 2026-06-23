@@ -9,6 +9,7 @@ const ENABLED = process.env.WHATSAPP_ENABLED === 'true';
 const ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
 const AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || '';
 const FROM = process.env.TWILIO_WHATSAPP_FROM || 'whatsapp:+15005550006';
+const _OWNER_WHATSAPP = process.env.TWILIO_OWNER_NOTIFY_TO || '';
 
 interface SendPayload {
   to: string;
@@ -20,23 +21,23 @@ interface SendPayload {
 
 const TEMPLATES: Record<string, (p: Record<string, string>) => string> = {
   xps_lead_submitted: (p) =>
-    `Hi ${p.name}! ✅ We received your floor project request. Jeremy will review and send your estimate within 24 hours. — Phoenix Epoxy Pros`,
+    `Hi ${p.name}! ✅ We received your floor project request for ${p.projectType || 'your project'}. Jeremy will review your photos and details and send your estimate within 24 hours. Questions? Call us: 772-209-0266 — Phoenix Epoxy Pros`,
   xps_proposal_sent: (p) =>
-    `Hi ${p.name}! 📋 Your proposal is ready. Check your email for details.`,
+    `Hi ${p.name}! 📋 Your epoxy floor proposal is ready. Check your email for the full scope, pricing, and warranty info.`,
   xps_payment_link: (p) =>
-    `Hi ${p.name}! 💳 Your payment link has been sent to ${p.email}.`,
+    `Hi ${p.name}! 💳 Your payment link has been sent to ${p.email}. — Phoenix Epoxy Pros`,
   xps_tracker_access: (p) =>
-    `Hi ${p.name}! 🔑 Your Job Tracker is now active: ${p.link}`,
+    `Hi ${p.name}! 🔑 Your XPS Job Tracker is now active: ${p.link} — Phoenix Epoxy Pros`,
   xps_admin_new_lead: (p) =>
-    `🔔 New Lead: ${p.name} in ${p.zip} — ${p.projectType}. Score: ${p.score || 'new'}.`,
+    `🔔 New XPS Lead: ${p.name} in ${p.zip} — ${p.projectType}. Score: ${p.score || 'new'}.`,
   xps_crew_assignment: (p) =>
-    `📋 New job: ${p.customerName} — ${p.address} — ${p.date}.`,
+    `📋 New job assigned: ${p.customerName} — ${p.address} — ${p.date}.`,
   xps_change_order_alert: (p) =>
-    `⚠️ Change Order: "${p.description}" — $${p.amount}.`,
+    `⚠️ Change Order from ${p.crewLeader}: "${p.description}" — $${p.amount}. Approval needed.`,
   xps_color_approval_request: (p) =>
-    `🎨 Color approval needed: ${p.finish} / ${p.color}. Reply YES to approve.`,
+    `Hi ${p.name}! 🎨 Color approval needed: ${p.finish} / ${p.color}. Reply YES to approve or call 772-209-0266`,
   xps_job_complete: (p) =>
-    `🎉 Your floor is complete! Review it in your Job Tracker.`,
+    `Hi ${p.name}! 🎉 Your XPS floor is complete! Review it in your Job Tracker. Leave a review: ${p.reviewLink || 'https://g.page/phoenix-epoxy-pros/review'}`,
 };
 
 async function sendTwilioWhatsApp(
@@ -71,7 +72,7 @@ export async function POST(req: NextRequest) {
   };
 
   if (!ENABLED) {
-    return NextResponse.json({ ...receipt, status: 'disabled' });
+    return NextResponse.json({ ...receipt, status: 'disabled', message: 'WHATSAPP_ENABLED not set to true' });
   }
 
   let payload: SendPayload;
