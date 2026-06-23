@@ -1,0 +1,843 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node",
+      "/tmp/xpswebsites-test/node_modules/.bin/playwright",
+      "test",
+      ".agents/playwright/tests/01-homepage.spec.ts",
+      "--project=Desktop Chrome"
+    ],
+    "configFile": "/tmp/xpswebsites-test/playwright.config.ts",
+    "rootDir": "/tmp/xpswebsites-test/.agents/playwright/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/tmp/xpswebsites-test/.agents/playwright/results/artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Desktop Chrome",
+        "name": "Desktop Chrome",
+        "testDir": "/tmp/xpswebsites-test/.agents/playwright/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/tmp/xpswebsites-test/.agents/playwright/results/artifacts",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/tmp/xpswebsites-test/.agents/playwright/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/08-mobile-nav.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json",
+        {
+          "outputFile": ".agents/playwright/results/results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.61.0",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "01-homepage.spec.ts",
+      "file": "01-homepage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Homepage — Core Load",
+          "file": "01-homepage.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "loads with 200 status and correct title",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3831,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:11:48.588Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-72de9a184b9c7344f22c",
+              "file": "01-homepage.spec.ts",
+              "line": 11,
+              "column": 7
+            },
+            {
+              "title": "has correct meta description",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 916,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:11:53.020Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-a469c68da06cc478923a",
+              "file": "01-homepage.spec.ts",
+              "line": 19,
+              "column": 7
+            },
+            {
+              "title": "has LocalBusiness JSON-LD schema",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 576,
+                      "error": {
+                        "message": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"",
+                        "stack": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"\n    at /tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts:28:31",
+                        "location": {
+                          "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                          "column": 31,
+                          "line": 28
+                        },
+                        "snippet": "  26 |   test('has LocalBusiness JSON-LD schema', async ({ page }) => {\n  27 |     await page.goto('/');\n> 28 |     const schema = await page.$eval(\n     |                               ^\n  29 |       'script[type=\"application/ld+json\"]',\n  30 |       (el) => JSON.parse(el.textContent || '{}')\n  31 |     );"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                            "column": 31,
+                            "line": 28
+                          },
+                          "message": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"\n\n  26 |   test('has LocalBusiness JSON-LD schema', async ({ page }) => {\n  27 |     await page.goto('/');\n> 28 |     const schema = await page.$eval(\n     |                               ^\n  29 |       'script[type=\"application/ld+json\"]',\n  30 |       (el) => JSON.parse(el.textContent || '{}')\n  31 |     );\n    at /tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts:28:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:11:53.951Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/xpswebsites-test/.agents/playwright/results/artifacts/01-homepage-Homepage-—-Cor-28ebc-ocalBusiness-JSON-LD-schema-Desktop-Chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                        "column": 31,
+                        "line": 28
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 1081,
+                      "error": {
+                        "message": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"",
+                        "stack": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"\n    at /tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts:28:31",
+                        "location": {
+                          "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                          "column": 31,
+                          "line": 28
+                        },
+                        "snippet": "  26 |   test('has LocalBusiness JSON-LD schema', async ({ page }) => {\n  27 |     await page.goto('/');\n> 28 |     const schema = await page.$eval(\n     |                               ^\n  29 |       'script[type=\"application/ld+json\"]',\n  30 |       (el) => JSON.parse(el.textContent || '{}')\n  31 |     );"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                            "column": 31,
+                            "line": 28
+                          },
+                          "message": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"\n\n  26 |   test('has LocalBusiness JSON-LD schema', async ({ page }) => {\n  27 |     await page.goto('/');\n> 28 |     const schema = await page.$eval(\n     |                               ^\n  29 |       'script[type=\"application/ld+json\"]',\n  30 |       (el) => JSON.parse(el.textContent || '{}')\n  31 |     );\n    at /tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts:28:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-06-23T10:11:55.374Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/xpswebsites-test/.agents/playwright/results/artifacts/01-homepage-Homepage-—-Cor-28ebc-ocalBusiness-JSON-LD-schema-Desktop-Chrome-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/tmp/xpswebsites-test/.agents/playwright/results/artifacts/01-homepage-Homepage-—-Cor-28ebc-ocalBusiness-JSON-LD-schema-Desktop-Chrome-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                        "column": 31,
+                        "line": 28
+                      }
+                    },
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 672,
+                      "error": {
+                        "message": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"",
+                        "stack": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"\n    at /tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts:28:31",
+                        "location": {
+                          "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                          "column": 31,
+                          "line": 28
+                        },
+                        "snippet": "  26 |   test('has LocalBusiness JSON-LD schema', async ({ page }) => {\n  27 |     await page.goto('/');\n> 28 |     const schema = await page.$eval(\n     |                               ^\n  29 |       'script[type=\"application/ld+json\"]',\n  30 |       (el) => JSON.parse(el.textContent || '{}')\n  31 |     );"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                            "column": 31,
+                            "line": 28
+                          },
+                          "message": "Error: page.$eval: Failed to find element matching selector \"script[type=\"application/ld+json\"]\"\n\n  26 |   test('has LocalBusiness JSON-LD schema', async ({ page }) => {\n  27 |     await page.goto('/');\n> 28 |     const schema = await page.$eval(\n     |                               ^\n  29 |       'script[type=\"application/ld+json\"]',\n  30 |       (el) => JSON.parse(el.textContent || '{}')\n  31 |     );\n    at /tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts:28:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 2,
+                      "startTime": "2026-06-23T10:11:58.194Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/tmp/xpswebsites-test/.agents/playwright/results/artifacts/01-homepage-Homepage-—-Cor-28ebc-ocalBusiness-JSON-LD-schema-Desktop-Chrome-retry2/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/tmp/xpswebsites-test/.agents/playwright/tests/01-homepage.spec.ts",
+                        "column": 31,
+                        "line": 28
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-84f015c41d3aed69b8ba",
+              "file": "01-homepage.spec.ts",
+              "line": 26,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Homepage — Header",
+          "file": "01-homepage.spec.ts",
+          "line": 38,
+          "column": 6,
+          "specs": [
+            {
+              "title": "has logo visible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 664,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:00.293Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-1530b10f77f1073879c3",
+              "file": "01-homepage.spec.ts",
+              "line": 39,
+              "column": 7
+            },
+            {
+              "title": "has Get Quote / Digital Bid CTA button",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 602,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:01.541Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-c96fed9c33bd226d0115",
+              "file": "01-homepage.spec.ts",
+              "line": 45,
+              "column": 7
+            },
+            {
+              "title": "has phone link in header",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 607,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:02.158Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-7ac24a949bcd9762fa76",
+              "file": "01-homepage.spec.ts",
+              "line": 51,
+              "column": 7
+            },
+            {
+              "title": "navigation links are present",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 671,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:02.778Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-6c2c885c5d3bd66298dd",
+              "file": "01-homepage.spec.ts",
+              "line": 57,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Homepage — Hero Lead Form",
+          "file": "01-homepage.spec.ts",
+          "line": 66,
+          "column": 6,
+          "specs": [
+            {
+              "title": "has name, email, phone, ZIP fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 545,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:03.467Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-aec2fe45cbce3a723176",
+              "file": "01-homepage.spec.ts",
+              "line": 67,
+              "column": 7
+            },
+            {
+              "title": "hero form shows validation error on empty submit",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1406,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:04.029Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-1e2759e45e40d448d626",
+              "file": "01-homepage.spec.ts",
+              "line": 80,
+              "column": 7
+            },
+            {
+              "title": "hero form navigates to estimator with valid data",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1048,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:05.447Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-21c3d8e500badb3eb4c2",
+              "file": "01-homepage.spec.ts",
+              "line": 98,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Homepage — Visual Sections",
+          "file": "01-homepage.spec.ts",
+          "line": 120,
+          "column": 6,
+          "specs": [
+            {
+              "title": "has service cards section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 543,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:06.507Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-478da002959f2b729c7e",
+              "file": "01-homepage.spec.ts",
+              "line": 121,
+              "column": 7
+            },
+            {
+              "title": "has color chart or finish section",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 567,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:07.063Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-d746b392a4c2a8124448",
+              "file": "01-homepage.spec.ts",
+              "line": 127,
+              "column": 7
+            },
+            {
+              "title": "has trust indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 616,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:07.642Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-2b5e9e11af6198d41bed",
+              "file": "01-homepage.spec.ts",
+              "line": 133,
+              "column": 7
+            },
+            {
+              "title": "has footer with contact info",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 780,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:08.270Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-5d4ea511320f34660060",
+              "file": "01-homepage.spec.ts",
+              "line": 139,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Homepage — Mobile (375px)",
+          "file": "01-homepage.spec.ts",
+          "line": 149,
+          "column": 6,
+          "specs": [
+            {
+              "title": "loads cleanly on mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2741,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:09.061Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-835d106c064758a8ffe8",
+              "file": "01-homepage.spec.ts",
+              "line": 152,
+              "column": 7
+            },
+            {
+              "title": "no horizontal overflow on mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 813,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:11.813Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-adb87f3aceb556ffa0c8",
+              "file": "01-homepage.spec.ts",
+              "line": 159,
+              "column": 7
+            },
+            {
+              "title": "CTA button is visible and tappable on mobile",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Desktop Chrome",
+                  "projectName": "Desktop Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 572,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-06-23T10:12:12.637Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "9992779f7716d889cb78-d137d55fc7f334cd6218",
+              "file": "01-homepage.spec.ts",
+              "line": 167,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-06-23T10:11:47.757Z",
+    "duration": 25575.199,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
