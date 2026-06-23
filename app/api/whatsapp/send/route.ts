@@ -8,37 +8,35 @@ import { supabaseAdmin, isSupabaseConfigured } from '@/lib/supabase';
 const ENABLED = process.env.WHATSAPP_ENABLED === 'true';
 const ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
 const AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || '';
-const FROM = process.env.TWILIO_WHATSAPP_FROM || 'whatsapp:+15005550006'; // Twilio sandbox default
-const OWNER_WHATSAPP = process.env.TWILIO_OWNER_NOTIFY_TO || '';
+const FROM = process.env.TWILIO_WHATSAPP_FROM || 'whatsapp:+15005550006';
 
 interface SendPayload {
-  to: string;           // E.164 phone number, e.g. "+17722090266"
-  template: string;     // Template name key
+  to: string;
+  template: string;
   params: Record<string, string>;
   leadId?: string;
   jobId?: string;
 }
 
-// Template message bodies
 const TEMPLATES: Record<string, (p: Record<string, string>) => string> = {
   xps_lead_submitted: (p) =>
-    `Hi ${p.name}! ✅ We received your floor project request for ${p.projectType || 'your project'}. Jeremy will review your photos and details and send your estimate within 24 hours. Questions? Call us: 772-209-0266 — Phoenix Epoxy Pros`,
+    `Hi ${p.name}! ✅ We received your floor project request. Jeremy will review and send your estimate within 24 hours. — Phoenix Epoxy Pros`,
   xps_proposal_sent: (p) =>
-    `Hi ${p.name}! 📋 Your epoxy floor proposal is ready. Check your email from jeremy@shopxps.com for the full scope, pricing, and warranty info. Reply here with any questions!`,
+    `Hi ${p.name}! 📋 Your proposal is ready. Check your email for details.`,
   xps_payment_link: (p) =>
-    `Hi ${p.name}! 💳 Your payment link has been sent to ${p.email}. Once payment is received, we'll issue your Job Tracker access and schedule your project. — Phoenix Epoxy Pros`,
+    `Hi ${p.name}! 💳 Your payment link has been sent to ${p.email}.`,
   xps_tracker_access: (p) =>
-    `Hi ${p.name}! 🔑 Your XPS Job Tracker is now active. Track your project progress, schedule, photos, and warranty here: ${p.link} — Phoenix Epoxy Pros`,
+    `Hi ${p.name}! 🔑 Your Job Tracker is now active: ${p.link}`,
   xps_admin_new_lead: (p) =>
-    `🔔 New XPS Lead: ${p.name} in ${p.zip} — ${p.projectType}. Score: ${p.score || 'new'}. ASAP: ${p.asap || 'no'}. Review in admin dashboard.`,
+    `🔔 New Lead: ${p.name} in ${p.zip} — ${p.projectType}. Score: ${p.score || 'new'}.`,
   xps_crew_assignment: (p) =>
-    `📋 New job assigned: ${p.customerName} — ${p.address} — ${p.date}. Open your Crew Dashboard for full details and checklist.`,
+    `📋 New job: ${p.customerName} — ${p.address} — ${p.date}.`,
   xps_change_order_alert: (p) =>
-    `⚠️ Change Order from ${p.crewLeader}: "${p.description}" — $${p.amount}. Approval needed in admin dashboard.`,
+    `⚠️ Change Order: "${p.description}" — $${p.amount}.`,
   xps_color_approval_request: (p) =>
-    `Hi ${p.name}! 🎨 We need your color approval before applying your floor finish.\n\nSelected: ${p.finish} / ${p.color}\n\nReply YES to approve or call us to discuss: 772-209-0266`,
+    `🎨 Color approval needed: ${p.finish} / ${p.color}. Reply YES to approve.`,
   xps_job_complete: (p) =>
-    `Hi ${p.name}! 🎉 Your XPS floor is complete! Please review the final walkthrough photos in your Job Tracker. We'd love a review: ${p.reviewLink || 'https://g.page/phoenix-epoxy-pros/review'} — Thank you!`,
+    `🎉 Your floor is complete! Review it in your Job Tracker.`,
 };
 
 async function sendTwilioWhatsApp(
@@ -73,7 +71,7 @@ export async function POST(req: NextRequest) {
   };
 
   if (!ENABLED) {
-    return NextResponse.json({ ...receipt, status: 'disabled', message: 'WHATSAPP_ENABLED not set to true' });
+    return NextResponse.json({ ...receipt, status: 'disabled' });
   }
 
   let payload: SendPayload;
@@ -96,7 +94,6 @@ export async function POST(req: NextRequest) {
   const body = templateFn(params);
   const result = await sendTwilioWhatsApp(to, body);
 
-  // Log to DB if configured
   if (isSupabaseConfigured()) {
     await supabaseAdmin.from('whatsapp_messages').insert({
       lead_id: leadId || null,
@@ -124,27 +121,6 @@ export async function POST(req: NextRequest) {
   });
 }
 
-// Helper: send WhatsApp from server-side (import and call this in other routes)
-export async function sendWhatsApp(
-  to: string,
-  template: string,
-  params: Record<string, string>,
-  meta?: { leadId?: string; jobId?: string }
-): Promise<boolean> {
-  if (!ENABLED || !to) return false;
-  try {
-    const resp = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || ''}/api/whatsapp/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ to, template, params, ...meta }),
-    });
-    return resp.ok;
-  } catch {
-    return false;
-  }
-}
-
-// Inbound webhook from Twilio (for receiving customer replies)
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   return NextResponse.json({ status: 'ok', service: 'xps-whatsapp', enabled: ENABLED });
 }
