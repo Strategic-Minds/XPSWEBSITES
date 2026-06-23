@@ -43,51 +43,30 @@ function scoreLead(lead: LeadInput): number {
 }
 
 async function sendOwnerEmail(lead: LeadInput, leadId: string, score: number): Promise<boolean> {
-  const resendKey = process.env.EMAIL_PROVIDER_API_KEY;
+  const resendKey = process.env.EMAIL_PROVIDER_API_KEY || process.env.RESEND_API_KEY;
   if (!resendKey) return false;
   try {
     const resp = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from: 'XPS Estimator <noreply@phoenixepoxypros.com>',
         to: ['jeremy@shopxps.com'],
         subject: `🔔 New Lead: ${lead.fullName} — ${lead.projectType} [Score: ${score}]${lead.asapRequested ? ' ⚡ ASAP' : ''}`,
-        html: `
-<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-  <div style="background:#111214;padding:24px;text-align:center">
-    <h1 style="color:#c9a227;margin:0;font-size:24px">Phoenix Epoxy Pros</h1>
-    <p style="color:#fff;margin:4px 0 0">New Digital Estimator Lead</p>
-  </div>
-  <div style="padding:24px;background:#fff;border:1px solid #e2e0dc">
-    <table style="width:100%;border-collapse:collapse">
-      <tr><td style="padding:8px 0;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Lead ID</td><td style="padding:8px 0;font-weight:600">${leadId}</td></tr>
-      <tr style="background:#f8f7f4"><td style="padding:8px;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Name</td><td style="padding:8px;font-weight:700;font-size:16px">${lead.fullName}</td></tr>
-      <tr><td style="padding:8px 0;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Email</td><td style="padding:8px 0">${lead.email}</td></tr>
-      <tr style="background:#f8f7f4"><td style="padding:8px;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Phone</td><td style="padding:8px">${lead.phone}</td></tr>
-      <tr><td style="padding:8px 0;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">ZIP</td><td style="padding:8px 0">${lead.zipCode}</td></tr>
-      ${lead.address ? `<tr style="background:#f8f7f4"><td style="padding:8px;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Address</td><td style="padding:8px">${lead.address}</td></tr>` : ''}
-      <tr><td style="padding:8px 0;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Project Type</td><td style="padding:8px 0;font-weight:600">${lead.projectType}</td></tr>
-      ${lead.floorMeasurements ? `<tr style="background:#f8f7f4"><td style="padding:8px;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Measurements</td><td style="padding:8px">${lead.floorMeasurements}</td></tr>` : ''}
-      ${lead.existingFloorCovering ? `<tr><td style="padding:8px 0;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Existing Floor</td><td style="padding:8px 0">${lead.existingFloorCovering}</td></tr>` : ''}
-      ${lead.concreteCondition ? `<tr style="background:#f8f7f4"><td style="padding:8px;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Concrete Condition</td><td style="padding:8px">${lead.concreteCondition}</td></tr>` : ''}
-      ${lead.desiredFinish ? `<tr><td style="padding:8px 0;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Desired Finish</td><td style="padding:8px 0;font-weight:600">${lead.desiredFinish}</td></tr>` : ''}
-      ${lead.desiredColor ? `<tr style="background:#f8f7f4"><td style="padding:8px;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Desired Color</td><td style="padding:8px;font-weight:600">${lead.desiredColor}</td></tr>` : ''}
-      ${lead.asapRequested ? `<tr><td style="padding:8px 0;color:#c9a227;font-size:12px;text-transform:uppercase;font-weight:700">⚡ ASAP</td><td style="padding:8px 0;color:#c9a227;font-weight:700">YES${lead.asapNotes ? ' — ' + lead.asapNotes : ''}</td></tr>` : ''}
-      ${lead.notes ? `<tr style="background:#f8f7f4"><td style="padding:8px;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Notes</td><td style="padding:8px">${lead.notes}</td></tr>` : ''}
-      <tr><td style="padding:8px 0;color:#888;font-size:12px;text-transform:uppercase;font-weight:700">Photos</td><td style="padding:8px 0">${lead.attachmentCount || 0} file(s)</td></tr>
-    </table>
-    <div style="margin:20px 0;padding:16px;background:${score >= 70 ? '#f0fdf4' : '#fefce8'};border-left:4px solid ${score >= 70 ? '#16a34a' : '#d97706'};border-radius:4px">
-      <strong style="font-size:18px">Lead Score: ${score}/100</strong>
-      ${score >= 70 ? '<span style="color:#16a34a;margin-left:8px">🔥 Hot Lead</span>' : score >= 40 ? '<span style="color:#d97706;margin-left:8px">⭐ Warm Lead</span>' : '<span style="color:#6b7280;margin-left:8px">Cold Lead</span>'}
-    </div>
-  </div>
-  <div style="background:#111214;padding:16px;text-align:center">
-    <p style="color:#888;font-size:12px;margin:0">Phoenix Epoxy Pros | 772-209-0266 | jeremy@shopxps.com</p>
-  </div>
+        html: `<div style="font-family:Arial,sans-serif;max-width:600px">
+<div style="background:#111214;padding:24px;text-align:center">
+  <h1 style="color:#c9a227;margin:0">Phoenix Epoxy Pros — New Lead</h1>
+</div>
+<div style="padding:24px;background:#fff">
+  <p><strong>Name:</strong> ${lead.fullName}</p>
+  <p><strong>Email:</strong> ${lead.email}</p>
+  <p><strong>Phone:</strong> ${lead.phone}</p>
+  <p><strong>ZIP:</strong> ${lead.zipCode}</p>
+  <p><strong>Project:</strong> ${lead.projectType}</p>
+  ${lead.asapRequested ? '<p style="color:#c9a227"><strong>⚡ ASAP SERVICE REQUESTED</strong></p>' : ''}
+  <p><strong>Score:</strong> ${score}/100</p>
+  <p><strong>Lead ID:</strong> ${leadId}</p>
+</div>
 </div>`,
       }),
     });
@@ -97,51 +76,9 @@ async function sendOwnerEmail(lead: LeadInput, leadId: string, score: number): P
   }
 }
 
-async function sendWhatsAppNotifications(lead: LeadInput, leadId: string, score: number): Promise<void> {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
-  if (!appUrl) return;
-
-  // Notify customer
-  if (lead.whatsappConsent && lead.phone) {
-    await fetch(`${appUrl}/api/whatsapp/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: lead.phone,
-        template: 'xps_lead_submitted',
-        params: { name: lead.fullName.split(' ')[0], projectType: lead.projectType },
-        leadId,
-      }),
-    }).catch(() => null);
-  }
-
-  // Notify Jeremy
-  const ownerPhone = process.env.TWILIO_OWNER_NOTIFY_TO;
-  if (ownerPhone) {
-    await fetch(`${appUrl}/api/whatsapp/send`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: ownerPhone,
-        template: 'xps_admin_new_lead',
-        params: {
-          name: lead.fullName,
-          zip: lead.zipCode,
-          projectType: lead.projectType,
-          score: String(score),
-          asap: lead.asapRequested ? 'YES' : 'no',
-        },
-        leadId,
-      }),
-    }).catch(() => null);
-  }
-}
-
 export async function POST(req: NextRequest) {
-  const receipt: Record<string, unknown> = {
-    timestamp: new Date().toISOString(),
-    supabaseConfigured: isSupabaseConfigured(),
-  };
+  const timestamp = new Date().toISOString();
+  const receipt: Record<string, unknown> = { timestamp, supabaseConfigured: isSupabaseConfigured() };
 
   let body: unknown;
   try {
@@ -158,58 +95,78 @@ export async function POST(req: NextRequest) {
   const lead = parsed.data;
   const score = scoreLead(lead);
   const leadId = crypto.randomUUID();
-
   receipt.leadId = leadId;
   receipt.score = score;
 
-  // Save to Supabase
-  let savedToDb = false;
+  // Save to Supabase — gracefully skip if not configured
   if (isSupabaseConfigured()) {
-    const { error } = await supabaseAdmin.from('leads').insert({
-      id: leadId,
-      full_name: lead.fullName,
-      email: lead.email,
-      phone: lead.phone,
-      project_type: lead.projectType,
-      address: lead.address,
-      floor_measurements: lead.floorMeasurements,
-      existing_floor_covering: lead.existingFloorCovering,
-      concrete_condition: lead.concreteCondition,
-      desired_finish: lead.desiredFinish,
-      desired_color: lead.desiredColor,
-      asap_requested: lead.asapRequested,
-      asap_notes: lead.asapNotes,
-      preferred_timeline: lead.preferredTimeline,
-      notes: lead.notes,
-      whatsapp_consent: lead.whatsappConsent,
-      whatsapp_number: lead.whatsappConsent ? lead.phone : null,
-      attachment_count: lead.attachmentCount,
-      attachment_paths: lead.attachmentPaths,
-      coupon_claimed: true,
-      source_campaign: lead.campaign,
-      source_page: lead.source,
-      ai_score: score,
-      raw_payload: lead as unknown as Record<string, unknown>,
-      square_footage: lead.floorMeasurements,
-      zip_code: lead.zipCode,
-      lead_score: score >= 70 ? 'hot' : score >= 40 ? 'warm' : 'cold',
-      status: 'new',
-    });
-    savedToDb = !error;
-    receipt.savedToDb = savedToDb;
-    if (error) receipt.dbError = error.message;
+    try {
+      const { error } = await supabaseAdmin.from('leads').insert({
+        id: leadId,
+        full_name: lead.fullName,
+        email: lead.email,
+        phone: lead.phone,
+        project_type: lead.projectType,
+        address: lead.address || null,
+        floor_measurements: lead.floorMeasurements || null,
+        existing_floor_covering: lead.existingFloorCovering || null,
+        concrete_condition: lead.concreteCondition || null,
+        desired_finish: lead.desiredFinish || null,
+        desired_color: lead.desiredColor || null,
+        asap_requested: lead.asapRequested,
+        asap_notes: lead.asapNotes || null,
+        preferred_timeline: lead.preferredTimeline || null,
+        notes: lead.notes || null,
+        whatsapp_consent: lead.whatsappConsent,
+        whatsapp_number: lead.whatsappConsent ? lead.phone : null,
+        attachment_count: lead.attachmentCount,
+        attachment_paths: lead.attachmentPaths,
+        coupon_claimed: true,
+        source_campaign: lead.campaign,
+        source_page: lead.source,
+        ai_score: score,
+        raw_payload: lead as unknown as Record<string, unknown>,
+        square_footage: lead.floorMeasurements || null,
+        zip_code: lead.zipCode,
+        lead_score: score >= 70 ? 'hot' : score >= 40 ? 'warm' : 'cold',
+        status: 'new',
+      });
+      receipt.savedToDb = !error;
+      if (error) receipt.dbError = error.message;
+    } catch (err) {
+      receipt.savedToDb = false;
+      receipt.dbError = err instanceof Error ? err.message : 'Unknown DB error';
+    }
+  } else {
+    receipt.savedToDb = false;
+    receipt.dbNote = 'Supabase not configured — lead logged but not persisted';
   }
 
   // Send email notification
   const emailSent = await sendOwnerEmail(lead, leadId, score);
   receipt.emailSent = emailSent;
 
-  // Send WhatsApp notifications (async, non-blocking)
-  void sendWhatsAppNotifications(lead, leadId, score);
+  // Non-blocking WhatsApp notify
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
+  if (appUrl && lead.whatsappConsent && lead.phone) {
+    fetch(`${appUrl}/api/whatsapp/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: lead.phone,
+        message: `Hi ${lead.fullName.split(' ')[0]}! Your Phoenix Epoxy Pros estimate request was received. Jeremy will send your detailed estimate within 24 hours. — XPS Digital`,
+      }),
+    }).catch(() => null);
+  }
 
   return NextResponse.json({
     ...receipt,
     status: 'received',
     message: 'Your request has been submitted. Jeremy will send your estimate within 24 hours.',
   });
+}
+
+// HEAD for health check
+export async function GET() {
+  return NextResponse.json({ status: 'ok', endpoint: '/api/leads', configured: isSupabaseConfigured() });
 }

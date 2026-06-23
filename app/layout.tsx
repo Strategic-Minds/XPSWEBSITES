@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     default: `${BRAND.name} | #1 Epoxy Floor Coating Company in Phoenix, AZ`,
     template: `%s | ${BRAND.name}`,
   },
-  description: 'Phoenix Epoxy Pros delivers premium epoxy floor coatings for garages, commercial spaces, patios, and concrete repair. Get a free digital estimate in minutes. 15% off when you bid online.',
+  description: 'Phoenix Epoxy Pros — epoxy floor coatings for garages, commercial floors, patios & concrete. Free digital estimate. 15% off when you bid online.',
   keywords: ['epoxy floor coating Phoenix', 'garage floor epoxy Phoenix AZ', 'commercial epoxy flooring Phoenix', 'concrete coating Phoenix', 'floor coating company Phoenix'],
   openGraph: {
     title: `${BRAND.name} | #1 Epoxy Floor Coating — Phoenix, AZ`,
