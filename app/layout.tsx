@@ -3,13 +3,10 @@ import type { Metadata } from 'next';
 import { BRAND, COLORS } from '@/lib/tokens';
 import './globals.css';
 import './approved-hero.css';
-import './branded-pages.css';
 import './phoenix-approved-template.css';
 import './phoenix-hero-lock.css';
 import './phoenix-final-revision.css';
 import './xps-flake-chart-lock.css';
-import './client-dashboard.css';
-import './digital-estimator-intake.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BRAND.siteUrl),
