@@ -6,16 +6,13 @@
 
 # Test info
 
-- Name: 07-seo-performance.spec.ts >> SEO — Homepage >> meta description exists and is correct length
-- Location: .agents/playwright/tests/07-seo-performance.spec.ts:17:7
+- Name: 01-homepage.spec.ts >> Homepage — Core Load >> has LocalBusiness JSON-LD schema
+- Location: .agents/playwright/tests/01-homepage.spec.ts:26:7
 
 # Error details
 
 ```
-Error: expect(received).toBeLessThan(expected)
-
-Expected: < 165
-Received:   181
+Error: page.$eval: Failed to find element matching selector "script[type="application/ld+json"]"
 ```
 
 # Page snapshot
@@ -345,126 +342,132 @@ Received:   181
 
 ```ts
   1   | // ============================================================
-  2   | // TEST SUITE 07: SEO & Performance
-  3   | // Validates: titles, meta tags, schema, Core Web Vitals proxy,
-  4   | //            image optimization, canonical URLs
+  2   | // TEST SUITE 01: Homepage
+  3   | // Route: /
+  4   | // Validates: header, hero, forms, navigation, SEO, mobile
   5   | // ============================================================
-  6   | import { test, expect } from '@playwright/test';
+  6   | import { test, expect, Page } from '@playwright/test';
   7   | 
-  8   | test.describe('SEO — Homepage', () => {
-  9   |   test('title contains brand and location keyword', async ({ page }) => {
-  10  |     await page.goto('/');
-  11  |     const title = await page.title();
-  12  |     expect(title.toLowerCase()).toMatch(/epoxy|phoenix|floor/);
-  13  |     expect(title.length).toBeGreaterThan(10);
-  14  |     expect(title.length).toBeLessThan(70);
-  15  |   });
-  16  | 
-  17  |   test('meta description exists and is correct length', async ({ page }) => {
-  18  |     await page.goto('/');
-  19  |     const desc = await page.$eval('meta[name="description"]', (el) => el.getAttribute('content')).catch(() => null);
-  20  |     if (desc) {
-  21  |       expect(desc.length).toBeGreaterThan(50);
-> 22  |       expect(desc.length).toBeLessThan(165);
-      |                           ^ Error: expect(received).toBeLessThan(expected)
-  23  |       expect(desc.toLowerCase()).toMatch(/epoxy|floor|phoenix|coating/);
-  24  |     }
-  25  |   });
-  26  | 
-  27  |   test('has canonical URL tag', async ({ page }) => {
-  28  |     await page.goto('/');
-  29  |     const canonical = await page.$eval('link[rel="canonical"]', (el) => el.getAttribute('href')).catch(() => null);
-  30  |     if (canonical) {
-  31  |       expect(canonical).toMatch(/^https/);
-  32  |     }
-  33  |   });
-  34  | 
-  35  |   test('has OpenGraph tags', async ({ page }) => {
-  36  |     await page.goto('/');
-  37  |     const ogTitle = await page.$eval('meta[property="og:title"]', (el) => el.getAttribute('content')).catch(() => null);
-  38  |     const ogDesc = await page.$eval('meta[property="og:description"]', (el) => el.getAttribute('content')).catch(() => null);
-  39  |     const ogImage = await page.$eval('meta[property="og:image"]', (el) => el.getAttribute('content')).catch(() => null);
-  40  |     // At least one OG tag should exist
-  41  |     expect(ogTitle || ogDesc || ogImage).toBeTruthy();
-  42  |   });
-  43  | 
-  44  |   test('has LocalBusiness schema with all required fields', async ({ page }) => {
-  45  |     await page.goto('/');
-  46  |     const schema = await page.$eval('script[type="application/ld+json"]', (el) => {
-  47  |       try { return JSON.parse(el.textContent || '{}'); } catch { return {}; }
-  48  |     }).catch(() => null);
-  49  |     if (schema) {
-  50  |       expect(schema['@type']).toBe('LocalBusiness');
-  51  |       expect(schema.name).toBeTruthy();
-  52  |       expect(schema.telephone).toBeTruthy();
-  53  |       expect(schema.address?.['@type']).toBe('PostalAddress');
-  54  |     }
+  8   | const BASE = process.env.XPS_TEST_URL || 'https://xpswebsites.vercel.app';
+  9   | 
+  10  | test.describe('Homepage — Core Load', () => {
+  11  |   test('loads with 200 status and correct title', async ({ page }) => {
+  12  |     const resp = await page.goto('/');
+  13  |     expect(resp?.status()).toBeLessThan(400);
+  14  |     const title = await page.title();
+  15  |     expect(title.toLowerCase()).toContain('epoxy');
+  16  |     await page.screenshot({ path: 'results/screenshots/homepage-desktop.png', fullPage: true });
+  17  |   });
+  18  | 
+  19  |   test('has correct meta description', async ({ page }) => {
+  20  |     await page.goto('/');
+  21  |     const meta = await page.$eval('meta[name="description"]', (el) => el.getAttribute('content'));
+  22  |     expect(meta).toBeTruthy();
+  23  |     expect(meta!.length).toBeGreaterThan(50);
+  24  |   });
+  25  | 
+  26  |   test('has LocalBusiness JSON-LD schema', async ({ page }) => {
+  27  |     await page.goto('/');
+> 28  |     const schema = await page.$eval(
+      |                               ^ Error: page.$eval: Failed to find element matching selector "script[type="application/ld+json"]"
+  29  |       'script[type="application/ld+json"]',
+  30  |       (el) => JSON.parse(el.textContent || '{}')
+  31  |     );
+  32  |     expect(schema['@type']).toBe('LocalBusiness');
+  33  |     expect(schema.name).toContain('Epoxy');
+  34  |     expect(schema.telephone).toBeTruthy();
+  35  |   });
+  36  | });
+  37  | 
+  38  | test.describe('Homepage — Header', () => {
+  39  |   test('has logo visible', async ({ page }) => {
+  40  |     await page.goto('/');
+  41  |     const logo = page.locator('header img[alt*="Epoxy"], header img[alt*="XPS"], header .header-logo img').first();
+  42  |     await expect(logo).toBeVisible();
+  43  |   });
+  44  | 
+  45  |   test('has Get Quote / Digital Bid CTA button', async ({ page }) => {
+  46  |     await page.goto('/');
+  47  |     const cta = page.locator('a[href*="estimator"], a[href*="bid"], button:has-text("Quote"), a:has-text("Get Quote")').first();
+  48  |     await expect(cta).toBeVisible();
+  49  |   });
+  50  | 
+  51  |   test('has phone link in header', async ({ page }) => {
+  52  |     await page.goto('/');
+  53  |     const phone = page.locator('a[href^="tel:"]').first();
+  54  |     await expect(phone).toBeVisible();
   55  |   });
-  56  | });
-  57  | 
-  58  | test.describe('SEO — Inner Pages', () => {
-  59  |   const pages = [
-  60  |     { path: '/digital-estimator', keyword: /estimate|bid|floor|digital/i },
-  61  |     { path: '/visualizer', keyword: /visualiz|floor|color|design/i },
-  62  |     { path: '/about-us', keyword: /about|epoxy|phoenix|company/i },
-  63  |   ];
-  64  | 
-  65  |   for (const { path, keyword } of pages) {
-  66  |     test(`${path} has appropriate title`, async ({ page }) => {
-  67  |       await page.goto(path);
-  68  |       const status = (await page.goto(path))?.status() ?? 0;
-  69  |       if (status === 404) return; // Not yet built — skip SEO check
-  70  |       const title = await page.title();
-  71  |       const meta = await page.$eval('meta[name="description"]', (el) => el.getAttribute('content')).catch(() => '');
-  72  |       expect(title.toLowerCase() + (meta || '')).toMatch(keyword);
-  73  |     });
-  74  |   }
-  75  | });
-  76  | 
-  77  | test.describe('Performance — Image Optimization', () => {
-  78  |   test('hero image loads and is not broken', async ({ page }) => {
-  79  |     await page.goto('/');
-  80  |     const heroImg = page.locator('header ~ * img, .hero img, section:first-of-type img').first();
-  81  |     if (await heroImg.isVisible({ timeout: 5000 }).catch(() => false)) {
-  82  |       const loaded = await page.waitForFunction(
-  83  |         (el) => (el as HTMLImageElement).complete && (el as HTMLImageElement).naturalWidth > 0,
-  84  |         await heroImg.elementHandle(),
-  85  |         { timeout: 8000 }
-  86  |       ).catch(() => false);
-  87  |       expect(loaded).not.toBeFalsy();
-  88  |     }
-  89  |   });
-  90  | 
-  91  |   test('no images return 404', async ({ page }) => {
-  92  |     const failedImages: string[] = [];
-  93  |     page.on('response', (resp) => {
-  94  |       if (resp.request().resourceType() === 'image' && resp.status() === 404) {
-  95  |         failedImages.push(resp.url());
-  96  |       }
-  97  |     });
-  98  |     await page.goto('/');
-  99  |     await page.waitForLoadState('networkidle');
-  100 |     if (failedImages.length > 0) {
-  101 |       console.warn('Broken images:', failedImages);
-  102 |     }
-  103 |     expect(failedImages.length).toBe(0);
-  104 |   });
-  105 | 
-  106 |   test('page loads within 8 seconds', async ({ page }) => {
-  107 |     const start = Date.now();
-  108 |     await page.goto('/', { waitUntil: 'domcontentloaded' });
-  109 |     const elapsed = Date.now() - start;
-  110 |     expect(elapsed).toBeLessThan(8000);
-  111 |   });
-  112 | 
-  113 |   test('no console errors on homepage', async ({ page }) => {
-  114 |     const errors: string[] = [];
-  115 |     page.on('console', (msg) => {
-  116 |       if (msg.type() === 'error') errors.push(msg.text());
-  117 |     });
-  118 |     await page.goto('/');
-  119 |     await page.waitForLoadState('networkidle').catch(() => null);
-  120 |     // Filter out known acceptable errors (e.g. GA, third-party)
-  121 |     const criticalErrors = errors.filter((e) =>
-  122 |       !e.includes('google') && !e.includes('analytics') && !e.includes('cdn.shopify')
+  56  | 
+  57  |   test('navigation links are present', async ({ page }) => {
+  58  |     await page.goto('/');
+  59  |     for (const label of ['Gallery', 'About']) {
+  60  |       const link = page.locator(`nav a:has-text("${label}")`).first();
+  61  |       await expect(link).toBeVisible();
+  62  |     }
+  63  |   });
+  64  | });
+  65  | 
+  66  | test.describe('Homepage — Hero Lead Form', () => {
+  67  |   test('has name, email, phone, ZIP fields', async ({ page }) => {
+  68  |     await page.goto('/');
+  69  |     for (const selector of [
+  70  |       'input[name="fullName"], input[placeholder*="name" i]',
+  71  |       'input[name="email"], input[type="email"]',
+  72  |       'input[name="phone"], input[type="tel"]',
+  73  |       'input[name="zipCode"], input[placeholder*="zip" i]',
+  74  |     ]) {
+  75  |       const field = page.locator(selector).first();
+  76  |       await expect(field).toBeVisible();
+  77  |     }
+  78  |   });
+  79  | 
+  80  |   test('hero form shows validation error on empty submit', async ({ page }) => {
+  81  |     await page.goto('/');
+  82  |     await page.waitForLoadState('domcontentloaded');
+  83  |     const submitBtn = page.locator('form button[type="submit"], form .gold-button').first();
+  84  |     if (await submitBtn.isVisible()) {
+  85  |       await submitBtn.click();
+  86  |       await page.waitForTimeout(800); // allow any navigation or validation to settle
+  87  |       // Should stay on homepage (/ or /#...) after failed validation
+  88  |       const url = page.url();
+  89  |       const stayed = url.includes('xpswebsites.vercel.app/') && !url.includes('/digital-estimator') && !url.includes('/customer-portal');
+  90  |       if (!stayed) {
+  91  |         console.log('NOTE: Form navigated to', url, '— browser-level validation may differ from expected');
+  92  |       }
+  93  |       // At minimum the submit should not crash (no 500 error page)
+  94  |       await expect(page.locator('body')).not.toContainText('Application error');
+  95  |     }
+  96  |   });
+  97  | 
+  98  |   test('hero form navigates to estimator with valid data', async ({ page }) => {
+  99  |     await page.goto('/');
+  100 |     // Fill the mini lead form
+  101 |     const nameField = page.locator('input[name="fullName"]').first();
+  102 |     if (await nameField.isVisible()) {
+  103 |       await nameField.fill('Test User QA');
+  104 |       await page.locator('input[name="email"], input[type="email"]').first().fill('test@qa.xps');
+  105 |       await page.locator('input[name="phone"], input[type="tel"]').first().fill('7722090266');
+  106 |       await page.locator('input[name="zipCode"]').first().fill('85001');
+  107 |       // Select project type if present
+  108 |       const select = page.locator('select[name="projectType"]').first();
+  109 |       if (await select.isVisible()) await select.selectOption({ index: 1 });
+  110 |       await page.locator('form button[type="submit"], form .gold-button').first().click();
+  111 |       // Should redirect to estimator
+  112 |       await page.waitForURL(/estimator|bid/, { timeout: 8000 }).catch(() => null);
+  113 |       const url = page.url();
+  114 |       expect(url).toMatch(/estimator|bid|\//);
+  115 |     }
+  116 |     await page.screenshot({ path: 'results/screenshots/homepage-form-submit.png' });
+  117 |   });
+  118 | });
+  119 | 
+  120 | test.describe('Homepage — Visual Sections', () => {
+  121 |   test('has service cards section', async ({ page }) => {
+  122 |     await page.goto('/');
+  123 |     const text = await page.textContent('body');
+  124 |     expect(text).toMatch(/garage|commercial|patio|repair/i);
+  125 |   });
+  126 | 
+  127 |   test('has color chart or finish section', async ({ page }) => {
+  128 |     await page.goto('/');
 ```
