@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { PhoenixLeadForm } from "../PhoenixLeadForm";
 import { dailyPhotos, floorSystems, installerJobs, phoenixImages, progressSteps, project, projectChecklist } from "../../lib/phoenix-demo-data";
@@ -123,30 +125,135 @@ function EnterpriseStyles() {
       .table { display:grid; gap:1px; background:#e2e2e2; border:1px solid #e2e2e2; border-radius:8px; overflow:hidden; }
       .table-row { display:grid; grid-template-columns:1fr 1.5fr .8fr .8fr; gap:12px; padding:13px; background:#fff; font-weight:750; }
       .badge { display:inline-flex; align-items:center; justify-content:center; width:max-content; min-height:24px; padding:0 9px; border-radius:999px; background:#fff3c0; color:#8a6200; font-size:11px; font-weight:950; }
-      @media (max-width: 980px) { .pep-header { min-height:70px; } .pep-logo img { width:170px; } .pep-nav, .pep-user, .desktop-only { display:none; } .pep-layout, .hero-public, .dashboard, .quote-shell, .installer-shell, .ops-grid { grid-template-columns:1fr; width:100%; padding-left:14px; padding-right:14px; } .design-hero { grid-template-columns:1fr; padding:22px; } .design-hero:after { inset:0; opacity:.82; } .product-grid, .service-mini, .quote-form-grid, .photo-row, .phone-grid, .stats { grid-template-columns:1fr 1fr; } .trust-strip, .portal-strip, .stepper { grid-template-columns:repeat(2,1fr); transform:none; } .quote-shell { gap:14px; } .summary-rail { position:static; } .installer-brand { display:none; } .phone-grid { padding:14px; } .phone-screen { min-height:auto; border-width:6px; border-radius:26px; } .ops-grid { padding-top:14px; } }
+      
+      /* ── Hamburger / Mobile Drawer ─────────────────────────────── */
+      .pep-hamburger { display:none; flex-direction:column; justify-content:center; gap:5px; width:42px; height:42px; padding:8px; background:none; border:none; cursor:pointer; z-index:100; }
+      .pep-hamburger span { display:block; height:2px; background:#fff; border-radius:2px; transition:all .25s; }
+      .pep-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+      .pep-hamburger.open span:nth-child(2) { opacity:0; }
+      .pep-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+      .pep-mobile-drawer { display:none; position:fixed; inset:0; z-index:50; }
+      .pep-mobile-drawer.open { display:flex; flex-direction:column; }
+      .pep-drawer-backdrop { position:absolute; inset:0; background:rgba(0,0,0,.55); }
+      .pep-drawer-panel { position:relative; width:min(85vw, 320px); height:100%; background:#0a0a0a; color:#fff; overflow-y:auto; display:flex; flex-direction:column; padding:0 0 32px; }
+      .pep-drawer-header { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #222; min-height:72px; }
+      .pep-drawer-logo img { width:160px; height:auto; }
+      .pep-drawer-close { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; padding:4px 8px; }
+      .pep-drawer-section { padding:20px 20px 0; }
+      .pep-drawer-section-title { font-size:10px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:#f6b800; margin-bottom:12px; }
+      .pep-drawer-link { display:flex; align-items:center; gap:12px; min-height:48px; padding:0 12px; border-radius:8px; font-size:15px; font-weight:700; color:#fff; text-decoration:none; transition:background .15s; }
+      .pep-drawer-link:hover, .pep-drawer-link.active { background:#1a1a1a; color:#f6b800; }
+      .pep-drawer-link .dl-icon { font-size:18px; width:24px; text-align:center; }
+      .pep-drawer-divider { height:1px; background:#1e1e1e; margin:16px 20px; }
+      .pep-drawer-cta { margin:20px; }
+      .pep-drawer-cta a { display:flex; align-items:center; justify-content:center; min-height:48px; background:linear-gradient(180deg,#ffd75a,#f6b800); color:#111; font-weight:900; font-size:15px; border-radius:8px; text-decoration:none; }
+      .pep-drawer-phone { display:flex; align-items:center; justify-content:center; gap:8px; min-height:44px; margin:0 20px 8px; border:1px solid #333; border-radius:8px; color:#fff; font-weight:700; font-size:14px; text-decoration:none; }
+      @media (max-width: 980px) { .pep-header { min-height:70px; } .pep-logo img { width:170px; } .pep-nav, .pep-user, .desktop-only { display:none; } .pep-hamburger { display:flex; } .pep-layout, .hero-public, .dashboard, .quote-shell, .installer-shell, .ops-grid { grid-template-columns:1fr; width:100%; padding-left:14px; padding-right:14px; } .design-hero { grid-template-columns:1fr; padding:22px; } .design-hero:after { inset:0; opacity:.82; } .product-grid, .service-mini, .quote-form-grid, .photo-row, .phone-grid, .stats { grid-template-columns:1fr 1fr; } .trust-strip, .portal-strip, .stepper { grid-template-columns:repeat(2,1fr); transform:none; } .quote-shell { gap:14px; } .summary-rail { position:static; } .installer-brand { display:none; } .phone-grid { padding:14px; } .phone-screen { min-height:auto; border-width:6px; border-radius:26px; } .ops-grid { padding-top:14px; } }
       @media (max-width: 560px) { .pep-section { width:100%; padding:14px; } .pep-h1 { font-size:38px; } .hero-public { min-height:520px; align-items:end; color:#fff; background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.72)), url('/images/hero-garage-approved.webp?v=approved-final-20260617') center/cover; } .quote-panel { background:#fff; color:#111; } .upload-choice, .product-grid, .service-mini, .overview-grid, .quote-form-grid, .choice-grid, .photo-row, .phone-grid, .stats { grid-template-columns:1fr; } .dashboard { width:100%; padding:14px; grid-template-columns:1fr; } .dashboard-wide { grid-column:auto; } .dash-hero { grid-template-columns:1fr; } .hero-points { display:none; } .pep-card { border-radius:8px; } .bottom-nav { position:sticky; } }
     `}</style>
   );
 }
 
 function Header({ active = "" }: { active?: string }) {
-  const links = [
-    ["Dashboard", "/customer-portal/dashboard"],
-    ["Projects", "/customer-portal/projects/demo"],
-    ["Documents", "/customer-portal/projects/demo"],
-    ["Messages", "/customer-portal/dashboard"],
-    ["Visualizer", "/design"]
+  const [open, setOpen] = useState(false);
+
+  const publicLinks = [
+    ["🏠", "Home", "/"],
+    ["📋", "Get a Bid", "/digital-estimator"],
+    ["🎨", "Floor Visualizer", "/visualizer"],
+    ["🖼️", "Gallery", "/gallery"],
+    ["📞", "About Us", "/about-us"],
+    ["✉️", "Contact", "/contact-us"],
   ];
+  const dashLinks = [
+    ["👤", "Client Portal", "/customer-portal/dashboard"],
+    ["👑", "Owner Dashboard", "/owner-dashboard"],
+    ["🛡️", "Admin Dashboard", "/admin-dashboard"],
+    ["🔨", "Crew Leader", "/crew-leader-dashboard"],
+    ["📦", "Project Manager", "/project-manager-dashboard"],
+    ["🏗️", "Ops Center", "/ops"],
+  ];
+  const desktopLinks = [
+    ["Home", "/"],
+    ["Get a Bid", "/digital-estimator"],
+    ["Visualizer", "/visualizer"],
+    ["Gallery", "/gallery"],
+    ["Portal", "/customer-portal/dashboard"],
+  ];
+
   return (
-    <header className="pep-header">
-      <a className="pep-logo" href="/"><img src={phoenixImages.logo} alt="Phoenix Epoxy Pros" /></a>
-      <nav className="pep-nav" aria-label="Phoenix navigation">
-        {links.map(([label, href]) => <a className={active === label ? "active" : ""} href={href} key={label}>{label}</a>)}
-        <a href={phoneHref}>Call</a>
-      </nav>
-      <div className="pep-user"><span className="pep-avatar">JL</span><span>Hi, Jason</span></div>
-      <span className="pep-btn gold">Get Quote</span>
-    </header>
+    <>
+      <header className="pep-header">
+        <a className="pep-logo" href="/"><img src={phoenixImages.logo} alt="Phoenix Epoxy Pros" /></a>
+        {/* Desktop nav */}
+        <nav className="pep-nav" aria-label="Main navigation">
+          {desktopLinks.map(([label, href]) => (
+            <a className={active === label ? "active" : ""} href={href} key={label}>{label}</a>
+          ))}
+        </nav>
+        <div className="pep-user desktop-only">
+          <a className="pep-btn gold" href="/digital-estimator">Get Free Bid</a>
+          <a href={phoneHref} className="pep-btn">📞 Call</a>
+        </div>
+        {/* Hamburger button — mobile only */}
+        <button
+          className={"pep-hamburger" + (open ? " open" : "")}
+          aria-label="Open navigation menu"
+          aria-expanded={open}
+          onClick={() => setOpen(true)}
+        >
+          <span /><span /><span />
+        </button>
+      </header>
+
+      {/* Mobile Drawer */}
+      <div className={"pep-mobile-drawer" + (open ? " open" : "")} aria-hidden={!open}>
+        {/* Backdrop */}
+        <div className="pep-drawer-backdrop" onClick={() => setOpen(false)} />
+        {/* Panel */}
+        <nav className="pep-drawer-panel" aria-label="Mobile navigation">
+          <div className="pep-drawer-header">
+            <a className="pep-drawer-logo" href="/" onClick={() => setOpen(false)}>
+              <img src={phoenixImages.logo} alt="Phoenix Epoxy Pros" />
+            </a>
+            <button className="pep-drawer-close" onClick={() => setOpen(false)} aria-label="Close menu">✕</button>
+          </div>
+
+          {/* CTA */}
+          <div className="pep-drawer-cta">
+            <a href="/digital-estimator" onClick={() => setOpen(false)}>🏷️ Get 15% Off — Free Digital Bid</a>
+          </div>
+          <a href={phoneHref} className="pep-drawer-phone">📞 (602) 730-3499 — Call Now</a>
+
+          {/* Public Links */}
+          <div className="pep-drawer-section">
+            <div className="pep-drawer-section-title">Navigation</div>
+            {publicLinks.map(([icon, label, href]) => (
+              <a key={href} href={href} className={"pep-drawer-link" + (active === label ? " active" : "")} onClick={() => setOpen(false)}>
+                <span className="dl-icon">{icon}</span>{label}
+              </a>
+            ))}
+          </div>
+
+          <div className="pep-drawer-divider" />
+
+          {/* Dashboard Links */}
+          <div className="pep-drawer-section">
+            <div className="pep-drawer-section-title">Dashboards & Portals</div>
+            {dashLinks.map(([icon, label, href]) => (
+              <a key={href} href={href} className={"pep-drawer-link" + (active === label ? " active" : "")} onClick={() => setOpen(false)}>
+                <span className="dl-icon">{icon}</span>{label}
+              </a>
+            ))}
+          </div>
+
+          <div className="pep-drawer-divider" />
+          <div className="pep-drawer-section" style={{fontSize:12, color:'#555', textAlign:'center'}}>
+            Phoenix Epoxy Pros © 2026
+          </div>
+        </nav>
+      </div>
+    </>
   );
 }
 
@@ -163,7 +270,15 @@ function Sample({ texture }: { texture: string }) {
 }
 
 function BottomNav() {
-  return <nav className="bottom-nav" aria-label="Mobile app navigation"><a href="/">Home</a><a href="/design">Visualizer</a><a href="/customer-portal/dashboard">Projects</a><a href="/customer-portal/dashboard">Favorites</a><a href="/quote/design">Quote</a></nav>;
+  return (
+    <nav className="bottom-nav" aria-label="Mobile bottom navigation">
+      <a href="/">🏠<br/>Home</a>
+      <a href="/visualizer">🎨<br/>Visualizer</a>
+      <a href="/digital-estimator">📋<br/>Get Bid</a>
+      <a href="/customer-portal/dashboard">📁<br/>Portal</a>
+      <a href="/admin-dashboard">⚙️<br/>Admin</a>
+    </nav>
+  );
 }
 
 export function PublicQuoteLanding() {
