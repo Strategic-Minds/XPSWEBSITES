@@ -2,6 +2,8 @@ import { DigitalEstimator } from "./components/DigitalEstimator";
 import { FinishVisualizer } from "./components/FinishVisualizer";
 import { MobileNavigation } from "./components/MobileNavigation";
 import { PhoenixLeadForm } from "./components/PhoenixLeadForm";
+import { PwaInstaller } from "./components/PwaInstaller";
+import { PwaDownloadButton } from "./components/PwaDownloadButton";
 
 const phone = "772-209-0266";
 const phoneHref = "tel:17722090266";
@@ -92,6 +94,9 @@ export default function HomePage() {
             <img src="/images/logo-panel.webp?v=mask-20260616" alt="" />
           </div>
           <PhoenixLeadForm />
+          <div style={{ marginTop: 16, display: "flex", justifyContent: "center" }}>
+            <PwaDownloadButton variant="dark" />
+          </div>
         </div>
         <nav className="mobile-action-rail" aria-label="Mobile quick actions">
           <a href="/digital-estimator"><span className="action-icon">01</span>Estimate</a>
@@ -235,6 +240,7 @@ export default function HomePage() {
       </footer>
 
       <a className="mobile-call" href={phoneHref}><span className="mobile-phone-icon" aria-hidden="true" />Call {phone}</a>
+      <PwaInstaller />
     </main>
   );
 }

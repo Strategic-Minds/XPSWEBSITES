@@ -156,14 +156,21 @@ function ShellStyles() {
       .ds-step-info span { font-size:.76rem; color:#888; }
       
       /* PWA INSTALL BANNER */
-      .ds-pwa-banner { display:none; position:fixed; bottom:calc(60px + env(safe-area-inset-bottom)); left:12px; right:12px; z-index:50; background:linear-gradient(135deg,#050505,#1a1a1a); border:1px solid #f6b800; border-radius:12px; padding:14px 16px; box-shadow:0 8px 32px rgba(0,0,0,.4); }
-      .ds-pwa-banner.visible { display:flex; align-items:center; gap:12px; }
-      .ds-pwa-banner-icon { width:44px; height:44px; border-radius:10px; background:linear-gradient(180deg,#ffd75a,#f6b800); display:grid; place-items:center; font-size:1.3rem; flex-shrink:0; }
+      .ds-pwa-banner { display:none; position:fixed; bottom:calc(64px + env(safe-area-inset-bottom)); left:12px; right:12px; z-index:50; background:#050505; border:1px solid #f6b800; border-radius:14px; padding:0; box-shadow:0 12px 40px rgba(0,0,0,.6); overflow:hidden; }
+      .ds-pwa-banner.visible { display:flex; flex-direction:column; }
+      .ds-pwa-banner-top { display:flex; align-items:center; gap:12px; padding:14px 16px 10px; }
+      .ds-pwa-banner-icon { width:52px; height:52px; border-radius:12px; background:linear-gradient(180deg,#ffd75a,#f6b800); display:grid; place-items:center; font-size:1.5rem; flex-shrink:0; box-shadow:0 4px 12px rgba(246,184,0,.4); }
       .ds-pwa-banner-text { flex:1; min-width:0; }
-      .ds-pwa-banner-text strong { display:block; color:#fff; font-size:.88rem; font-weight:900; }
-      .ds-pwa-banner-text span { color:rgba(255,255,255,.6); font-size:.75rem; }
-      .ds-pwa-banner-btn { background:linear-gradient(180deg,#ffd75a,#f6b800); color:#050505; font-weight:900; font-size:.8rem; padding:8px 14px; border-radius:8px; border:none; cursor:pointer; white-space:nowrap; flex-shrink:0; }
-      .ds-pwa-banner-close { color:rgba(255,255,255,.4); font-size:1.2rem; background:none; border:none; cursor:pointer; padding:0 4px; flex-shrink:0; }
+      .ds-pwa-banner-text strong { display:block; color:#fff; font-size:.96rem; font-weight:900; }
+      .ds-pwa-banner-text em { display:block; color:rgba(255,255,255,.5); font-size:.73rem; font-style:normal; margin-top:2px; }
+      .ds-pwa-banner-close { color:rgba(255,255,255,.35); font-size:1.4rem; background:none; border:none; cursor:pointer; padding:0 4px; flex-shrink:0; line-height:1; }
+      .ds-pwa-banner-perks { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; border-top:1px solid rgba(255,255,255,.08); border-bottom:1px solid rgba(255,255,255,.08); }
+      .ds-pwa-banner-perk { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:10px 8px; text-align:center; }
+      .ds-pwa-banner-perk span:first-child { font-size:1.1rem; }
+      .ds-pwa-banner-perk span:last-child { color:rgba(255,255,255,.55); font-size:.65rem; font-weight:700; }
+      .ds-pwa-banner-actions { display:grid; grid-template-columns:1fr; gap:8px; padding:12px 16px 14px; }
+      .ds-pwa-banner-btn { background:linear-gradient(180deg,#ffd75a,#f6b800); color:#050505; font-weight:900; font-size:.9rem; padding:12px 18px; border-radius:10px; border:none; cursor:pointer; width:100%; letter-spacing:.02em; }
+      .ds-pwa-banner-ios-hint { color:rgba(255,255,255,.45); font-size:.7rem; text-align:center; padding:0 0 4px; }
 
       /* MOBILE-FIRST BREAKPOINTS */
       @media(min-width:768px) {
@@ -216,15 +223,29 @@ function MobileBottomNav({ role, active }: { role: keyof typeof SIDEBARS; active
 function PwaInstallBanner() {
   const [show, setShow] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [platform, setPlatform] = useState<"android"|"ios"|"desktop">("desktop");
 
   useEffect(() => {
-    // Check if already installed
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (navigator as any).standalone === true;
     if (isStandalone) return;
 
-    // Check if dismissed
     const dismissed = localStorage.getItem("pwa-banner-dismissed");
     if (dismissed) return;
+
+    const ua = navigator.userAgent.toLowerCase();
+    const isIOS = /iphone|ipad|ipod/.test(ua);
+    const isAndroid = /android/.test(ua);
+
+    if (isIOS) {
+      setPlatform("ios");
+      setTimeout(() => setShow(true), 2500);
+    } else if (isAndroid) {
+      setPlatform("android");
+    } else {
+      setPlatform("desktop");
+    }
 
     const handler = (e: any) => {
       e.preventDefault();
@@ -233,21 +254,19 @@ function PwaInstallBanner() {
     };
 
     window.addEventListener("beforeinstallprompt", handler);
-
-    // Show fallback for iOS after 3s (no beforeinstallprompt on Safari)
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    if (isIOS) {
-      setTimeout(() => setShow(true), 3000);
-    }
-
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
   async function handleInstall() {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      const result = await deferredPrompt.userChoice;
+      const { outcome } = await deferredPrompt.userChoice;
       setDeferredPrompt(null);
+      if (outcome === "accepted") {
+        setShow(false);
+        localStorage.setItem("pwa-banner-dismissed", "installed");
+        return;
+      }
     }
     setShow(false);
     localStorage.setItem("pwa-banner-dismissed", "true");
@@ -261,14 +280,45 @@ function PwaInstallBanner() {
   if (!show) return null;
 
   return (
-    <div className={`ds-pwa-banner${show ? " visible" : ""}`}>
-      <div className="ds-pwa-banner-icon">🏗️</div>
-      <div className="ds-pwa-banner-text">
-        <strong>Add to Home Screen</strong>
-        <span>Track your project anytime, offline</span>
+    <div className="ds-pwa-banner visible" role="dialog" aria-label="Install app">
+      {/* TOP ROW */}
+      <div className="ds-pwa-banner-top">
+        <div className="ds-pwa-banner-icon">🏗️</div>
+        <div className="ds-pwa-banner-text">
+          <strong>Phoenix Epoxy Pros</strong>
+          <em>Your project portal — add to home screen</em>
+        </div>
+        <button className="ds-pwa-banner-close" onClick={handleDismiss} aria-label="Dismiss">×</button>
       </div>
-      <button className="ds-pwa-banner-btn" onClick={handleInstall}>Install</button>
-      <button className="ds-pwa-banner-close" onClick={handleDismiss} aria-label="Dismiss">×</button>
+
+      {/* PERKS ROW */}
+      <div className="ds-pwa-banner-perks">
+        <div className="ds-pwa-banner-perk">
+          <span>📋</span><span>Track Status</span>
+        </div>
+        <div className="ds-pwa-banner-perk">
+          <span>🎨</span><span>Pick Colors</span>
+        </div>
+        <div className="ds-pwa-banner-perk">
+          <span>📱</span><span>WhatsApp Us</span>
+        </div>
+      </div>
+
+      {/* ACTION */}
+      <div className="ds-pwa-banner-actions">
+        {platform === "ios" ? (
+          <>
+            <p className="ds-pwa-banner-ios-hint">
+              Tap the Share button ( ⬆️ ) in Safari, then "Add to Home Screen"
+            </p>
+            <button className="ds-pwa-banner-btn" onClick={handleDismiss}>Got it ✓</button>
+          </>
+        ) : (
+          <button className="ds-pwa-banner-btn" onClick={handleInstall}>
+            ⬇️ Install App — Free
+          </button>
+        )}
+      </div>
     </div>
   );
 }
