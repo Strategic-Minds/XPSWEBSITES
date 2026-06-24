@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
         desired_finish: lead.desiredFinish || null,
         desired_color: lead.desiredColor || null,
         asap_requested: lead.asapRequested,
-        asap_notes: lead.asapNotes || null,
+        notes: (lead.notes || lead.asapNotes || null),
         preferred_timeline: lead.preferredTimeline || null,
         notes: lead.notes || null,
         whatsapp_consent: lead.whatsappConsent,
