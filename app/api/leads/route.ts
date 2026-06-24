@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
   // Save to Supabase — gracefully skip if not configured
   if (isSupabaseConfigured()) {
     try {
-      const { error } = await supabaseAdmin.from('leads').insert({
+      const { error } = await supabaseAdmin.from('pep_leads').insert({
         id: leadId,
         full_name: lead.fullName,
         email: lead.email,
