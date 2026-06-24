@@ -40,48 +40,38 @@ export default function CustomerDashboardPage() {
   return (
     <DashboardShell role="customer" roleLabel="Customer Portal" user="Jason L." active="My Dashboard">
 
-      {/* ── WELCOME + TIMELINE ── */}
+      <style>{`
+        .cd-welcome { display:grid; grid-template-columns:1fr; gap:0; }
+        .cd-welcome-body { padding:20px 16px; display:flex; flex-direction:column; gap:10px; }
+        .cd-welcome-photo { height:180px; overflow:hidden; }
+        .cd-welcome-photo img { width:100%; height:100%; object-fit:cover; }
+        .cd-welcome-status { padding:16px; background:#fffbeb; border-top:1px solid #fde68a; }
+        @media(min-width:600px) {
+          .cd-welcome { grid-template-columns:1fr 2fr 1fr; }
+          .cd-welcome-photo { height:auto; min-height:180px; }
+          .cd-welcome-status { border-top:none; border-left:1px solid #fde68a; }
+        }
+      `}</style>
+
+      {/* ── WELCOME CARD ── */}
       <div className="ds-card">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 1fr", gap: 0, minHeight: 200 }}>
-          {/* Welcome */}
-          <div style={{ padding: "28px 24px", display: "flex", flexDirection: "column", gap: 10, justifyContent: "center" }}>
-            <p style={{ margin: 0, fontSize: ".72rem", fontWeight: 900, textTransform: "uppercase", color: "#888" }}>Welcome back</p>
-            <h1 style={{ margin: 0, fontSize: "1.8rem", fontWeight: 900 }}>Jason!</h1>
-            <p style={{ margin: 0, fontSize: ".84rem", color: "#666" }}>Your project is in estimator review. We'll have your proposal ready within 24 hours.</p>
-            <a className="ds-btn gold" href="https://wa.me/17722090266" target="_blank" rel="noopener noreferrer" style={{ marginTop: 8, width: "fit-content" }}>
+        <div className="cd-welcome">
+          <div className="cd-welcome-body">
+            <p style={{ margin: 0, fontSize: ".68rem", fontWeight: 900, textTransform: "uppercase", color: "#888" }}>Welcome back</p>
+            <h1 style={{ margin: 0, fontSize: "1.6rem", fontWeight: 900 }}>Jason!</h1>
+            <p style={{ margin: 0, fontSize: ".82rem", color: "#666" }}>Your project is in estimator review. Proposal ready within 24 hrs.</p>
+            <a className="ds-btn gold full" href="https://wa.me/17722090266" target="_blank" rel="noopener noreferrer" style={{ marginTop: 4 }}>
               📱 WhatsApp Us
             </a>
           </div>
-          {/* Project photo */}
-          <div style={{ background: "#111", overflow: "hidden" }}>
-            <img src="https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581" alt="Your project" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: .85 }} />
+          <div className="cd-welcome-photo">
+            <img src="https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581" alt="Your project" />
           </div>
-          {/* Status */}
-          <div style={{ padding: "22px", display: "flex", flexDirection: "column", gap: 10, background: "#fffbeb", borderLeft: "1px solid #e2e6e8" }}>
-            <p style={{ margin: 0, fontSize: ".68rem", fontWeight: 900, textTransform: "uppercase", color: "#f6b800" }}>Current Status</p>
-            <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 900 }}>Estimator Review</h2>
-            <p style={{ margin: 0, fontSize: ".78rem", color: "#666" }}>Next action: watch email for your proposal + 15% coupon within 24 hrs.</p>
-            <a className="ds-btn dark" href="https://wa.me/17722090266" target="_blank" rel="noopener noreferrer" style={{ marginTop: 4, fontSize: ".76rem" }}>
-              Ask a Question
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* ── 5-STEP PROGRESS TIMELINE ── */}
-      <div className="ds-card">
-        <div className="ds-card-head">
-          <h2 className="ds-card-title">Your Project Timeline</h2>
-        </div>
-        <div className="ds-card-body">
-          <div className="ds-timeline">
-            {STEPS.map((step) => (
-              <div key={step.num} className={`ds-timeline-step ${step.state}`}>
-                <div className="ds-bubble">{step.state === "done" ? "✓" : step.num}</div>
-                <span style={{ fontWeight: 900, color: step.state === "active" ? "#050505" : undefined }}>{step.label}</span>
-                <span style={{ fontSize: ".66rem", color: step.state === "active" ? "#f6b800" : "#aaa" }}>{step.sub}</span>
-              </div>
-            ))}
+          <div className="cd-welcome-status">
+            <p style={{ margin: "0 0 4px", fontSize: ".68rem", fontWeight: 900, textTransform: "uppercase", color: "#f6b800" }}>Current Status</p>
+            <h2 style={{ margin: "0 0 6px", fontSize: "1rem", fontWeight: 900 }}>Estimator Review</h2>
+            <p style={{ margin: "0 0 10px", fontSize: ".78rem", color: "#666" }}>Watch email for your proposal + 15% coupon.</p>
+            <a className="ds-btn dark full" href="https://wa.me/17722090266" target="_blank" rel="noopener noreferrer" style={{ fontSize: ".76rem" }}>Ask a Question</a>
           </div>
         </div>
       </div>
@@ -89,96 +79,85 @@ export default function CustomerDashboardPage() {
       {/* ── KPI ROW ── */}
       <div className="ds-kpi-row">
         {[
-          { label: "Project ID",       value: "PXP-2024-0587",      sub: "Keep for reference" },
-          { label: "System Type",      value: "Full Broadcast",     sub: "Garage Floor" },
-          { label: "Discount",         value: "15% OFF",            sub: "Digital bid coupon attached" },
-          { label: "Estimate ETA",     value: "24 hrs",             sub: "Proposal by email" },
+          { label: "Project ID",   value: "PXP-0587",     sub: "Keep for reference" },
+          { label: "System",       value: "Full Broadcast",sub: "Garage Floor" },
+          { label: "Discount",     value: "15% OFF",       sub: "Digital bid coupon" },
+          { label: "Estimate ETA", value: "24 hrs",        sub: "Proposal by email" },
         ].map(({ label, value, sub }) => (
           <div className="ds-kpi" key={label}>
             <p className="ds-kpi-label">{label}</p>
-            <p className="ds-kpi-value" style={{ fontSize: "1.2rem" }}>{value}</p>
+            <p className="ds-kpi-value">{value}</p>
             <p className="ds-kpi-sub">{sub}</p>
           </div>
         ))}
       </div>
 
-      {/* ── FLOOR DESIGNER + CHECKLIST ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 18 }}>
-
-        {/* Floor Designer */}
-        <div className="ds-card">
-          <div className="ds-card-head">
-            <h2 className="ds-card-title">Floor Designer</h2>
-            <span style={{ fontSize: ".78rem", color: "#888" }}>Upload your floor — choose a finish</span>
-          </div>
-          <div className="ds-floor-designer">
-            {/* Preview side */}
-            <div className="ds-floor-preview">
-              {previewSrc ? (
-                <img src={previewSrc} alt="Your floor preview" />
-              ) : selectedChart ? (
-                <img src={selectedChart} alt="Selected color chart" style={{ maxHeight: 200, objectFit: "contain" }} />
-              ) : (
-                <>
-                  <div style={{ width: 80, height: 80, borderRadius: 8, background: "rgba(246,184,0,.15)", display: "grid", placeItems: "center", fontSize: "2rem" }}>🖼️</div>
-                  <p style={{ margin: 0, fontSize: ".84rem", color: "rgba(255,255,255,.6)", textAlign: "center" }}>Upload your current floor or select a color chart below</p>
-                </>
-              )}
-            </div>
-            {/* Upload side */}
-            <div className="ds-floor-upload">
-              <h3 style={{ margin: 0, fontSize: ".9rem", fontWeight: 900, textTransform: "uppercase" }}>Upload Your Floor</h3>
-              <label className="ds-drop-zone" htmlFor="floor-upload">
-                <span style={{ fontSize: "1.6rem" }}>📎</span>
-                <span>Tap to attach floor photos</span>
-                <span style={{ fontSize: ".72rem" }}>JPG, PNG, HEIC — multiple files OK</span>
-                <input id="floor-upload" type="file" accept="image/*" multiple style={{ display: "none" }} onChange={handleFloorUpload} />
-              </label>
-              <p style={{ margin: 0, fontSize: ".76rem", color: "#888" }}>Your photos are sent directly to Jeremy for the estimate review.</p>
-              <a className="ds-btn gold" href="https://wa.me/17722090266" target="_blank" rel="noopener noreferrer">
-                📱 Send via WhatsApp
-              </a>
-            </div>
-          </div>
+      {/* ── PROJECT TIMELINE ── */}
+      <div className="ds-card">
+        <div className="ds-card-head">
+          <h2 className="ds-card-title">Project Timeline</h2>
         </div>
-
-        {/* Project Checklist */}
-        <div className="ds-card">
-          <div className="ds-card-head">
-            <h2 className="ds-card-title">Your Checklist</h2>
-          </div>
-          <div className="ds-card-body" style={{ padding: "16px" }}>
-            <div className="ds-step-list">
-              {CHECKLIST.map((item, i) => (
-                <div key={i} className={`ds-step ${item.done ? "done" : item.active ? "active" : ""}`}>
-                  <div className="ds-step-num">{item.done ? "✓" : i + 1}</div>
-                  <div className="ds-step-info">
-                    <strong>{item.label}</strong>
-                    <span>{item.done ? "Complete" : item.active ? "Action needed" : "Pending"}</span>
-                  </div>
+        <div className="ds-card-body">
+          <div className="ds-timeline">
+            {STEPS.map((step) => (
+              <div key={step.num} className={`ds-timeline-step ${step.state}`}>
+                <div className="ds-bubble">{step.state === "done" ? "✓" : step.num}</div>
+                <div className="ds-timeline-step-info">
+                  <strong>{step.label}</strong>
+                  <span>{step.sub}</span>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* ── COLOR CHARTS (same source as homepage) ── */}
-      <div className="ds-card" id="colors">
+      {/* ── CHECKLIST ── */}
+      <div className="ds-card">
         <div className="ds-card-head">
-          <h2 className="ds-card-title">Choose Your Color</h2>
-          <span style={{ fontSize: ".78rem", color: "#888" }}>Click a chart to preview in the Floor Designer above</span>
+          <h2 className="ds-card-title">Project Checklist</h2>
+          <span className="ds-badge amber">3 / 12 Done</span>
         </div>
         <div className="ds-card-body">
+          <div className="ds-step-list">
+            {CHECKLIST.map((item, i) => (
+              <div
+                key={item.label}
+                className={`ds-step${item.done ? " done" : item.active ? " active" : ""}`}
+              >
+                <div className="ds-step-num">{item.done ? "✓" : i + 1}</div>
+                <div className="ds-step-info">
+                  <strong>{item.label}</strong>
+                  <span>{item.done ? "Complete" : item.active ? "Action needed" : "Pending"}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── COLOR CHARTS ── */}
+      <div className="ds-card" id="colors">
+        <div className="ds-card-head">
+          <h2 className="ds-card-title">Choose Your Finish</h2>
+          <span className="ds-badge blue">{COLOR_CHARTS.length} Systems</span>
+        </div>
+        <div className="ds-card-body">
+          {selectedChart && (
+            <div style={{ marginBottom: 16, padding: 12, background: "#fffbeb", borderRadius: 8, border: "1px solid #fde68a", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: ".84rem", fontWeight: 900 }}>Selected: {selectedChart}</span>
+              <button className="ds-btn" style={{ fontSize: ".72rem" }} onClick={() => setSelectedChart(null)}>Clear</button>
+            </div>
+          )}
           <div className="ds-color-charts">
             {COLOR_CHARTS.map((chart) => (
               <div
-                key={chart.id}
+                key={chart.title}
                 className="ds-color-chart-card"
-                style={{ cursor: "pointer", outline: selectedChart === chart.image ? "3px solid #f6b800" : "none" }}
-                onClick={() => setSelectedChart(chart.image)}
+                style={{ cursor: "pointer", outline: selectedChart === chart.title ? "2px solid #f6b800" : "none" }}
+                onClick={() => setSelectedChart(chart.title)}
               >
-                <img src={chart.image} alt={chart.alt} />
+                <img src={chart.image} alt={chart.title} loading="lazy" />
                 <div className="ds-color-chart-info">
                   <h3>{chart.title}</h3>
                   <p>{chart.subtitle}</p>
@@ -186,21 +165,87 @@ export default function CustomerDashboardPage() {
               </div>
             ))}
           </div>
-          <p style={{ marginTop: 16, fontSize: ".76rem", color: "#888" }}>
-            Due to screen differences, colors may vary slightly in person. Sealer may give a &quot;wet look&quot; that enriches the color.
-          </p>
         </div>
       </div>
 
-      {/* ── WHATSAPP BANNER ── */}
-      <div style={{ background: "#25d366", borderRadius: 8, padding: "22px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
-        <div>
-          <h2 style={{ margin: 0, color: "#fff", fontSize: "1.1rem", fontWeight: 900 }}>Questions? We're on WhatsApp.</h2>
-          <p style={{ margin: "4px 0 0", color: "rgba(255,255,255,.85)", fontSize: ".84rem" }}>Text us photos, questions, or update requests. Jeremy responds same day.</p>
+      {/* ── FLOOR DESIGNER ── */}
+      <div className="ds-card" id="design">
+        <div className="ds-card-head">
+          <h2 className="ds-card-title">Floor Designer</h2>
         </div>
-        <a href="https://wa.me/17722090266" target="_blank" rel="noopener noreferrer" className="ds-btn" style={{ background: "#fff", color: "#25d366", fontWeight: 900, flexShrink: 0 }}>
-          Open WhatsApp →
-        </a>
+        <div className="ds-floor-designer">
+          <div className="ds-floor-preview">
+            {previewSrc
+              ? <img src={previewSrc} alt="Your floor preview" />
+              : <>
+                  <div style={{ fontSize: "2.5rem" }}>🏠</div>
+                  <p style={{ margin: 0, fontSize: ".82rem", color: "rgba(255,255,255,.6)", textAlign: "center" }}>Upload a photo to visualize your floor</p>
+                </>
+            }
+          </div>
+          <div className="ds-floor-upload">
+            <h3 style={{ margin: "0 0 8px", fontSize: ".9rem", fontWeight: 900 }}>Upload Your Floor Photo</h3>
+            <label className="ds-drop-zone" htmlFor="floor-upload-input">
+              📷 Tap to upload floor photo
+              <span style={{ fontSize: ".72rem", fontWeight: 400 }}>JPG, PNG, HEIC accepted</span>
+            </label>
+            <input
+              id="floor-upload-input"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              style={{ display: "none" }}
+              onChange={handleFloorUpload}
+            />
+            {selectedChart && (
+              <div style={{ background: "#f4f5f6", borderRadius: 6, padding: 12 }}>
+                <p style={{ margin: "0 0 4px", fontSize: ".72rem", fontWeight: 900, textTransform: "uppercase", color: "#888" }}>Selected Finish</p>
+                <p style={{ margin: 0, fontSize: ".88rem", fontWeight: 900 }}>{selectedChart}</p>
+              </div>
+            )}
+            <a className="ds-btn gold full" href="https://wa.me/17722090266" target="_blank" rel="noopener noreferrer">
+              💬 Send to Estimator
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* ── DOCUMENTS ── */}
+      <div className="ds-card">
+        <div className="ds-card-head">
+          <h2 className="ds-card-title">Documents</h2>
+        </div>
+        <div className="ds-card-body">
+          <table className="ds-table">
+            <thead>
+              <tr>
+                <th>Document</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { doc: "Digital Bid Intake",    status: "complete", badge: "green" },
+                { doc: "Project Proposal",      status: "pending",  badge: "amber" },
+                { doc: "Deposit Invoice",       status: "pending",  badge: "amber" },
+                { doc: "Install Agreement",     status: "pending",  badge: "amber" },
+                { doc: "Warranty Certificate",  status: "pending",  badge: "amber" },
+              ].map(({ doc, status, badge }) => (
+                <tr key={doc}>
+                  <td style={{ fontWeight: 700 }}>{doc}</td>
+                  <td><span className={`ds-badge ${badge}`}>{status}</span></td>
+                  <td>
+                    {status === "complete"
+                      ? <a href="#" className="ds-btn" style={{ fontSize: ".72rem", padding: "4px 10px" }}>View</a>
+                      : <span style={{ color: "#aaa", fontSize: ".78rem" }}>—</span>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </DashboardShell>
