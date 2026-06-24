@@ -1,49 +1,37 @@
 "use client";
+import { FormEvent, useState } from "react";
 
-import { FormEvent, useRef, useState } from "react";
-
-const projectTypes = [
-  "Garage Floors",
-  "Commercial Floors",
-  "Patios & Outdoor Spaces",
-  "Floor Repair",
-  "Polished Concrete",
-  "Decorative Concrete",
-  "Epoxy Training Classes",
-  "Business Starter Training"
-];
-
-type SubmitState = "idle" | "sending" | "sent" | "error";
+type State = "idle" | "submitting" | "error";
 
 export function PhoenixLeadForm() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [state, setState] = useState<State>("idle");
+  const [msg, setMsg] = useState("");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmitState("sending");
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const name  = String(fd.get("fullName") || "").trim();
+    const email = String(fd.get("email")    || "").trim();
+    const phone = String(fd.get("phone")    || "").trim();
 
-    try {
-      const formData = new FormData(event.currentTarget);
-      const response = await fetch("/api/leads", {
-        method: "POST",
-        body: formData
-      });
-
-      if (!response.ok) throw new Error("Lead endpoint failed");
-
-      await response.json();
-      setSubmitState("sent");
-      formRef.current?.reset();
-    } catch {
-      setSubmitState("error");
+    if (!name || !email || !phone) {
+      setState("error");
+      setMsg("Please enter your name, email, and phone number.");
+      return;
     }
+
+    setState("submitting");
+    // Store in sessionStorage so dashboard can read it
+    window.sessionStorage.setItem("xpsLead", JSON.stringify({ fullName: name, email, phone }));
+    const p = new URLSearchParams({ fullName: name, email, phone });
+    window.location.assign(`/customer-portal/dashboard?${p.toString()}`);
   }
 
   return (
-    <form ref={formRef} className="estimate-card" id="estimate" onSubmit={handleSubmit} encType="multipart/form-data">
+    <form className="estimate-card" id="estimate" onSubmit={handleSubmit}>
       <div className="form-head">
-        <h2>Get Quote</h2>
+        <h2>Start Digital Bid</h2>
+        <p style={{ margin: "4px 0 0", fontSize: ".78rem", color: "rgba(255,255,255,.7)" }}>Name, email &amp; phone — that's it</p>
       </div>
 
       <label className="form-field">
@@ -51,40 +39,21 @@ export function PhoenixLeadForm() {
       </label>
 
       <label className="form-field">
-        <input name="phone" placeholder="Phone Number" required autoComplete="tel" />
-      </label>
-
-      <label className="form-field">
         <input name="email" type="email" placeholder="Email Address" required autoComplete="email" />
       </label>
 
       <label className="form-field">
-        <input name="zipCode" placeholder="Zip Code" inputMode="numeric" autoComplete="postal-code" />
+        <input name="phone" placeholder="Phone Number" required autoComplete="tel" />
       </label>
 
-      <label className="form-field">
-        <select name="projectType" required defaultValue="">
-          <option value="" disabled>
-            Project Type
-          </option>
-          {projectTypes.map((project) => (
-            <option key={project}>{project}</option>
-          ))}
-        </select>
-      </label>
+      {msg && <p style={{ margin: "0 0 6px", fontSize: ".78rem", color: state === "error" ? "#ef4444" : "#fff" }}>{msg}</p>}
 
-      <input className="hidden-field" name="budget" value="Online estimate request" readOnly />
-      <input className="hidden-field" name="website" tabIndex={-1} autoComplete="off" />
-
-      <button className="gold-button form-submit" type="submit" disabled={submitState === "sending"}>
-        {submitState === "sending" ? "Sending..." : "Get Quote"}
+      <button className="gold-button form-submit" type="submit" disabled={state === "submitting"}>
+        {state === "submitting" ? "Opening your dashboard..." : "Start Digital Bid →"}
       </button>
 
-      <p className={`form-status ${submitState}`} aria-live="polite">
-        {submitState === "sent" && "Request received. We will review your project details next."}
-        {submitState === "error" && "The form did not send. Please call or try again."}
-        {submitState === "idle" && "Send the basics and we will review the project next."}
-        {submitState === "sending" && "Sending your estimate request..."}
+      <p style={{ margin: "8px 0 0", fontSize: ".72rem", color: "rgba(255,255,255,.55)", textAlign: "center" }}>
+        You'll choose your finish &amp; color inside your dashboard
       </p>
     </form>
   );

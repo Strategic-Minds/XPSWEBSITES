@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { InstantChatWidget } from "./components/InstantChatWidget";
 import "./globals.css";
 import "./approved-hero.css";
 import "./phoenix-final-revision.css";
@@ -9,16 +10,20 @@ import "./phoenix-hero-lock.css";
 import "./phoenix-approved-template.css";
 import "./phoenix-nashville-chart-lock.css";
 import "./xps-flake-chart-lock.css";
-import "./phoenix-enterprise-mobile-hardening.css";
+import "./portal-sign-in.css";
+import "./xps-home-revision.css";
+import "./digital-estimator-intake.css";
+import "./client-dashboard.css";
+import "./branded-pages.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://phoenixepoxypros.com"),
   title: "Phoenix Epoxy Pros | Phoenix Epoxy Floor Quotes",
-  description: "Quote-first Phoenix epoxy floor website for garage floors, commercial floors, patios, outdoor spaces, floor repair, polished concrete, and XPS-connected training inquiries.",
+  description: "Quote-first Phoenix epoxy floor website for garage floors, commercial floors, patios, outdoor spaces, floor repair, polished concrete, and XPS-connected digital estimator inquiries.",
   manifest: "/manifest.webmanifest",
   openGraph: {
     title: "Phoenix Epoxy Pros",
-    description: "Phoenix epoxy floor estimates, project photo upload, visualizer handoff, and XPS connected services.",
+    description: "Phoenix epoxy floor estimates, project photo upload, digital bid intake, and XPS connected services.",
     type: "website"
   }
 };
@@ -31,7 +36,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <InstantChatWidget />
+      </body>
     </html>
   );
 }
