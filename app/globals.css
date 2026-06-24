@@ -911,7 +911,8 @@ details p {
 
   .site-header {
     position: relative;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
+    align-items: center;
     gap: 12px;
     min-height: 78px;
     padding: 14px 16px;
@@ -1110,3 +1111,59 @@ details p {
     box-shadow: 0 14px 28px rgba(0, 0, 0, .28);
   }
 }
+
+/* ── HAMBURGER OVERRIDE — must stay last, wins over all CSS files ── */
+.mnav-btn {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 48px !important;
+  height: 48px !important;
+  padding: 10px;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  position: relative;
+  z-index: 1001 !important;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  pointer-events: all !important;
+}
+.mnav-btn span {
+  display: block !important;
+  height: 2px;
+  width: 22px;
+  background: #fff !important;
+  border-radius: 2px;
+  transition: all .22s ease;
+  transform-origin: center;
+}
+.mnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mnav-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.mnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Hide burger on desktop */
+@media (min-width: 901px) {
+  .mnav-btn { display: none !important; }
+}
+
+/* Ensure header on mobile always shows burger in the correct column */
+@media (max-width: 900px) {
+  .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 30 !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+    min-height: 72px !important;
+    overflow: visible !important;
+  }
+  .site-header nav { display: none !important; }
+  .header-cta { display: none !important; }
+}
+
