@@ -911,7 +911,8 @@ details p {
 
   .site-header {
     position: relative;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
+    align-items: center;
     gap: 12px;
     min-height: 78px;
     padding: 14px 16px;
