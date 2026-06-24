@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const ENABLED = process.env.WHATSAPP_ENABLED === 'true';
 
 const isConfigured = () =>
-  Boolean(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_WHATSAPP_FROM);
+  Boolean(process.env.TWILIO_ACCOUNT_SID && (process.env.TWILIO_AUTH_TOKEN || (process.env.TWILIO_API_KEY && process.env.TWILIO_API_SECRET)) && process.env.TWILIO_WHATSAPP_FROM);
 
 // ── 9 canonical message templates (per master spec) ──────────────────────────
 const TEMPLATES: Record<string, (p: Record<string, string>) => string> = {
