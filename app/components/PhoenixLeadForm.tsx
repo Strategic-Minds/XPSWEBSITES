@@ -1,63 +1,37 @@
 "use client";
-
 import { FormEvent, useState } from "react";
 
-const projectTypes = [
-  "Garage Floors",
-  "Commercial Floors",
-  "Patios & Outdoor Spaces",
-  "Floor Repair",
-  "Polished Concrete",
-  "Decorative Concrete",
-  "Epoxy Training Classes",
-  "Business Starter Training"
-];
-
-type SubmitState = "idle" | "opening" | "error";
-
-function readFormValue(formData: FormData, key: string) {
-  return String(formData.get(key) || "").trim();
-}
+type State = "idle" | "submitting" | "error";
 
 export function PhoenixLeadForm() {
-  const [submitState, setSubmitState] = useState<SubmitState>("idle");
-  const [message, setMessage] = useState("Send the basics and the Digital Bid form will open prefilled.");
+  const [state, setState] = useState<State>("idle");
+  const [msg, setMsg] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const name  = String(fd.get("fullName") || "").trim();
+    const email = String(fd.get("email")    || "").trim();
+    const phone = String(fd.get("phone")    || "").trim();
 
-    const formData = new FormData(event.currentTarget);
-    const lead = {
-      fullName: readFormValue(formData, "fullName"),
-      phone: readFormValue(formData, "phone"),
-      email: readFormValue(formData, "email"),
-      zipCode: readFormValue(formData, "zipCode"),
-      projectType: readFormValue(formData, "projectType"),
-      asapServiceRequested: formData.get("asapServiceRequested") === "yes" ? "yes" : "no"
-    };
-
-    if (!lead.fullName || !lead.phone || !lead.email || !lead.zipCode || !lead.projectType) {
-      setSubmitState("error");
-      setMessage("Name, phone, email, ZIP code, and project type are required.");
+    if (!name || !email || !phone) {
+      setState("error");
+      setMsg("Please enter your name, email, and phone number.");
       return;
     }
 
-    setSubmitState("opening");
-    setMessage("Opening your prefilled Digital Bid form...");
-
-    window.sessionStorage.setItem("xpsEstimatorLead", JSON.stringify(lead));
-    const params = new URLSearchParams();
-    Object.entries(lead).forEach(([key, value]) => {
-      if (value) params.set(key, value);
-    });
-
-    window.location.assign(`/digital-estimator?${params.toString()}`);
+    setState("submitting");
+    // Store in sessionStorage so dashboard can read it
+    window.sessionStorage.setItem("xpsLead", JSON.stringify({ fullName: name, email, phone }));
+    const p = new URLSearchParams({ fullName: name, email, phone });
+    window.location.assign(`/customer-portal/dashboard?${p.toString()}`);
   }
 
   return (
-    <form className="estimate-card" id="estimate" onSubmit={handleSubmit} encType="multipart/form-data">
+    <form className="estimate-card" id="estimate" onSubmit={handleSubmit}>
       <div className="form-head">
-        <h2>Get Quote</h2>
+        <h2>Start Digital Bid</h2>
+        <p style={{ margin: "4px 0 0", fontSize: ".78rem", color: "rgba(255,255,255,.7)" }}>Name, email &amp; phone — that's it</p>
       </div>
 
       <label className="form-field">
@@ -65,42 +39,21 @@ export function PhoenixLeadForm() {
       </label>
 
       <label className="form-field">
-        <input name="phone" placeholder="Phone Number" required autoComplete="tel" />
-      </label>
-
-      <label className="form-field">
         <input name="email" type="email" placeholder="Email Address" required autoComplete="email" />
       </label>
 
       <label className="form-field">
-        <input name="zipCode" placeholder="Zip Code" inputMode="numeric" autoComplete="postal-code" required />
+        <input name="phone" placeholder="Phone Number" required autoComplete="tel" />
       </label>
 
-      <label className="form-field">
-        <select name="projectType" required defaultValue="">
-          <option value="" disabled>
-            Project Type
-          </option>
-          {projectTypes.map((project) => (
-            <option key={project}>{project}</option>
-          ))}
-        </select>
-      </label>
+      {msg && <p style={{ margin: "0 0 6px", fontSize: ".78rem", color: state === "error" ? "#ef4444" : "#fff" }}>{msg}</p>}
 
-      <label className="asap-check hero-asap-check">
-        <input name="asapServiceRequested" type="checkbox" value="yes" />
-        <span>Request ASAP service</span>
-      </label>
-
-      <input className="hidden-field" name="budget" value="Digital Bid estimate request" readOnly />
-      <input className="hidden-field" name="website" tabIndex={-1} autoComplete="off" />
-
-      <button className="gold-button form-submit" type="submit" disabled={submitState === "opening"}>
-        {submitState === "opening" ? "Opening..." : "Start Digital Bid"}
+      <button className="gold-button form-submit" type="submit" disabled={state === "submitting"}>
+        {state === "submitting" ? "Opening your dashboard..." : "Start Digital Bid →"}
       </button>
 
-      <p className={`form-status ${submitState}`} aria-live="polite">
-        {message}
+      <p style={{ margin: "8px 0 0", fontSize: ".72rem", color: "rgba(255,255,255,.55)", textAlign: "center" }}>
+        You'll choose your finish &amp; color inside your dashboard
       </p>
     </form>
   );

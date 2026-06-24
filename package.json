@@ -9,8 +9,9 @@
     "vercel-build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "validate": "npm run validate:production",
-    "validate:production": "next build"
+    "validate": "npm run validate:production && npm run validate:enterprise",
+    "validate:production": "next build",
+    "validate:enterprise": "node scripts/enterprise-autonomy-check.mjs"
   },
   "engines": {
     "node": ">=20"

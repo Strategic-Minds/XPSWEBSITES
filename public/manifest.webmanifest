@@ -1,11 +1,10 @@
 {
   "name": "Phoenix Epoxy Pros",
-  "short_name": "Phoenix Epoxy",
-  "description": "Phoenix epoxy floor estimates, photo intake, visualizer handoff, and XPS connected services.",
-  "id": "/",
+  "short_name": "PEP",
+  "description": "Phoenix epoxy floors, polished concrete, and decorative concrete estimates",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
-  "background_color": "#050505",
-  "theme_color": "#050505"
+  "theme_color": "#030607",
+  "background_color": "#030607",
+  "icons": [{"src": "/icons/apple-touch-icon.svg", "sizes": "180x180", "type": "image/svg+xml"}]
 }

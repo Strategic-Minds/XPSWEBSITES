@@ -23,97 +23,32 @@ const images = {
 };
 
 const navLinks = [
-  { label: "Digital Bid", href: "/digital-bid" },
-  { label: "Portal System", href: "/portal-system" },
-  { label: "About Us", href: "/about-us" },
+  { label: "Color Charts", href: "#color-chart" },
+  { label: "My Dashboard", href: "/customer-portal/dashboard" },
+  { label: "Design Center", href: "/design" },
   { label: "Gallery", href: "/gallery" }
 ];
 
 const services = [
-  {
-    title: "Garage Floor Coatings",
-    image: images.garage,
-    summary: "Diamond-grind prep, crack repair, full-broadcast flake, and durable polyaspartic topcoat planning.",
-    detail: "Best for daily-use Phoenix garages that need a clean finish, traction, and easier maintenance."
-  },
-  {
-    title: "Commercial Floor Systems",
-    image: images.commercial,
-    summary: "Flake, quartz, and high-performance coating systems for shops, showrooms, warehouses, and workspaces.",
-    detail: "Traffic, chemical exposure, slip resistance, downtime, and cleaning needs drive the system recommendation."
-  },
-  {
-    title: "Patios & Outdoor Concrete",
-    image: images.patio,
-    summary: "Exterior coating direction for patios, covered spaces, walkways, and Arizona concrete surfaces.",
-    detail: "Outdoor projects need UV, heat, texture, and drainage considerations before finish selection."
-  },
-  {
-    title: "Repair & Surface Prep",
-    image: images.repair,
-    summary: "Crack repair, spalling, failed coating removal, grinding, patching, and slab-condition review.",
-    detail: "Prep is the part that decides whether the coating bonds, wears correctly, and looks right."
-  }
+  { title: "Garage Floor Coatings", image: images.garage, summary: "Diamond-grind prep, crack repair, full-broadcast flake, and durable polyaspartic topcoat planning.", detail: "Best for daily-use Phoenix garages that need a clean finish, traction, and easier maintenance." },
+  { title: "Commercial Floor Systems", image: images.commercial, summary: "Flake, quartz, and high-performance coating systems for shops, showrooms, warehouses, and workspaces.", detail: "Traffic, chemical exposure, slip resistance, downtime, and cleaning needs drive the system recommendation." },
+  { title: "Patios & Outdoor Concrete", image: images.patio, summary: "Exterior coating direction for patios, covered spaces, walkways, and Arizona concrete surfaces.", detail: "Outdoor projects need UV, heat, texture, and drainage considerations before finish selection." },
+  { title: "Repair & Surface Prep", image: images.repair, summary: "Crack repair, spalling, failed coating removal, grinding, patching, and slab-condition review.", detail: "Prep is the part that decides whether the coating bonds, wears correctly, and looks right." }
 ];
 
 const trustItems = [
-  {
-    title: "Photos, Size & Surface Condition",
-    text: "Start with the floor type, rough square footage, current coating history, cracks, and clear photos."
-  },
-  {
-    title: "Finish System Guidance",
-    text: "Compare flake, metallic, quartz, solid color, glitter, and stain options before choosing the performance path."
-  },
-  {
-    title: "Portal-Ready Project Setup",
-    text: "Estimator requests can move into proposal delivery, payment links, warranty information, and job tracking after approval."
-  }
+  { title: "Photos, Size & Surface Condition", text: "Start with the floor type, rough square footage, current coating history, cracks, and clear photos." },
+  { title: "Finish System Guidance", text: "Compare flake, metallic, quartz, solid color, glitter, and stain options before choosing the performance path." },
+  { title: "Portal-Ready Project Setup", text: "Estimator requests can move into proposal delivery, payment links, warranty information, and job tracking after approval." }
 ];
 
 const processSteps = [
-  {
-    number: "1",
-    title: "Sign Up & Schedule Job",
-    image: images.processSignUp,
-    text: "Start the estimate, send project basics, and choose the first finish direction.",
-    points: ["Free estimate intake", "Digital Bid handoff", "Scheduling path"]
-  },
-  {
-    number: "2",
-    title: "Prep Work",
-    image: images.processPrepWork,
-    text: "Concrete is mechanically prepared so the coating has the right profile and bond.",
-    points: ["Diamond grinding", "Crack repair and patching", "Clean surface profile"]
-  },
-  {
-    number: "3",
-    title: "Base Coat",
-    image: images.processBaseCoat,
-    text: "The base coat is matched to the slab, use case, and selected broadcast system.",
-    points: ["Moisture-aware review", "Strong bond layer", "System-specific base"]
-  },
-  {
-    number: "4",
-    title: "Beauty Coat",
-    image: images.processBeautyCoat,
-    text: "Flake, metallic, or quartz creates the visual finish and texture profile.",
-    points: ["Flake broadcast", "Metallic movement", "Quartz texture"]
-  },
-  {
-    number: "5",
-    title: "Topcoat Finish",
-    image: images.processTopcoatFinish,
-    text: "The clear topcoat locks in the system and sets the sheen, texture, and durability.",
-    points: ["Polyaspartic topcoat", "Satin or gloss direction", "Durability layer"]
-  },
-  {
-    number: "6",
-    title: "Final Inspection",
-    image: images.processFinalInspection,
-    text: "The finished floor is reviewed for quality, cure guidance, and care instructions.",
-    points: ["Walkthrough", "Care guide", "Follow-up notes"]
-  }
+  { number: "1", title: "Sign Up & Schedule Job", image: images.processSignUp, text: "Start the estimate, send project basics, and choose the first finish direction.", points: ["Free estimate intake", "Digital Bid handoff", "Scheduling path"] },
+  { number: "2", title: "Prep Work", image: images.processPrepWork, text: "Concrete is mechanically prepared so the coating has the right profile and bond.", points: ["Diamond grinding", "Crack repair and patching", "Clean surface profile"] },
+  { number: "3", title: "Base Coat", image: images.processBaseCoat, text: "The base coat is matched to the slab, use case, and selected broadcast system.", points: ["Moisture-aware review", "Strong bond layer", "System-specific base"] },
+  { number: "4", title: "Beauty Coat", image: images.processBeautyCoat, text: "Flake, metallic, or quartz creates the visual finish and texture profile.", points: ["Flake broadcast", "Metallic movement", "Quartz texture"] },
+  { number: "5", title: "Topcoat Finish", image: images.processTopcoatFinish, text: "The clear topcoat locks in the system and sets the sheen, texture, and durability.", points: ["Polyaspartic topcoat", "Satin or gloss direction", "Durability layer"] },
+  { number: "6", title: "Final Inspection", image: images.processFinalInspection, text: "The finished floor is reviewed for quality, cure guidance, and care instructions.", points: ["Walkthrough", "Care guide", "Follow-up notes"] }
 ];
 
 const gallery = [
@@ -158,7 +93,6 @@ export default function HomePage() {
           </div>
           <PhoenixLeadForm />
         </div>
-
         <nav className="mobile-action-rail" aria-label="Mobile quick actions">
           <a href="/digital-estimator"><span className="action-icon">01</span>Estimate</a>
           <a href="#process"><span className="action-icon">02</span>Process</a>
@@ -173,7 +107,7 @@ export default function HomePage() {
           <a href="#estimate"><span>1</span><strong>Start Digital Bid</strong><small>Name, email, phone, ZIP, and project type prefill the bid form.</small></a>
           <a href="#digital-estimator"><span>2</span><strong>Send Photos</strong><small>Upload floor images, measurements, covering type, finish, desired color, and inspiration photos.</small></a>
           <a href="#color-chart"><span>3</span><strong>Choose Finish</strong><small>Compare the color charts before locking your finish direction.</small></a>
-          <a href="/job-tracker"><span>4</span><strong>Track Next Steps</strong><small>Open job tracking, documents, messages, proposal status, and care guides.</small></a>
+          <a href="/customer-portal/dashboard"><span>4</span><strong>Track Next Steps</strong><small>Open job tracking, documents, messages, proposal status, and care guides.</small></a>
         </div>
       </section>
 
@@ -203,10 +137,7 @@ export default function HomePage() {
         <div className="proof-copy">
           <span className="section-kicker">Before / After</span>
           <h2>Prep is what separates a coating from a floor that lasts.</h2>
-          <p>
-            A good epoxy or polyaspartic system starts before the coating is poured. The slab needs the right profile,
-            repairs, cleaning, base coat, broadcast, and topcoat for the way the floor will actually be used.
-          </p>
+          <p>A good epoxy or polyaspartic system starts before the coating is poured. The slab needs the right profile, repairs, cleaning, base coat, broadcast, and topcoat for the way the floor will actually be used.</p>
           <a className="gold-button" href="/digital-estimator">Start My Quote</a>
         </div>
         <img src={images.beforeAfter} alt="Before and after Phoenix epoxy garage floor comparison" />
@@ -260,7 +191,7 @@ export default function HomePage() {
         </div>
         <div className="job-tracker-cta">
           <p>Every qualified estimate can become a tracked project with uploads, finish approvals, proposal status, warranty documents, progress checkpoints, and email updates in one place.</p>
-          <a className="gold-button" href="/portal-system">View Portal System</a>
+          <a className="gold-button" href="/customer-portal/dashboard">Open Client Dashboard</a>
         </div>
       </section>
 
@@ -290,12 +221,14 @@ export default function HomePage() {
           <p>Phoenix epoxy floor estimates, digital bid intake, finish system planning, proposal handoff, and customer project tracking.</p>
         </div>
         <nav aria-label="Footer navigation">
-          <a href="/digital-bid">Digital Bid</a>
-          <a href="/portal-system">Portal System</a>
+          <a href="/customer-portal/dashboard">Digital Bid</a>
+          <a href="/customer-portal/dashboard">Portal System</a>
           <a href="/about-us">About Us</a>
           <a href="/contact-us">Contact Us</a>
           <a href="/gallery">Gallery</a>
-          <a href="/job-tracker">Job Tracker</a>
+          <a href="/customer-portal/dashboard">Client Dashboard</a>
+          <a href="/ops">Ops Center</a>
+          <a href="/installer">Installer App</a>
           <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
         </nav>

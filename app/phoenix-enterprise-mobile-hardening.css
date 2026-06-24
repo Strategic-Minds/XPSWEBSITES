@@ -1,0 +1,26 @@
+@media (max-width: 980px) {
+  .pep .dashboard[style*="360px 1fr 320px"] {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+
+  .pep .dashboard[style*="360px 1fr 320px"] > * {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .pep .dashboard[style*="360px 1fr 320px"] {
+    padding: 14px !important;
+  }
+
+  .pep .dashboard[style*="360px 1fr 320px"] .check-item {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .pep .dashboard[style*="360px 1fr 320px"] .check-item small {
+    grid-column: 2;
+  }
+}
