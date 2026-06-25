@@ -67,6 +67,24 @@ const jobTrackerFeatures = [
 export default function HomePage() {
   return (
     <main className="phoenix-site">
+      {/* ── STAFF ACCESS BAR ── */}
+      <div style={{ background:'#111', borderBottom:'1px solid #222', padding:'8px 20px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, overflowX:'auto', fontSize:12, fontWeight:800, whiteSpace:'nowrap' }}>
+        <span style={{ color:'rgba(255,255,255,.3)', flexShrink:0 }}>STAFF →</span>
+        <div style={{ display:'flex', gap:6, alignItems:'center' }}>
+          {[
+            ['Admin',   '/admin-dashboard',  '#3b82f6'],
+            ['Owner',   '/owner-dashboard',  '#10b981'],
+            ['Crew',    '/crew-dashboard',   '#f59e0b'],
+            ['Ops',     '/ops',              '#8b5cf6'],
+            ['Portal',  '/customer-portal',  '#F6B800'],
+          ].map(([label, href, color]) => (
+            <a key={href as string} href={href as string} style={{ padding:'4px 12px', borderRadius:4, background: color as string, color: label==='Portal' ? '#000' : '#fff', fontWeight:900, fontSize:11, textDecoration:'none', flexShrink:0 }}>
+              {label as string}
+            </a>
+          ))}
+        </div>
+      </div>
+
       <header className="site-header">
         <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
