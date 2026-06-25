@@ -8,3 +8,5 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
+// auth-deploy-trigger: 2026-06-25
