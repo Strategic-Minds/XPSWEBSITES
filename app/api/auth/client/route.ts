@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signToken } from "../../../../lib/auth";
 
-// Try all possible env var names Vercel might use
 const SUPABASE_URL =
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   process.env.SUPABASE_URL ||
   "https://prhppuuwcnmfdhwsagug.supabase.co";
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
-const SUPABASE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const TWILIO_SID    = process.env.TWILIO_ACCOUNT_SID || "";
+const TWILIO_TOKEN  = process.env.TWILIO_AUTH_TOKEN || "";
+const WA_FROM       = process.env.TWILIO_WHATSAPP_FROM || "whatsapp:+15559730487";
 
 async function supaFetch(path: string, options?: RequestInit) {
-  const url = `${SUPABASE_URL}/rest/v1/${path}`;
-  return fetch(url, {
+  return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -21,6 +21,30 @@ async function supaFetch(path: string, options?: RequestInit) {
       ...(options?.headers || {}),
     },
   });
+}
+
+async function sendWhatsApp(to: string, body: string): Promise<boolean> {
+  try {
+    const toWA = to.startsWith("whatsapp:") ? to : `whatsapp:+1${to.replace(/\D/g,"")}`;
+    const res = await fetch(
+      `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_SID}/Messages.json`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": "Basic " + Buffer.from(`${TWILIO_SID}:${TWILIO_TOKEN}`).toString("base64"),
+        },
+        body: new URLSearchParams({ From: WA_FROM, To: toWA, Body: body }).toString(),
+      }
+    );
+    const data = await res.json();
+    if (data.sid) return true;
+    console.error("WhatsApp send failed:", data);
+    return false;
+  } catch (e) {
+    console.error("WhatsApp error:", e);
+    return false;
+  }
 }
 
 function generateCode(): string {
@@ -42,8 +66,6 @@ export async function POST(req: NextRequest) {
     );
 
     if (!res.ok) {
-      const errText = await res.text();
-      console.error("Supabase error:", res.status, errText);
       return NextResponse.json({ error: "Database error. Try again." }, { status: 500 });
     }
 
@@ -51,30 +73,43 @@ export async function POST(req: NextRequest) {
 
     if (!Array.isArray(leads) || leads.length === 0) {
       return NextResponse.json({
-        error: "No account found for that email. Start a Digital Bid to create your account.",
+        error: "No account found for that email. Get a free estimate at phoenixepoxypros.com to create your account.",
       }, { status: 401 });
     }
 
     const lead = leads[0];
 
+    // No token yet — generate one and send via WhatsApp
     if (!lead.dashboard_token) {
       const code = generateCode();
       await supaFetch(`pep_leads?id=eq.${lead.id}`, {
         method: "PATCH",
         body: JSON.stringify({ dashboard_token: code }),
       });
+
+      const phone = lead.phone || "";
+      let waSent = false;
+      if (phone) {
+        const msg = `Hi ${lead.full_name?.split(" ")[0] || "there"} 👋\n\nYour Phoenix Epoxy Pros portal access code is:\n\n*${code}*\n\nGo to your project portal and enter this code to track your job status.\n\n— Phoenix Epoxy Pros Team`;
+        waSent = await sendWhatsApp(phone, msg);
+      }
+
       return NextResponse.json({
-        error: `Your access code is: ${code} — We'll also send it to your phone.`,
+        error: waSent
+          ? "Access code sent to your WhatsApp. Enter it below."
+          : `Your access code is: ${code}`,
         code_sent: true,
       }, { status: 401 });
     }
 
+    // Validate code
     if (lead.dashboard_token.toUpperCase() !== password.trim().toUpperCase()) {
       return NextResponse.json({
-        error: "Invalid access code. Check your SMS or call 772-209-0266.",
+        error: "Invalid access code. Check your WhatsApp or call 772-209-0266.",
       }, { status: 401 });
     }
 
+    // Issue 24hr JWT
     const token = await signToken({
       sub: lead.id,
       email: lead.email,
