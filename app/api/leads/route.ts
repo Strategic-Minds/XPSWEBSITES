@@ -383,8 +383,7 @@ export async function POST(request: Request) {
     }
   } catch (_) { /* notify failure should never block lead save */ }
 
-
-  // TWILIO: notify Jeremy + confirm to lead
+  // Notify Jeremy via SMS + confirm text to lead (non-blocking)
   try {
     const tSid = process.env.TWILIO_ACCOUNT_SID || "";
     const tTok = process.env.TWILIO_AUTH_TOKEN || "";
@@ -396,8 +395,8 @@ export async function POST(request: Request) {
         "NEW LEAD (" + grade + ")",
         (leadPackage.fullName || "?") + " | " + (leadPackage.phone || "?"),
         (leadPackage.zipCode || "?") + " | " + (leadPackage.projectType || "?"),
-        "Score: " + leadPackage.score,
-        "Dashboard: https://xpswebsites.vercel.app/admin-dashboard"
+        "Score: " + String(leadPackage.score),
+        "https://xpswebsites.vercel.app/admin-dashboard"
       ].join("\n");
       const auth = "Basic " + Buffer.from(tSid + ":" + tTok).toString("base64");
       const twUrl = "https://api.twilio.com/2010-04-01/Accounts/" + tSid + "/Messages.json";
@@ -409,7 +408,7 @@ export async function POST(request: Request) {
       const rawPh = (leadPackage.phone || "").replace(/\D/g, "");
       if (rawPh) {
         const fn = (leadPackage.fullName || "").split(" ")[0];
-        const confMsg = "Hi " + fn + "! Phoenix Epoxy Pros received your bid request. Quote in 24h. Questions? Call (772) 209-0266.";
+        const confMsg = "Hi " + fn + "! Phoenix Epoxy Pros received your bid request. Quote within 24h. Call (772) 209-0266.";
         await fetch(twUrl, {
           method: "POST",
           headers: { "Authorization": auth, "Content-Type": "application/x-www-form-urlencoded" },
@@ -417,6 +416,17 @@ export async function POST(request: Request) {
         }).catch(() => null);
       }
     }
-  } catch (_notifyErr) { /* notify failure never blocks lead save */ }
+  } catch (_) { /* notify never blocks lead save */ }
 
-
+  return NextResponse.json({
+    ok: true,
+    score: leadPackage.score,
+    leadPackage,
+    persistence,
+    notification,
+    dashboardPath: "/client-dashboard",
+    message: hasDigitalEstimatorFields
+      ? "Digital estimator request received. Opening the client dashboard next."
+      : "Request received. Phoenix Epoxy Pros will review the details and follow up next."
+  });
+}
