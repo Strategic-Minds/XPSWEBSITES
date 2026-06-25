@@ -1,4 +1,5 @@
 "use client";
+import { MobileNavigation } from "./MobileNavigation";
 export { COLOR_CHARTS } from "../lib/color-charts";
 import type { ReactNode } from "react";
 import { useState, useEffect } from "react";
@@ -68,6 +69,16 @@ function ShellStyles() {
       .ds-header-cta { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; background:linear-gradient(180deg,#ffd75a,#f6b800); color:#050505; font-weight:900; font-size:.78rem; border-radius:6px; text-decoration:none; border:none; cursor:pointer; white-space:nowrap; flex-shrink:0; }
       
       /* MOBILE BOTTOM NAV */
+      
+      .ds-header-ham { display:none; }
+      .ds-header-cta-desktop { display:inline-flex; }
+      @media(max-width:900px) {
+        .ds-header-ham { display:flex; }
+        .ds-header-cta-desktop { display:none !important; }
+        .ds-sidebar { display:none; }
+        .ds-bottom-nav { display:block; }
+      }
+
       .ds-bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:40; background:#050505; border-top:1px solid #1a1a1a; padding:0 0 env(safe-area-inset-bottom); }
       .ds-bottom-nav-inner { display:grid; grid-template-columns: repeat(5, 1fr); }
       .ds-bottom-nav a { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px 4px 6px; color:rgba(255,255,255,.5); font-size:.58rem; font-weight:700; text-decoration:none; gap:3px; border-top:2px solid transparent; }
@@ -282,7 +293,8 @@ function DsHeader({ role, user }: { role: string; user: string }) {
         <span className="ds-header-role">{role}</span>
       </div>
       <span className="ds-header-user">{user}</span>
-      <a className="ds-header-cta" href="/">← Home</a>
+      <a className="ds-header-cta ds-header-cta-desktop" href="/">← Home</a>
+      <div className="ds-header-ham"><MobileNavigation /></div>
     </header>
   );
 }
