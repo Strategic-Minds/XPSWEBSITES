@@ -8,10 +8,6 @@
     {
       "path": "/api/cron/enterprise-ops-tick",
       "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/browser/inspect",
-      "schedule": "*/5 * * * *"
     }
   ]
 }
