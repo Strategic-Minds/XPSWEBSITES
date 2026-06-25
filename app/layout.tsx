@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { InstantChatWidget } from "./components/InstantChatWidget";
 import "./globals.css";
 import "./approved-hero.css";
 import "./phoenix-final-revision.css";
@@ -67,7 +66,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         {children}
-        <InstantChatWidget />
       </body>
     </html>
   );
