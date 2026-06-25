@@ -50,5 +50,6 @@ export const OPS_USERS: Record<string, { password: string; role: string }> = {
   "jeremy": { password: process.env.OPS_ADMIN_PASSWORD || "PEP@Admin2026!", role: "admin" },
   "admin":  { password: process.env.OPS_ADMIN_PASSWORD || "PEP@Admin2026!", role: "admin" },
   "crew":   { password: process.env.OPS_CREW_PASSWORD  || "PEP@Crew2026!",  role: "crew"  },
-  "owner":  { password: process.env.OPS_OWNER_PASSWORD || "PEP@Owner2026!", role: "owner" },
+  "owner":      { password: process.env.OPS_OWNER_PASSWORD      || "PEP@Owner2026!",  role: "owner"      },
+  "supervisor": { password: process.env.OPS_SUPERVISOR_PASSWORD || "PEP@Super2026!", role: "supervisor" },
 };
