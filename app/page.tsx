@@ -23,10 +23,18 @@ const images = {
 };
 
 const navLinks = [
-  { label: "Color Charts", href: "#color-chart" },
-  { label: "My Dashboard", href: "/customer-portal/dashboard" },
+  { label: "Gallery",       href: "/gallery" },
+  { label: "Color Charts",  href: "/#color-chart" },
   { label: "Design Center", href: "/design" },
-  { label: "Gallery", href: "/gallery" }
+  { label: "Digital Bid",   href: "/digital-estimator" },
+];
+
+// Staff/dashboard quick links shown in top bar on desktop
+const staffLinks = [
+  { label: "Admin",  href: "/admin-dashboard" },
+  { label: "Owner",  href: "/owner-dashboard" },
+  { label: "Crew",   href: "/crew-dashboard" },
+  { label: "Portal", href: "/customer-portal" },
 ];
 
 const services = [
@@ -68,7 +76,18 @@ export default function HomePage() {
   return (
     <main className="phoenix-site">
       <header className="site-header">
+        {/* ── BRANDED STAFF TOP BAR — desktop only ── */}
+        <div className="xps-topbar">
+          <span style={{ color:"rgba(255,255,255,.3)", fontSize:11, fontWeight:800, letterSpacing:".1em", textTransform:"uppercase" }}>Staff Access</span>
+          <div style={{ display:"flex", gap:6 }}>
+            {staffLinks.map(l => (
+              <a key={l.href} href={l.href} style={{ padding:"3px 12px", background:"rgba(246,184,0,.12)", color:"#F6B800", fontSize:11, fontWeight:900, borderRadius:4, textDecoration:"none", border:"1px solid rgba(246,184,0,.2)" }}>{l.label}</a>
+            ))}
+          </div>
+        </div>
         <style dangerouslySetInnerHTML={{ __html: `
+          .xps-topbar { display:flex; align-items:center; justify-content:space-between; padding:6px clamp(16px,4vw,48px); background:rgba(255,255,255,.04); border-bottom:1px solid rgba(255,255,255,.06); }
+          @media (max-width: 900px) { .xps-topbar { display:none; } }
           @media (max-width: 900px) {
             .site-header nav { display: none !important; }
             .header-cta { display: none !important; }
