@@ -66,84 +66,32 @@ const jobTrackerFeatures = [
 
 export default function HomePage() {
   return (
-    <main className="phoenix-site">            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* ── HEADER ── */}
-      <header style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 30,
-        background: "#050505",
-        color: "#fff",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 16,
-        padding: "0 clamp(16px,4vw,48px)",
-        minHeight: 76,
-        width: "100%",
-      }}>
-        {/* Logo */}
-        <a href="/" style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
-          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" style={{ height: 48, width: "auto" }} />
-        </a>
-
-        {/* Desktop nav — hidden on mobile via CSS class we'll inject below */}
-        <nav className="xps-desktop-nav" aria-label="Main navigation">
-          {navLinks.map((link) => (
-            <a href={link.href} key={link.label} style={{ padding: "12px 0", color: "rgba(255,255,255,.82)", fontWeight: 800, fontSize: 14, textTransform: "uppercase", textDecoration: "none", letterSpacing: ".04em" }}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* Right side: CTA + hamburger */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-          <a href="/digital-estimator" className="xps-cta-btn">
-            Get Quote
-          </a>
-          <MobileNavigation />
-        </div>
-      </header>
-
-      {/* ── HEADER STYLES ── */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        .xps-desktop-nav {
-          display: flex;
-          gap: clamp(16px, 2vw, 32px);
-          align-items: center;
-          flex: 1;
-          justify-content: flex-end;
-          margin-right: 16px;
-        }
-        .xps-cta-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 10px 22px;
-          background: linear-gradient(180deg, #ffd75a, #F6B800);
-          color: #050505;
-          font-weight: 900;
-          font-size: 14px;
-          border-radius: 6px;
-          text-decoration: none;
-          white-space: nowrap;
-          text-transform: uppercase;
-        }
-        @media (max-width: 900px) {
-          .xps-desktop-nav { display: none !important; }
-          .xps-cta-btn { display: none !important; }
-        }
-        @media (min-width: 901px) {
-          button[aria-label="Open menu"],
-          button[aria-label="Close menu"] {
-            display: none !important;
+    <main className="phoenix-site">
+      <header className="site-header">
+        <style dangerouslySetInnerHTML={{ __html: `
+          @media (max-width: 900px) {
+            .site-header nav { display: none !important; }
+            .header-cta { display: none !important; }
+            .phone-icon-link { display: none !important; }
           }
-        }
-      `}} />
+          @media (min-width: 901px) {
+            .mnav-btn, button[aria-label="Open menu"], button[aria-label="Close menu"] { display: none !important; }
+          }
+        ` }} />
+        <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
+          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
+        </a>
+        <nav aria-label="Main navigation">
+          {navLinks.map((link) => (
+            <a href={link.href} key={link.label}>{link.label}</a>
+          ))}
+          <a className="header-call phone-icon-link" href={phoneHref} aria-label={`Call ${phone}`}>
+            <span className="phone-icon" aria-hidden="true" />
+          </a>
+        </nav>
+        <a className="gold-button header-cta" href="/digital-estimator">Get Quote</a>
+        <MobileNavigation />
+      </header>
 
       <section className="hero" id="home" aria-label="Phoenix Epoxy Pros estimate hero">
         <div className="hero-stage">
