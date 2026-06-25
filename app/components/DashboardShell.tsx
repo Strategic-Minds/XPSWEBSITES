@@ -332,7 +332,15 @@ function PwaInstallBanner() {
 }
 
 // ─── SHARED HEADER ────────────────────────────────────────────────────────────
-function DsHeader({ role, user }: { role: string; user: string }) {
+function DsHeader({
+  role,
+  user,
+  onToggleSidebar,
+}: {
+  role: string;
+  user: string;
+  onToggleSidebar: () => void;
+}) {
   return (
     <header className="ds-header">
       <div className="ds-header-logo">
@@ -342,7 +350,7 @@ function DsHeader({ role, user }: { role: string; user: string }) {
       <span className="ds-header-user">{user}</span>
       <button
             className="ds-sidebar-toggle"
-            onClick={() => setSidebarOpen(v => !v)}
+            onClick={onToggleSidebar}
             aria-label="Toggle navigation"
             type="button"
           >
@@ -354,7 +362,15 @@ function DsHeader({ role, user }: { role: string; user: string }) {
 }
 
 // ─── SHARED SIDEBAR ───────────────────────────────────────────────────────────
-function DsSidebar({ role, active }: { role: keyof typeof SIDEBARS; active: string }) {
+function DsSidebar({
+  role,
+  active,
+  sidebarOpen,
+}: {
+  role: keyof typeof SIDEBARS;
+  active: string;
+  sidebarOpen: boolean;
+}) {
   const items = SIDEBARS[role];
   return (
     <nav className={`ds-sidebar${sidebarOpen ? " ds-sidebar-open" : ""}`}>
@@ -389,17 +405,23 @@ export function DashboardShell({
   active: string;
   children: ReactNode;
 }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <div className="ds-shell">
       <ShellStyles />
-      <DsHeader role={roleLabel} user={user} />
+      <DsHeader
+        role={roleLabel}
+        user={user}
+        onToggleSidebar={() => setSidebarOpen((value) => !value)}
+      />
       <div
           className={`ds-sidebar-backdrop${sidebarOpen ? " ds-sidebar-open" : ""}`}
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
         <div className="ds-body">
-        <DsSidebar role={role} active={active} />
+        <DsSidebar role={role} active={active} sidebarOpen={sidebarOpen} />
         <main className="ds-main">{children}</main>
       </div>
       <MobileBottomNav role={role} active={active} />
