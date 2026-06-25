@@ -62,7 +62,7 @@ export default function OpsLoginPage() {
             </label>
             <input
               type="text" value={user} onChange={e => setUser(e.target.value)}
-              placeholder="jeremy / admin / crew / owner"
+              placeholder="jeremy / admin / owner / supervisor / crew"
               autoComplete="username" required
               style={{
                 width: "100%", padding: "12px 14px", marginBottom: 18,
