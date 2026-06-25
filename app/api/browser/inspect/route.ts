@@ -43,7 +43,8 @@ function getStatusPayload() {
     purpose: "Protected general browser inspection bridge for homepage, portal, ops, and visualizer screenshot jobs.",
     runModes: {
       status: "GET /api/browser/inspect",
-      cronSecuredHomepageInspection: "GET /api/browser/inspect?run=homepage with Authorization: Bearer CRON_SECRET",
+      cronSecuredHomepageInspection: "Vercel Cron GET /api/browser/inspect with Authorization: Bearer CRON_SECRET and x-vercel-cron-schedule header",
+      protectedHomepageInspection: "GET /api/browser/inspect?run=homepage with Authorization: Bearer CRON_SECRET",
       protectedGeneralInspection: "POST /api/browser/inspect with Authorization: Bearer ENTERPRISE_VALIDATION_SECRET or CRON_SECRET"
     },
     requiredEnv: [
@@ -137,11 +138,23 @@ async function runInspection(request: Request, payload: BrowserInspectPayload) {
   }
 }
 
+function homepageInspectionPayload(request: Request): BrowserInspectPayload {
+  const origin = getOrigin(request);
+  return {
+    url: `${origin}/`,
+    mode: "both",
+    waitForText: "Start Digital Bid",
+    selector: "body",
+    objective: "Cron-secured read-only homepage inspection for Epoxy Nation Pros rebrand planning. Capture screenshots and visible text without submitting forms or mutating data."
+  };
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const run = searchParams.get("run");
+  const isCronInvocation = Boolean(request.headers.get("x-vercel-cron-schedule"));
 
-  if (run !== "homepage") {
+  if (run !== "homepage" && !isCronInvocation) {
     return Response.json(getStatusPayload());
   }
 
@@ -149,14 +162,7 @@ export async function GET(request: Request) {
     return unauthorizedResponse();
   }
 
-  const origin = getOrigin(request);
-  return runInspection(request, {
-    url: `${origin}/`,
-    mode: "both",
-    waitForText: "Start Digital Bid",
-    selector: "body",
-    objective: "Cron-secured read-only homepage inspection for Epoxy Nation Pros rebrand planning. Capture screenshots and visible text without submitting forms or mutating data."
-  });
+  return runInspection(request, homepageInspectionPayload(request));
 }
 
 export async function POST(request: Request) {
