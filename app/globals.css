@@ -51,7 +51,7 @@ img {
 .phoenix-site {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--white);
 }
 
@@ -910,7 +910,7 @@ details p {
   }
 
   .site-header {
-    position: relative;
+    position: sticky;
     grid-template-columns: 1fr auto;
     align-items: center;
     gap: 12px;
@@ -1113,7 +1113,7 @@ details p {
 }
 
 /* ── HAMBURGER OVERRIDE — must stay last, wins over all CSS files ── */
-.mnav-btn {
+.mnav-trigger {
   display: flex !important;
   flex-direction: column;
   justify-content: center;
@@ -1132,7 +1132,7 @@ details p {
   touch-action: manipulation;
   pointer-events: all !important;
 }
-.mnav-btn span {
+.mnav-trigger span {
   display: block !important;
   height: 2px;
   width: 22px;
@@ -1141,13 +1141,13 @@ details p {
   transition: all .22s ease;
   transform-origin: center;
 }
-.mnav-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.mnav-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.mnav-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mnav-trigger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mnav-trigger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.mnav-trigger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* Hide burger on desktop */
 @media (min-width: 901px) {
-  .mnav-btn { display: none !important; }
+  .mnav-trigger { display: none !important; }
 }
 
 /* Ensure header on mobile always shows burger in the correct column */
@@ -1162,6 +1162,7 @@ details p {
     padding: 12px 16px !important;
     min-height: 72px !important;
     overflow: visible !important;
+    isolation: isolate;
   }
   .site-header nav { display: none !important; }
   .header-cta { display: none !important; }
