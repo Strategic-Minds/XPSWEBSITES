@@ -65,7 +65,11 @@ function ShellStyles() {
       .ds-header-logo img { height:38px; width:auto; flex-shrink:0; }
       .ds-header-role { font-size:.66rem; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:#f6b800; border:1px solid #f6b800; padding:2px 8px; border-radius:4px; white-space:nowrap; }
       .ds-header-user { font-size:.8rem; font-weight:700; color:rgba(255,255,255,.7); display:none; }
-      .ds-header-cta { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; background:linear-gradient(180deg,#ffd75a,#f6b800); color:#050505; font-weight:900; font-size:.78rem; border-radius:6px; text-decoration:none; border:none; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.ds-sidebar-toggle { display:none; align-items:center; justify-content:center; width:40px; height:40px; background:rgba(255,255,255,.1); border:none; border-radius:6px; cursor:pointer; flex-shrink:0; gap:0; flex-direction:column; }
+.ds-sidebar-toggle span { display:block; width:18px; height:2px; background:#fff; border-radius:2px; margin:2px 0; transition:all .2s; }
+.ds-sidebar-toggle { display:none; align-items:center; justify-content:center; flex-direction:column; gap:3px; width:40px; height:40px; background:rgba(255,255,255,.1); border:none; border-radius:6px; cursor:pointer; flex-shrink:0; -webkit-tap-highlight-color:transparent; }
+      .ds-sidebar-toggle span { display:block; width:18px; height:2px; background:#fff; border-radius:2px; }
+            .ds-header-cta { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; background:linear-gradient(180deg,#ffd75a,#f6b800); color:#050505; font-weight:900; font-size:.78rem; border-radius:6px; text-decoration:none; border:none; cursor:pointer; white-space:nowrap; flex-shrink:0; }
       
       /* MOBILE BOTTOM NAV */
       .ds-bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; z-index:40; background:#050505; border-top:1px solid #1a1a1a; padding:0 0 env(safe-area-inset-bottom); }
@@ -189,6 +193,10 @@ function ShellStyles() {
       }
       @media(max-width:767px) {
         .ds-sidebar { display:none; }
+        .ds-sidebar.ds-sidebar-open { display:flex !important; position:fixed; top:0; left:0; bottom:0; z-index:200; width:min(280px,85vw); overflow-y:auto; padding-top:56px; }
+        .ds-sidebar-backdrop { display:none; }
+        .ds-sidebar-backdrop.ds-sidebar-open { display:block; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:199; }
+        .ds-sidebar-toggle { display:flex !important; }
         .ds-bottom-nav { display:block; }
         .ds-main { padding-bottom:calc(80px + env(safe-area-inset-bottom)); }
       }
@@ -332,7 +340,15 @@ function DsHeader({ role, user }: { role: string; user: string }) {
         <span className="ds-header-role">{role}</span>
       </div>
       <span className="ds-header-user">{user}</span>
-      <a className="ds-header-cta" href="/">← Home</a>
+      <button
+            className="ds-sidebar-toggle"
+            onClick={() => setSidebarOpen(v => !v)}
+            aria-label="Toggle navigation"
+            type="button"
+          >
+            <span /><span /><span />
+          </button>
+          <a className="ds-header-cta" href="/">← Home</a>
     </header>
   );
 }
@@ -341,7 +357,7 @@ function DsHeader({ role, user }: { role: string; user: string }) {
 function DsSidebar({ role, active }: { role: keyof typeof SIDEBARS; active: string }) {
   const items = SIDEBARS[role];
   return (
-    <nav className="ds-sidebar">
+    <nav className={`ds-sidebar${sidebarOpen ? " ds-sidebar-open" : ""}`}>
       <div className="ds-sidebar-section">{role.toUpperCase()}</div>
       {items.map((item) => (
         <a
@@ -377,7 +393,12 @@ export function DashboardShell({
     <div className="ds-shell">
       <ShellStyles />
       <DsHeader role={roleLabel} user={user} />
-      <div className="ds-body">
+      <div
+          className={`ds-sidebar-backdrop${sidebarOpen ? " ds-sidebar-open" : ""}`}
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+        <div className="ds-body">
         <DsSidebar role={role} active={active} />
         <main className="ds-main">{children}</main>
       </div>
