@@ -26,6 +26,14 @@ const SIDEBARS = {
     { label: "Crew Board",   href: "/crew-dashboard",    icon: "👷" },
     { label: "Settings",     href: "#",                  icon: "🔧" },
   ],
+  supervisor: [
+    { label: "Schedule",      href: "/supervisor-dashboard", icon: "📋" },
+    { label: "Active Jobs",   href: "/supervisor-dashboard", icon: "🔧" },
+    { label: "Crew Board",    href: "/crew-dashboard",        icon: "👷" },
+    { label: "Job Details",   href: "/supervisor-dashboard", icon: "🔍" },
+    { label: "Quality Check", href: "/supervisor-dashboard", icon: "✅" },
+    { label: "Admin View",    href: "/admin-dashboard",       icon: "⚙️" },
+  ],
   crew: [
     { label: "My Jobs",       href: "/crew-dashboard",    icon: "▦" },
     { label: "Today's Jobs",  href: "/crew-dashboard",    icon: "📋" },
