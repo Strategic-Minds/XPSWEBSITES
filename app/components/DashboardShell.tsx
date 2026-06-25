@@ -34,6 +34,12 @@ const SIDEBARS = {
     { label: "Quality Check", href: "/supervisor-dashboard", icon: "✅" },
     { label: "Admin View",    href: "/admin-dashboard",       icon: "⚙️" },
   ],
+  client: [
+    { label: 'My Project',    href: '/customer-portal/dashboard', icon: '🏠' },
+    { label: 'Timeline',      href: '/customer-portal/dashboard', icon: '📍' },
+    { label: 'Color Options', href: '/customer-portal/dashboard', icon: '🎨' },
+    { label: 'Contact Us',    href: 'https://wa.me/17722090266',  icon: '💬' },
+  ],
   crew: [
     { label: "My Jobs",       href: "/crew-dashboard",    icon: "▦" },
     { label: "Today's Jobs",  href: "/crew-dashboard",    icon: "📋" },
