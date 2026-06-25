@@ -344,7 +344,7 @@ export async function POST(request: Request) {
     const FROM_SMS2     = "+15616780328";
     const NOTIFY_TO2    = process.env.TWILIO_OWNER_NOTIFY_TO || "+17722090266";
     if (TWILIO_SID2 && TWILIO_TOKEN2) {
-      const grade2 = leadPackage.score >= 80 ? "HOT" : leadPackage.score >= 60 ? "WARM" : "COLD";
+      const grade2 = Number(leadPackage.score) >= 80 ? "HOT" : Number(leadPackage.score) >= 60 ? "WARM" : "COLD";
       const smsLines = [
         "NEW LEAD (" + grade2 + ")",
         (leadPackage.fullName || "") + " | " + (leadPackage.phone || ""),
@@ -390,7 +390,7 @@ export async function POST(request: Request) {
     const tFrom = "+15616780328";
     const tTo = process.env.TWILIO_OWNER_NOTIFY_TO || "+17722090266";
     if (tSid && tTok) {
-      const grade = leadPackage.score >= 80 ? "HOT" : leadPackage.score >= 60 ? "WARM" : "COLD";
+      const grade = Number(leadPackage.score) >= 80 ? "HOT" : Number(leadPackage.score) >= 60 ? "WARM" : "COLD";
       const notifyBody = [
         "NEW LEAD (" + grade + ")",
         (leadPackage.fullName || "?") + " | " + (leadPackage.phone || "?"),
