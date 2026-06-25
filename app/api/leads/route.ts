@@ -339,7 +339,46 @@ export async function POST(request: Request) {
     }, { status: 503 });
   }
 
-  return NextResponse.json({
+  
+  // ── TWILIO NOTIFY (Jeremy) ──────────────────────────────────────────────────
+  const TWILIO_SID   = process.env.TWILIO_ACCOUNT_SID || '';
+  const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN  || '';
+  const FROM_SMS     = '+15616780328';
+  const NOTIFY_TO    = process.env.TWILIO_OWNER_NOTIFY_TO || '+17722090266';
+  if (TWILIO_SID && TWILIO_TOKEN) {
+    const grade = leadPackage.score >= 80 ? 'HOT' : leadPackage.score >= 60 ? 'WARM' : 'COLD';
+    const smsBody = ;
+    await fetch(
+      ,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + Buffer.from().toString('base64'),
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({ To: NOTIFY_TO, From: FROM_SMS, Body: smsBody }).toString(),
+      }
+    ).catch(() => null);
+    // Confirm to lead
+    const phone = (leadPackage.phone || '').replace(/\D/g,'');
+    if (phone) {
+      const firstName = (leadPackage.fullName || '').split(' ')[0];
+      const confirm = ;
+      await fetch(
+        ,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Basic ' + Buffer.from().toString('base64'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({ To: , From: FROM_SMS, Body: confirm }).toString(),
+        }
+      ).catch(() => null);
+    }
+  }
+
+return NextResponse.json({
     ok: true,
     score,
     leadPackage,
