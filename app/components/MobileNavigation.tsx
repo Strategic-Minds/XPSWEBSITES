@@ -6,7 +6,6 @@ const LINKS = [
   { label: "Gallery",          href: "/gallery",                   group: "Pages" },
   { label: "About Us",         href: "/about-us",                  group: "Pages" },
   { label: "Contact Us",       href: "/contact-us",                group: "Pages" },
-  { label: "Design Center",    href: "/design",                    group: "Pages" },
   { label: "Color Charts",     href: "/#color-chart",              group: "Pages" },
   { label: "Digital Bid",      href: "/digital-estimator",         group: "Pages" },
   { label: "My Dashboard",     href: "/customer-portal/dashboard", group: "Client Portal" },
