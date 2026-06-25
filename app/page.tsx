@@ -66,40 +66,84 @@ const jobTrackerFeatures = [
 
 export default function HomePage() {
   return (
-    <main className="phoenix-site">
-      {/* ── STAFF ACCESS BAR ── */}
-      <div style={{ background:'#111', borderBottom:'1px solid #222', padding:'8px 20px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, overflowX:'auto', fontSize:12, fontWeight:800, whiteSpace:'nowrap' }}>
-        <span style={{ color:'rgba(255,255,255,.3)', flexShrink:0 }}>STAFF →</span>
-        <div style={{ display:'flex', gap:6, alignItems:'center' }}>
-          {[
-            ['Admin',   '/admin-dashboard',  '#3b82f6'],
-            ['Owner',   '/owner-dashboard',  '#10b981'],
-            ['Crew',    '/crew-dashboard',   '#f59e0b'],
-            ['Ops',     '/ops',              '#8b5cf6'],
-            ['Portal',  '/customer-portal',  '#F6B800'],
-          ].map(([label, href, color]) => (
-            <a key={href as string} href={href as string} style={{ padding:'4px 12px', borderRadius:4, background: color as string, color: label==='Portal' ? '#000' : '#fff', fontWeight:900, fontSize:11, textDecoration:'none', flexShrink:0 }}>
-              {label as string}
-            </a>
+    <main className="phoenix-site">            </a>
           ))}
         </div>
       </div>
 
-      <header className="site-header">
-        <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
-          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
+      {/* ── HEADER ── */}
+      <header style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 30,
+        background: "#050505",
+        color: "#fff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 16,
+        padding: "0 clamp(16px,4vw,48px)",
+        minHeight: 76,
+        width: "100%",
+      }}>
+        {/* Logo */}
+        <a href="/" style={{ flexShrink: 0, display: "flex", alignItems: "center" }}>
+          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" style={{ height: 48, width: "auto" }} />
         </a>
-        <nav aria-label="Main navigation">
+
+        {/* Desktop nav — hidden on mobile via CSS class we'll inject below */}
+        <nav className="xps-desktop-nav" aria-label="Main navigation">
           {navLinks.map((link) => (
-            <a href={link.href} key={link.label}>{link.label}</a>
+            <a href={link.href} key={link.label} style={{ padding: "12px 0", color: "rgba(255,255,255,.82)", fontWeight: 800, fontSize: 14, textTransform: "uppercase", textDecoration: "none", letterSpacing: ".04em" }}>
+              {link.label}
+            </a>
           ))}
-          <a className="header-call phone-icon-link" href={phoneHref} aria-label={`Call ${phone}`}>
-            <span className="phone-icon" aria-hidden="true" />
-          </a>
         </nav>
-        <a className="gold-button header-cta" href="/digital-estimator">Get Quote</a>
-        <MobileNavigation />
+
+        {/* Right side: CTA + hamburger */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+          <a href="/digital-estimator" className="xps-cta-btn">
+            Get Quote
+          </a>
+          <MobileNavigation />
+        </div>
       </header>
+
+      {/* ── HEADER STYLES ── */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .xps-desktop-nav {
+          display: flex;
+          gap: clamp(16px, 2vw, 32px);
+          align-items: center;
+          flex: 1;
+          justify-content: flex-end;
+          margin-right: 16px;
+        }
+        .xps-cta-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px 22px;
+          background: linear-gradient(180deg, #ffd75a, #F6B800);
+          color: #050505;
+          font-weight: 900;
+          font-size: 14px;
+          border-radius: 6px;
+          text-decoration: none;
+          white-space: nowrap;
+          text-transform: uppercase;
+        }
+        @media (max-width: 900px) {
+          .xps-desktop-nav { display: none !important; }
+          .xps-cta-btn { display: none !important; }
+        }
+        @media (min-width: 901px) {
+          button[aria-label="Open menu"],
+          button[aria-label="Close menu"] {
+            display: none !important;
+          }
+        }
+      `}} />
 
       <section className="hero" id="home" aria-label="Phoenix Epoxy Pros estimate hero">
         <div className="hero-stage">
