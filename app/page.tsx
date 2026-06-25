@@ -86,17 +86,59 @@ export default function HomePage() {
           </div>
         </div>
         <style dangerouslySetInnerHTML={{ __html: `
-          .xps-topbar { display:flex; align-items:center; justify-content:space-between; padding:6px clamp(16px,4vw,48px); background:rgba(255,255,255,.04); border-bottom:1px solid rgba(255,255,255,.06); }
-          @media (max-width: 900px) { .xps-topbar { display:none; } }
+          /* ── RESET site-header to flex ── */
+          .site-header {
+            display: flex !important;
+            grid-template-columns: unset !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 0 clamp(16px,4vw,48px) !important;
+            min-height: 72px !important;
+            gap: 16px !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 30 !important;
+            background: #050505 !important;
+            flex-wrap: nowrap !important;
+          }
+          .site-header > .header-logo { 
+            flex-shrink: 0 !important;
+            width: auto !important;
+          }
+          .site-header > nav {
+            display: flex !important;
+            flex: 1 !important;
+            justify-content: center !important;
+            gap: clamp(12px,2vw,28px) !important;
+            align-items: center !important;
+            font-size: 13px !important;
+            font-weight: 800 !important;
+          }
+          .site-header > nav a { padding: 10px 0 !important; white-space: nowrap !important; }
+          .site-header > .gold-button { flex-shrink: 0 !important; }
+          /* Top bar */
+          .xps-topbar { 
+            display: flex !important; 
+            align-items: center !important; 
+            justify-content: flex-start !important;
+            gap: 12px !important;
+            padding: 7px clamp(16px,4vw,48px) !important; 
+            background: rgba(255,255,255,.03) !important; 
+            border-bottom: 1px solid rgba(255,255,255,.07) !important; 
+          }
+          /* Mobile: hide desktop nav + CTA, show hamburger */
           @media (max-width: 900px) {
-            .site-header nav { display: none !important; }
-            .header-cta { display: none !important; }
+            .xps-topbar { display: none !important; }
+            .site-header > nav { display: none !important; }
+            .site-header > .gold-button { display: none !important; }
+            .site-header > .header-cta { display: none !important; }
             .phone-icon-link { display: none !important; }
           }
+          /* Desktop: hide hamburger */
           @media (min-width: 901px) {
-            .mnav-btn, button[aria-label="Open menu"], button[aria-label="Close menu"] { display: none !important; }
-          }
-        ` }} />
+            button[aria-label="Open menu"],
+            button[aria-label="Close menu"] { display: none !important; }
+          }` }} />
         <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
         </a>
