@@ -121,10 +121,8 @@ export default function SupervisorDashboardPage() {
                     </div>
                   ))}
                 </div>
-                {selectedJob.notes && (
-                  <div style={{ background: "#111", borderRadius: 6, padding: 10, fontSize: 13, color: "#aaa" }}>
-                    📝 {selectedJob.notes as string}
-                  </div>
+                {(selectedJob.notes as string | null) && (
+                  <div style={{ background: "#111", borderRadius: 6, padding: 10, fontSize: 13, color: "#aaa" }}>📝 {String(selectedJob.notes)}</div>
                 )}
                 <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
                   <a className="ds-btn gold" href="/crew-dashboard" style={{ flex: 1, textAlign: "center" }}>Assign Crew</a>
