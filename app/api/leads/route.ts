@@ -390,3 +390,50 @@ return NextResponse.json({
       : "Request received. Phoenix Epoxy Pros will review the details and follow up next."
   });
 }
+  // ── TWILIO NOTIFY (Jeremy) ──────────────────────────────────────────────────
+  try {
+    const TWILIO_SID2   = process.env.TWILIO_ACCOUNT_SID || "";
+    const TWILIO_TOKEN2 = process.env.TWILIO_AUTH_TOKEN  || "";
+    const FROM_SMS2     = "+15616780328";
+    const NOTIFY_TO2    = process.env.TWILIO_OWNER_NOTIFY_TO || "+17722090266";
+    if (TWILIO_SID2 && TWILIO_TOKEN2) {
+      const grade2 = leadPackage.score >= 80 ? "HOT" : leadPackage.score >= 60 ? "WARM" : "COLD";
+      const smsLines = [
+        "NEW LEAD (" + grade2 + ")",
+        (leadPackage.fullName || "") + " | " + (leadPackage.phone || ""),
+        (leadPackage.zipCode || "") + " | " + (leadPackage.projectType || ""),
+        "Score: " + leadPackage.score,
+        "Dashboard: https://xpswebsites.vercel.app/admin-dashboard"
+      ];
+      const smsBody2 = smsLines.join("\n");
+      await fetch(
+        "https://api.twilio.com/2010-04-01/Accounts/" + TWILIO_SID2 + "/Messages.json",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": "Basic " + Buffer.from(TWILIO_SID2 + ":" + TWILIO_TOKEN2).toString("base64"),
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({ To: NOTIFY_TO2, From: FROM_SMS2, Body: smsBody2 }).toString(),
+        }
+      ).catch(() => null);
+      const rawPhone2 = (leadPackage.phone || "").replace(/\D/g, "");
+      if (rawPhone2) {
+        const firstName2 = (leadPackage.fullName || "").split(" ")[0];
+        const confirmMsg = "Hi " + firstName2 + "! Your Phoenix Epoxy Pros bid request was received. We will send your quote within 24 hours. Call/text (772) 209-0266.";
+        await fetch(
+          "https://api.twilio.com/2010-04-01/Accounts/" + TWILIO_SID2 + "/Messages.json",
+          {
+            method: "POST",
+            headers: {
+              "Authorization": "Basic " + Buffer.from(TWILIO_SID2 + ":" + TWILIO_TOKEN2).toString("base64"),
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({ To: "+1" + rawPhone2, From: FROM_SMS2, Body: confirmMsg }).toString(),
+          }
+        ).catch(() => null);
+      }
+    }
+  } catch (_) { /* notify failure should never block lead save */ }
+
+
