@@ -29,13 +29,6 @@ const navLinks = [
   { label: "Digital Bid",   href: "/digital-estimator" },
 ];
 
-// Staff/dashboard quick links shown in top bar on desktop
-const staffLinks = [
-  { label: "Admin",  href: "/admin-dashboard" },
-  { label: "Owner",  href: "/owner-dashboard" },
-  { label: "Crew",   href: "/crew-dashboard" },
-  { label: "Portal", href: "/customer-portal" },
-];
 
 const services = [
   { title: "Garage Floor Coatings", image: images.garage, summary: "Diamond-grind prep, crack repair, full-broadcast flake, and durable polyaspartic topcoat planning.", detail: "Best for daily-use Phoenix garages that need a clean finish, traction, and easier maintenance." },
@@ -75,82 +68,19 @@ const jobTrackerFeatures = [
 export default function HomePage() {
   return (
     <main className="phoenix-site">
-      <header className="site-header">
-        {/* ── BRANDED STAFF TOP BAR — desktop only ── */}
-        <div className="xps-topbar">
-          <span style={{ color:"rgba(255,255,255,.3)", fontSize:11, fontWeight:800, letterSpacing:".1em", textTransform:"uppercase" }}>Staff Access</span>
-          <div style={{ display:"flex", gap:6 }}>
-            {staffLinks.map(l => (
-              <a key={l.href} href={l.href} style={{ padding:"3px 12px", background:"rgba(246,184,0,.12)", color:"#F6B800", fontSize:11, fontWeight:900, borderRadius:4, textDecoration:"none", border:"1px solid rgba(246,184,0,.2)" }}>{l.label}</a>
-            ))}
-          </div>
-        </div>
-        <style dangerouslySetInnerHTML={{ __html: `
-          /* ── RESET site-header to flex ── */
-          .site-header {
-            display: flex !important;
-            grid-template-columns: unset !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            padding: 0 clamp(16px,4vw,48px) !important;
-            min-height: 72px !important;
-            gap: 16px !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 30 !important;
-            background: #050505 !important;
-            flex-wrap: nowrap !important;
-          }
-          .site-header > .header-logo { 
-            flex-shrink: 0 !important;
-            width: auto !important;
-          }
-          .site-header > nav {
-            display: flex !important;
-            flex: 1 !important;
-            justify-content: center !important;
-            gap: clamp(12px,2vw,28px) !important;
-            align-items: center !important;
-            font-size: 13px !important;
-            font-weight: 800 !important;
-          }
-          .site-header > nav a { padding: 10px 0 !important; white-space: nowrap !important; }
-          .site-header > .gold-button { flex-shrink: 0 !important; }
-          /* Top bar */
-          .xps-topbar { 
-            display: flex !important; 
-            align-items: center !important; 
-            justify-content: flex-start !important;
-            gap: 12px !important;
-            padding: 7px clamp(16px,4vw,48px) !important; 
-            background: rgba(255,255,255,.03) !important; 
-            border-bottom: 1px solid rgba(255,255,255,.07) !important; 
-          }
-          /* Mobile: hide desktop nav + CTA, show hamburger */
-          @media (max-width: 900px) {
-            .xps-topbar { display: none !important; }
-            .site-header > nav { display: none !important; }
-            .site-header > .gold-button { display: none !important; }
-            .site-header > .header-cta { display: none !important; }
-            .phone-icon-link { display: none !important; }
-          }
-          /* Desktop: hide hamburger */
-          @media (min-width: 901px) {
-            button[aria-label="Open menu"],
-            button[aria-label="Close menu"] { display: none !important; }
-          }` }} />
-        <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
-          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
-        </a>
-        <nav aria-label="Main navigation">
-          {navLinks.map((link) => (
-            <a href={link.href} key={link.label}>{link.label}</a>
-          ))}
-          <a className="header-call phone-icon-link" href={phoneHref} aria-label={`Call ${phone}`}>
-            <span className="phone-icon" aria-hidden="true" />
-          </a>
-        </nav>
-        <a className="gold-button header-cta" href="/digital-estimator">Get Quote</a>
+      {/* ── HEADER: hamburger only ── */}
+      <header style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 30,
+        background: "#050505",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        padding: "0 16px",
+        minHeight: 64,
+        width: "100%",
+      }}>
         <MobileNavigation />
       </header>
 
