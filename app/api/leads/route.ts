@@ -338,59 +338,6 @@ export async function POST(request: Request) {
       message: "We could not email or safely queue this request yet. Please call 772-209-0266 or email jeremy@shopxps.com while we finish the connection."
     }, { status: 503 });
   }
-
-  
-  // ── TWILIO NOTIFY (Jeremy) ──────────────────────────────────────────────────
-  const TWILIO_SID   = process.env.TWILIO_ACCOUNT_SID || '';
-  const TWILIO_TOKEN = process.env.TWILIO_AUTH_TOKEN  || '';
-  const FROM_SMS     = '+15616780328';
-  const NOTIFY_TO    = process.env.TWILIO_OWNER_NOTIFY_TO || '+17722090266';
-  if (TWILIO_SID && TWILIO_TOKEN) {
-    const grade = leadPackage.score >= 80 ? 'HOT' : leadPackage.score >= 60 ? 'WARM' : 'COLD';
-    const smsBody = ;
-    await fetch(
-      ,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Basic ' + Buffer.from().toString('base64'),
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({ To: NOTIFY_TO, From: FROM_SMS, Body: smsBody }).toString(),
-      }
-    ).catch(() => null);
-    // Confirm to lead
-    const phone = (leadPackage.phone || '').replace(/\D/g,'');
-    if (phone) {
-      const firstName = (leadPackage.fullName || '').split(' ')[0];
-      const confirm = ;
-      await fetch(
-        ,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Basic ' + Buffer.from().toString('base64'),
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({ To: , From: FROM_SMS, Body: confirm }).toString(),
-        }
-      ).catch(() => null);
-    }
-  }
-
-return NextResponse.json({
-    ok: true,
-    score,
-    leadPackage,
-    persistence,
-    notification,
-    dashboardPath: "/client-dashboard",
-    message: hasDigitalEstimatorFields
-      ? "Digital estimator request received. Opening the client dashboard next."
-      : "Request received. Phoenix Epoxy Pros will review the details and follow up next."
-  });
-}
-  // ── TWILIO NOTIFY (Jeremy) ──────────────────────────────────────────────────
   try {
     const TWILIO_SID2   = process.env.TWILIO_ACCOUNT_SID || "";
     const TWILIO_TOKEN2 = process.env.TWILIO_AUTH_TOKEN  || "";
@@ -435,5 +382,41 @@ return NextResponse.json({
       }
     }
   } catch (_) { /* notify failure should never block lead save */ }
+
+
+  // TWILIO: notify Jeremy + confirm to lead
+  try {
+    const tSid = process.env.TWILIO_ACCOUNT_SID || "";
+    const tTok = process.env.TWILIO_AUTH_TOKEN || "";
+    const tFrom = "+15616780328";
+    const tTo = process.env.TWILIO_OWNER_NOTIFY_TO || "+17722090266";
+    if (tSid && tTok) {
+      const grade = leadPackage.score >= 80 ? "HOT" : leadPackage.score >= 60 ? "WARM" : "COLD";
+      const notifyBody = [
+        "NEW LEAD (" + grade + ")",
+        (leadPackage.fullName || "?") + " | " + (leadPackage.phone || "?"),
+        (leadPackage.zipCode || "?") + " | " + (leadPackage.projectType || "?"),
+        "Score: " + leadPackage.score,
+        "Dashboard: https://xpswebsites.vercel.app/admin-dashboard"
+      ].join("\n");
+      const auth = "Basic " + Buffer.from(tSid + ":" + tTok).toString("base64");
+      const twUrl = "https://api.twilio.com/2010-04-01/Accounts/" + tSid + "/Messages.json";
+      await fetch(twUrl, {
+        method: "POST",
+        headers: { "Authorization": auth, "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ To: tTo, From: tFrom, Body: notifyBody }).toString(),
+      }).catch(() => null);
+      const rawPh = (leadPackage.phone || "").replace(/\D/g, "");
+      if (rawPh) {
+        const fn = (leadPackage.fullName || "").split(" ")[0];
+        const confMsg = "Hi " + fn + "! Phoenix Epoxy Pros received your bid request. Quote in 24h. Questions? Call (772) 209-0266.";
+        await fetch(twUrl, {
+          method: "POST",
+          headers: { "Authorization": auth, "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ To: "+1" + rawPh, From: tFrom, Body: confMsg }).toString(),
+        }).catch(() => null);
+      }
+    }
+  } catch (_notifyErr) { /* notify failure never blocks lead save */ }
 
 
