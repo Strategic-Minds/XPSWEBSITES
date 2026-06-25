@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signToken } from "../../../../lib/auth";
 
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || "";
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+// Try all possible env var names Vercel might use
+const SUPABASE_URL =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  process.env.SUPABASE_URL ||
+  "https://prhppuuwcnmfdhwsagug.supabase.co";
+
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
 async function supaFetch(path: string, options?: RequestInit) {
-  return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+  const url = `${SUPABASE_URL}/rest/v1/${path}`;
+  return fetch(url, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -30,10 +37,16 @@ export async function POST(req: NextRequest) {
 
     const emailClean = email.toLowerCase().trim();
 
-    // Fetch the most recent lead record for this email
     const res = await supaFetch(
       `pep_leads?email=eq.${encodeURIComponent(emailClean)}&select=id,full_name,email,phone,status,dashboard_token&order=created_at.desc&limit=1`
     );
+
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error("Supabase error:", res.status, errText);
+      return NextResponse.json({ error: "Database error. Try again." }, { status: 500 });
+    }
+
     const leads = await res.json();
 
     if (!Array.isArray(leads) || leads.length === 0) {
@@ -44,7 +57,6 @@ export async function POST(req: NextRequest) {
 
     const lead = leads[0];
 
-    // If no token set — auto generate and return it (SMS would fire here)
     if (!lead.dashboard_token) {
       const code = generateCode();
       await supaFetch(`pep_leads?id=eq.${lead.id}`, {
@@ -52,19 +64,17 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({ dashboard_token: code }),
       });
       return NextResponse.json({
-        error: `Access code created: ${code} — We've sent it to your phone via SMS.`,
+        error: `Your access code is: ${code} — We'll also send it to your phone.`,
         code_sent: true,
       }, { status: 401 });
     }
 
-    // Validate code (case-insensitive)
     if (lead.dashboard_token.toUpperCase() !== password.trim().toUpperCase()) {
       return NextResponse.json({
-        error: "Invalid access code. Check your SMS or contact us at 772-209-0266.",
+        error: "Invalid access code. Check your SMS or call 772-209-0266.",
       }, { status: 401 });
     }
 
-    // Issue 24hr JWT
     const token = await signToken({
       sub: lead.id,
       email: lead.email,
