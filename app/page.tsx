@@ -26,9 +26,17 @@ const images = {
 
 const navLinks = [
   { label: "Color Charts", href: "#color-chart" },
-  { label: "My Dashboard", href: "/customer-portal/dashboard" },
   { label: "Design Center", href: "/design" },
-  { label: "Gallery", href: "/gallery" }
+  { label: "Gallery", href: "/gallery" },
+  { label: "Get a Quote", href: "/digital-estimator" },
+];
+
+// Staff nav — only shown when logged in (role-based, future auth gate)
+const staffLinks = [
+  { label: "Admin", href: "/admin-dashboard" },
+  { label: "Owner", href: "/owner-dashboard" },
+  { label: "Crew", href: "/crew-dashboard" },
+  { label: "Customer Portal", href: "/customer-portal/dashboard" },
 ];
 
 const services = [
@@ -85,6 +93,15 @@ export default function HomePage() {
         <MobileNavigation />
       </header>
 
+      {/* Staff Portal Access Bar */}
+      <div style={{background:"#0a0a0a",borderBottom:"1px solid #1a1a1a",padding:"8px clamp(16px,4vw,48px)",display:"flex",gap:16,alignItems:"center",flexWrap:"wrap" as const}}>
+        <span style={{fontSize:".68rem",fontWeight:900,textTransform:"uppercase" as const,color:"rgba(255,255,255,.35)",letterSpacing:".1em",flexShrink:0}}>Staff Access</span>
+        {staffLinks.map(l=>(
+          <a key={l.href} href={l.href} style={{fontSize:".75rem",fontWeight:800,color:"rgba(255,255,255,.6)",textDecoration:"none",padding:"3px 10px",borderRadius:4,border:"1px solid rgba(255,255,255,.12)",whiteSpace:"nowrap" as const}}>
+            {l.label}
+          </a>
+        ))}
+      </div>
       <section className="hero" id="home" aria-label="Phoenix Epoxy Pros estimate hero">
         <div className="hero-stage">
           <div className="hero-photo" aria-hidden="true">
