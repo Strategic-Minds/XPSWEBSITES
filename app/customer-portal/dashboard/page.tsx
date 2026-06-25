@@ -144,9 +144,9 @@ export default function ClientDashboardPage() {
         <div className="ds-card-head"><h2 className="ds-card-title">🎨 Browse Color Options</h2></div>
         <div className="ds-card-body">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
-            {COLOR_CHARTS.slice(0, 8).map(c => (
+            {COLOR_CHARTS.slice(0, 6).map(c => (
               <div key={c.name} onClick={() => setActiveColor(c.name)} style={{ cursor: "pointer", borderRadius: 8, overflow: "hidden", border: `2px solid ${activeColor === c.name ? "#f6b800" : "transparent"}`, transition: "border-color .2s" }}>
-                <div style={{ height: 60, background: c.hex }} />
+                <img src={c.image} alt={c.alt} style={{ width: '100%', height: 60, objectFit: 'cover' }} />
                 <div style={{ padding: "6px 8px", background: "#111" }}>
                   <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: activeColor === c.name ? "#f6b800" : "#ccc" }}>{c.name}</p>
                 </div>
