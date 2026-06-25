@@ -34,30 +34,38 @@ function getOrigin(request: Request) {
   return forwardedHost ? `${forwardedProto}://${forwardedHost}` : "";
 }
 
-export async function GET() {
-  return Response.json({
+function getStatusPayload() {
+  return {
     ok: Boolean(process.env.BROWSER_WORKER_URL),
     configured: Boolean(process.env.BROWSER_WORKER_URL),
     executionEnabled: process.env.VISUALIZER_BROWSER_WORKER_ENABLED === "true",
     route: "/api/browser/inspect",
     purpose: "Protected general browser inspection bridge for homepage, portal, ops, and visualizer screenshot jobs.",
+    runModes: {
+      status: "GET /api/browser/inspect",
+      cronSecuredHomepageInspection: "GET /api/browser/inspect?run=homepage with Authorization: Bearer CRON_SECRET",
+      protectedGeneralInspection: "POST /api/browser/inspect with Authorization: Bearer ENTERPRISE_VALIDATION_SECRET or CRON_SECRET"
+    },
     requiredEnv: [
       "BROWSER_WORKER_URL",
       "VISUALIZER_BROWSER_WORKER_ENABLED",
       "ENTERPRISE_VALIDATION_SECRET or CRON_SECRET"
     ],
     blockedActions
-  });
+  };
 }
 
-export async function POST(request: Request) {
+function unauthorizedResponse() {
+  return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+}
+
+function isAuthorized(request: Request) {
   const validationSecret = getValidationSecret();
   const authHeader = request.headers.get("authorization");
+  return Boolean(validationSecret && authHeader === `Bearer ${validationSecret}`);
+}
 
-  if (!validationSecret || authHeader !== `Bearer ${validationSecret}`) {
-    return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
-  }
-
+async function runInspection(request: Request, payload: BrowserInspectPayload) {
   const workerUrl = process.env.BROWSER_WORKER_URL;
   if (!workerUrl) {
     return Response.json({
@@ -73,13 +81,6 @@ export async function POST(request: Request) {
       status: "planned_only",
       blockers: ["VISUALIZER_BROWSER_WORKER_ENABLED is not true, so no browser job was executed."]
     });
-  }
-
-  let payload: BrowserInspectPayload = {};
-  try {
-    payload = await request.json();
-  } catch {
-    payload = {};
   }
 
   const origin = getOrigin(request);
@@ -134,4 +135,41 @@ export async function POST(request: Request) {
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const run = searchParams.get("run");
+
+  if (run !== "homepage") {
+    return Response.json(getStatusPayload());
+  }
+
+  if (!isAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
+  const origin = getOrigin(request);
+  return runInspection(request, {
+    url: `${origin}/`,
+    mode: "both",
+    waitForText: "Start Digital Bid",
+    selector: "body",
+    objective: "Cron-secured read-only homepage inspection for Epoxy Nation Pros rebrand planning. Capture screenshots and visible text without submitting forms or mutating data."
+  });
+}
+
+export async function POST(request: Request) {
+  if (!isAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
+  let payload: BrowserInspectPayload = {};
+  try {
+    payload = await request.json();
+  } catch {
+    payload = {};
+  }
+
+  return runInspection(request, payload);
 }
