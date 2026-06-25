@@ -117,6 +117,22 @@ async function runInspection(request: Request, payload: BrowserInspectPayload) {
     });
 
     const text = await response.text();
+    if (!response.ok) {
+      console.error("browser-inspect-worker-error", {
+        workerStatus: response.status,
+        targetUrl,
+        mode,
+        responseText: text.slice(0, 4000)
+      });
+    } else {
+      console.info("browser-inspect-worker-completed", {
+        workerStatus: response.status,
+        targetUrl,
+        mode,
+        responseText: text.slice(0, 4000)
+      });
+    }
+
     return Response.json({
       ok: response.ok,
       status: response.ok ? "browser_worker_completed" : "browser_worker_error",
@@ -126,6 +142,11 @@ async function runInspection(request: Request, payload: BrowserInspectPayload) {
       responseText: text.slice(0, 12000)
     }, { status: response.ok ? 200 : 502 });
   } catch (error) {
+    console.error("browser-inspect-worker-exception", {
+      targetUrl,
+      mode,
+      error: error instanceof Error ? error.message : "Unknown browser worker error"
+    });
     return Response.json({
       ok: false,
       status: "browser_worker_exception",
