@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "./lib/auth";
 
-// Ops routes — protected for ops subdomain or /ops/* paths
 const OPS_PATHS = [
   "/admin-dashboard",
   "/owner-dashboard",
   "/crew-dashboard",
+  "/supervisor-dashboard",
   "/ops",
 ];
 
-// Client routes — protected
 const CLIENT_PATHS = [
   "/customer-portal/dashboard",
   "/customer-portal/projects",
@@ -21,36 +20,23 @@ function isOpsDomain(req: NextRequest) {
   return host.startsWith("ops.");
 }
 
-function isClientDomain(req: NextRequest) {
-  const host = req.headers.get("host") || "";
-  return host.startsWith("client.") || host.startsWith("portal.");
-}
-
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const host = req.headers.get("host") || "";
 
-  // ── OPS SUBDOMAIN: all routes require ops auth ──
   if (isOpsDomain(req)) {
-    if (pathname === "/ops-login" || pathname.startsWith("/api/auth/ops")) {
-      return NextResponse.next();
-    }
+    if (pathname === "/ops-login" || pathname.startsWith("/api/auth/ops")) return NextResponse.next();
     const token = req.cookies.get("ops_token")?.value;
     const payload = token ? await verifyToken(token) : null;
     if (!payload) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/ops-login";
+      const url = req.nextUrl.clone(); url.pathname = "/ops-login";
       return NextResponse.redirect(url);
     }
     return NextResponse.next();
   }
 
-  // ── MAIN DOMAIN: protect specific ops paths ──
   const isOpsPath = OPS_PATHS.some(p => pathname.startsWith(p));
   if (isOpsPath) {
-    if (pathname === "/ops-login" || pathname.startsWith("/api/auth/ops")) {
-      return NextResponse.next();
-    }
+    if (pathname === "/ops-login" || pathname.startsWith("/api/auth/ops")) return NextResponse.next();
     const token = req.cookies.get("ops_token")?.value;
     const payload = token ? await verifyToken(token) : null;
     if (!payload) {
@@ -62,7 +48,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // ── CLIENT PORTAL: protect client paths ──
   const isClientPath = CLIENT_PATHS.some(p => pathname.startsWith(p));
   if (isClientPath) {
     const token = req.cookies.get("client_token")?.value;
@@ -84,6 +69,7 @@ export const config = {
     "/admin-dashboard/:path*",
     "/owner-dashboard/:path*",
     "/crew-dashboard/:path*",
+    "/supervisor-dashboard/:path*",
     "/ops/:path*",
     "/ops-login",
     "/customer-portal/dashboard/:path*",
