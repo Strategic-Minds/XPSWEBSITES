@@ -1110,3 +1110,12 @@ details p {
     box-shadow: 0 14px 28px rgba(0, 0, 0, .28);
   }
 }
+
+/* ── MOBILE NAV GLOBAL FIX ──────────────────────────────── */
+@media (max-width: 900px) {
+  .site-header nav { display: none !important; }
+  .header-nav-actions { display: none !important; }
+}
+@media (min-width: 901px) {
+  .mnav-trigger { display: none !important; }
+}
