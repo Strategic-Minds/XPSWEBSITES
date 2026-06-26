@@ -23,11 +23,12 @@ const images = {
 };
 
 const navLinks = [
-  { label: "Color Charts", href: "#color-chart" },
-  { label: "My Dashboard", href: "/customer-portal/dashboard" },
+  { label: "Gallery",       href: "/gallery" },
+  { label: "Color Charts",  href: "/#color-chart" },
   { label: "Design Center", href: "/design" },
-  { label: "Gallery", href: "/gallery" }
+  { label: "Digital Bid",   href: "/digital-estimator" },
 ];
+
 
 const services = [
   { title: "Garage Floor Coatings", image: images.garage, summary: "Diamond-grind prep, crack repair, full-broadcast flake, and durable polyaspartic topcoat planning.", detail: "Best for daily-use Phoenix garages that need a clean finish, traction, and easier maintenance." },
@@ -67,19 +68,19 @@ const jobTrackerFeatures = [
 export default function HomePage() {
   return (
     <main className="phoenix-site">
-      <header className="site-header">
-        <a className="header-logo" href="#home" aria-label="Phoenix Epoxy Pros home">
-          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
-        </a>
-        <nav aria-label="Main navigation">
-          {navLinks.map((link) => (
-            <a href={link.href} key={link.label}>{link.label}</a>
-          ))}
-          <a className="header-call phone-icon-link" href={phoneHref} aria-label={`Call ${phone}`}>
-            <span className="phone-icon" aria-hidden="true" />
-          </a>
-        </nav>
-        <a className="gold-button header-cta" href="/digital-estimator">Get Quote</a>
+      {/* ── HEADER: hamburger only ── */}
+      <header style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 30,
+        background: "#050505",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        padding: "0 16px",
+        minHeight: 64,
+        width: "100%",
+      }}>
         <MobileNavigation />
       </header>
 

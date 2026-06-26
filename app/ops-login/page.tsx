@@ -1,44 +1,32 @@
 "use client";
 import { useState, FormEvent } from "react";
 
-export default function ClientPortalSignIn() {
-  const [email, setEmail]     = useState("");
-  const [code, setCode]       = useState("");
-  const [err, setErr]         = useState("");
-  const [info, setInfo]       = useState("");
+export default function OpsLoginPage() {
+  const [user, setUser] = useState("");
+  const [pass, setPass] = useState("");
+  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const [codeSent, setCodeSent] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setErr(""); setInfo(""); setLoading(true);
+    setErr(""); setLoading(true);
     try {
-      const res = await fetch("/api/auth/client", {
+      const res = await fetch("/api/auth/ops", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), password: code.trim() }),
+        body: JSON.stringify({ username: user, password: pass }),
       });
       const data = await res.json();
-
-      if (data.code_sent) {
-        setCodeSent(true);
-        setInfo("Access code sent to your phone via SMS. Enter it below.");
-        setLoading(false);
-        return;
-      }
-
-      if (!res.ok) {
-        setErr(data.error || "Invalid credentials");
-        setLoading(false);
-        return;
-      }
-
+      if (!res.ok) { setErr(data.error || "Invalid credentials"); return; }
+      // Redirect based on role
       const from = new URLSearchParams(window.location.search).get("from");
-      window.location.href = from || "/customer-portal/dashboard";
+      if (from) { window.location.href = from; return; }
+      if (data.role === "crew")  { window.location.href = "/crew-dashboard"; return; }
+      if (data.role === "owner") { window.location.href = "/owner-dashboard"; return; }
+      window.location.href = "/admin-dashboard";
     } catch {
       setErr("Connection error. Try again.");
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }
 
   return (
@@ -47,67 +35,57 @@ export default function ClientPortalSignIn() {
       display: "flex", alignItems: "center", justifyContent: "center",
       fontFamily: "'Inter', system-ui, sans-serif", padding: 24,
     }}>
-      <div style={{ width: "100%", maxWidth: 420 }}>
+      <div style={{ width: "100%", maxWidth: 400 }}>
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" style={{ height: 52, width: "auto" }} />
           <div style={{ marginTop: 12, color: "rgba(255,255,255,.4)", fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".15em" }}>
-            Client Portal
+            Operations Portal
           </div>
         </div>
 
+        {/* Card */}
         <div style={{
           background: "#0f0f0f", border: "1px solid rgba(255,255,255,.08)",
           borderRadius: 12, padding: "32px 28px",
         }}>
           <h1 style={{ color: "#fff", fontSize: 22, fontWeight: 900, margin: "0 0 6px" }}>
-            Track Your Project
+            Staff Sign In
           </h1>
           <p style={{ color: "rgba(255,255,255,.4)", fontSize: 13, margin: "0 0 28px" }}>
-            {codeSent
-              ? "We texted your access code. Enter it below to continue."
-              : "Enter your email and the access code we sent you by SMS."}
+            Restricted access — authorized personnel only
           </p>
-
-          {info && (
-            <div style={{ color: "#4ade80", fontSize: 13, marginBottom: 18, padding: "10px 14px", background: "rgba(74,222,128,.08)", borderRadius: 6, border: "1px solid rgba(74,222,128,.2)" }}>
-              {info}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit}>
             <label style={{ display: "block", color: "rgba(255,255,255,.5)", fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 8 }}>
-              Email Address
+              Username
             </label>
             <input
-              type="email" value={email} onChange={e => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              autoComplete="email" required
+              type="text" value={user} onChange={e => setUser(e.target.value)}
+              placeholder="jeremy / admin / owner / supervisor / crew"
+              autoComplete="username" required
               style={{
                 width: "100%", padding: "12px 14px", marginBottom: 18,
                 background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.12)",
-                borderRadius: 8, color: "#fff", fontSize: 14, boxSizing: "border-box", outline: "none",
+                borderRadius: 8, color: "#fff", fontSize: 14, boxSizing: "border-box",
+                outline: "none",
               }}
             />
 
             <label style={{ display: "block", color: "rgba(255,255,255,.5)", fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 8 }}>
-              Access Code
+              Password
             </label>
             <input
-              type="text" value={code} onChange={e => setCode(e.target.value.toUpperCase())}
-              placeholder={codeSent ? "Enter the code from your SMS" : "e.g. AB3X9K2M"}
-              autoComplete="one-time-code" required
+              type="password" value={pass} onChange={e => setPass(e.target.value)}
+              placeholder="••••••••••"
+              autoComplete="current-password" required
               style={{
                 width: "100%", padding: "12px 14px", marginBottom: 8,
                 background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.12)",
-                borderRadius: 8, color: "#fff", fontSize: 14,
-                fontFamily: "monospace", letterSpacing: ".1em",
-                boxSizing: "border-box", outline: "none",
+                borderRadius: 8, color: "#fff", fontSize: 14, boxSizing: "border-box",
+                outline: "none",
               }}
             />
-            <div style={{ color: "rgba(255,255,255,.25)", fontSize: 11, marginBottom: 20 }}>
-              Don't have a code? Submit your email first — we'll text it to the number on your estimate.
-            </div>
 
             {err && (
               <div style={{ color: "#f87171", fontSize: 13, marginBottom: 16, padding: "10px 14px", background: "rgba(248,113,113,.08)", borderRadius: 6, border: "1px solid rgba(248,113,113,.2)" }}>
@@ -118,22 +96,16 @@ export default function ClientPortalSignIn() {
             <button
               type="submit" disabled={loading}
               style={{
-                width: "100%", padding: "14px", marginTop: 4,
+                width: "100%", padding: "14px", marginTop: 8,
                 background: loading ? "rgba(246,184,0,.5)" : "#F6B800",
                 color: "#000", fontWeight: 900, fontSize: 14,
                 border: "none", borderRadius: 8, cursor: loading ? "not-allowed" : "pointer",
                 textTransform: "uppercase", letterSpacing: ".05em",
               }}
             >
-              {loading ? "Checking…" : codeSent ? "Enter Portal →" : "Access My Project →"}
+              {loading ? "Signing in…" : "Sign In →"}
             </button>
           </form>
-
-          <div style={{ marginTop: 20, textAlign: "center" }}>
-            <a href="/digital-estimator" style={{ color: "#F6B800", fontSize: 13, textDecoration: "none" }}>
-              No account yet? Start a Digital Bid →
-            </a>
-          </div>
         </div>
 
         <div style={{ textAlign: "center", marginTop: 24 }}>

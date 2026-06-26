@@ -338,10 +338,89 @@ export async function POST(request: Request) {
       message: "We could not email or safely queue this request yet. Please call 772-209-0266 or email jeremy@shopxps.com while we finish the connection."
     }, { status: 503 });
   }
+  try {
+    const TWILIO_SID2   = process.env.TWILIO_ACCOUNT_SID || "";
+    const TWILIO_TOKEN2 = process.env.TWILIO_AUTH_TOKEN  || "";
+    const FROM_SMS2     = "+15616780328";
+    const NOTIFY_TO2    = process.env.TWILIO_OWNER_NOTIFY_TO || "+17722090266";
+    if (TWILIO_SID2 && TWILIO_TOKEN2) {
+      const grade2 = Number(leadPackage.score) >= 80 ? "HOT" : Number(leadPackage.score) >= 60 ? "WARM" : "COLD";
+      const smsLines = [
+        "NEW LEAD (" + grade2 + ")",
+        (leadPackage.fullName || "") + " | " + (leadPackage.phone || ""),
+        (leadPackage.zipCode || "") + " | " + (leadPackage.projectType || ""),
+        "Score: " + leadPackage.score,
+        "Dashboard: https://xpswebsites.vercel.app/admin-dashboard"
+      ];
+      const smsBody2 = smsLines.join("\n");
+      await fetch(
+        "https://api.twilio.com/2010-04-01/Accounts/" + TWILIO_SID2 + "/Messages.json",
+        {
+          method: "POST",
+          headers: {
+            "Authorization": "Basic " + Buffer.from(TWILIO_SID2 + ":" + TWILIO_TOKEN2).toString("base64"),
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({ To: NOTIFY_TO2, From: FROM_SMS2, Body: smsBody2 }).toString(),
+        }
+      ).catch(() => null);
+      const rawPhone2 = (leadPackage.phone || "").replace(/\D/g, "");
+      if (rawPhone2) {
+        const firstName2 = (leadPackage.fullName || "").split(" ")[0];
+        const confirmMsg = "Hi " + firstName2 + "! Your Phoenix Epoxy Pros bid request was received. We will send your quote within 24 hours. Call/text (772) 209-0266.";
+        await fetch(
+          "https://api.twilio.com/2010-04-01/Accounts/" + TWILIO_SID2 + "/Messages.json",
+          {
+            method: "POST",
+            headers: {
+              "Authorization": "Basic " + Buffer.from(TWILIO_SID2 + ":" + TWILIO_TOKEN2).toString("base64"),
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({ To: "+1" + rawPhone2, From: FROM_SMS2, Body: confirmMsg }).toString(),
+          }
+        ).catch(() => null);
+      }
+    }
+  } catch (_) { /* notify failure should never block lead save */ }
+
+  // Notify Jeremy via SMS + confirm text to lead (non-blocking)
+  try {
+    const tSid = process.env.TWILIO_ACCOUNT_SID || "";
+    const tTok = process.env.TWILIO_AUTH_TOKEN || "";
+    const tFrom = "+15616780328";
+    const tTo = process.env.TWILIO_OWNER_NOTIFY_TO || "+17722090266";
+    if (tSid && tTok) {
+      const grade = Number(leadPackage.score) >= 80 ? "HOT" : Number(leadPackage.score) >= 60 ? "WARM" : "COLD";
+      const notifyBody = [
+        "NEW LEAD (" + grade + ")",
+        (leadPackage.fullName || "?") + " | " + (leadPackage.phone || "?"),
+        (leadPackage.zipCode || "?") + " | " + (leadPackage.projectType || "?"),
+        "Score: " + String(leadPackage.score),
+        "https://xpswebsites.vercel.app/admin-dashboard"
+      ].join("\n");
+      const auth = "Basic " + Buffer.from(tSid + ":" + tTok).toString("base64");
+      const twUrl = "https://api.twilio.com/2010-04-01/Accounts/" + tSid + "/Messages.json";
+      await fetch(twUrl, {
+        method: "POST",
+        headers: { "Authorization": auth, "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ To: tTo, From: tFrom, Body: notifyBody }).toString(),
+      }).catch(() => null);
+      const rawPh = (leadPackage.phone || "").replace(/\D/g, "");
+      if (rawPh) {
+        const fn = (leadPackage.fullName || "").split(" ")[0];
+        const confMsg = "Hi " + fn + "! Phoenix Epoxy Pros received your bid request. Quote within 24h. Call (772) 209-0266.";
+        await fetch(twUrl, {
+          method: "POST",
+          headers: { "Authorization": auth, "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ To: "+1" + rawPh, From: tFrom, Body: confMsg }).toString(),
+        }).catch(() => null);
+      }
+    }
+  } catch (_) { /* notify never blocks lead save */ }
 
   return NextResponse.json({
     ok: true,
-    score,
+    score: leadPackage.score,
     leadPackage,
     persistence,
     notification,

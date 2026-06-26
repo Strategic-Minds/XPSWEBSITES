@@ -8,3 +8,5 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
+// auth-deploy-trigger: 1782403535
