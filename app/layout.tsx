@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LocalBusinessSchema } from "./components/LocalBusinessSchema";
 import "./globals.css";
+import "./xps-flake-chart-lock.css";
 
 export const metadata: Metadata = {
   title: "Phoenix Epoxy Pros | Professional Epoxy Floors & Polished Concrete AZ",
