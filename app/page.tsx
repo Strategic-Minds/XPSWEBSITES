@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { FinishVisualizer } from "./components/FinishVisualizer";
+
 export const metadata: Metadata = {
   title: "Phoenix Epoxy Pros | Professional Epoxy Floors & Polished Concrete AZ",
   description: "Professional epoxy garage floors, metallic epoxy, and polished concrete in Phoenix, Scottsdale, and surrounding cities. Free estimates. XPS certified. 4.9★ rated.",
@@ -57,6 +59,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <FinishVisualizer />
 
       <section className="py-20 px-6 text-center">
         <h2 className="text-3xl font-black text-white mb-6">See the Transformation</h2>
