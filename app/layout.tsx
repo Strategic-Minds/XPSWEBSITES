@@ -8,7 +8,6 @@ export const metadata: Metadata = {
     "National Epoxy Pros is a premium epoxy, polished concrete, decorative concrete, countertop, and overlay digital bid app powered by XPS, America's #1 Epoxy Super Store.",
   metadataBase: new URL("https://xpswebsites.vercel.app"),
   applicationName: "National Epoxy Pros",
-  manifest: "/manifest.webmanifest",
   openGraph: {
     title: "National Epoxy Pros | Powered by XPS",
     description:
