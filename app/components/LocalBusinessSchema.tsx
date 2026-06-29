@@ -1,29 +1,60 @@
 export function LocalBusinessSchema() {
   const schema = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": "https://xpswebsites.vercel.app",
-    "name": "Phoenix Epoxy Pros",
-    "description": "XPS-certified epoxy and polished concrete floor specialists serving Phoenix, Scottsdale, Tempe, Mesa, and surrounding cities.",
-    "url": "https://xpswebsites.vercel.app",
-    "telephone": "+17722090266",
-    "email": "info@phoenixepoxypros.com",
-    "address": {
+    "@type": "HomeAndConstructionBusiness",
+    "@id": "https://xpswebsites.vercel.app/#national-epoxy-pros",
+    name: "National Epoxy Pros",
+    description:
+      "Certified epoxy floor systems, digital bids, design guidance, and nationwide service powered by Xtreme Polishing Systems Supply.",
+    url: "https://xpswebsites.vercel.app",
+    telephone: "+18779586408",
+    email: "support@nationalepoxypros.com",
+    address: {
       "@type": "PostalAddress",
-      "addressLocality": "Phoenix",
-      "addressRegion": "AZ",
-      "postalCode": "85001",
-      "addressCountry": "US"
+      streetAddress: "2200 NW 32nd St #700",
+      addressLocality: "Pompano Beach",
+      addressRegion: "FL",
+      postalCode: "33069",
+      addressCountry: "US",
     },
-    "geo": { "@type": "GeoCoordinates", "latitude": 33.4484, "longitude": -112.0740 },
-    "areaServed": ["Phoenix","Scottsdale","Tempe","Mesa","Chandler","Gilbert","Glendale","Peoria"],
-    "serviceType": ["Garage Epoxy","Metallic Epoxy","Commercial Flooring","Polished Concrete","Polyaspartic Coatings"],
-    "priceRange": "$$",
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" },
-    "sameAs": ["https://www.facebook.com/phoenixepoxypros","https://www.instagram.com/phoenixepoxypros"],
-    "openingHoursSpecification": [
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "07:00", "closes": "19:00" }
-    ]
+    parentOrganization: {
+      "@type": "Organization",
+      name: "Xtreme Polishing Systems Supply",
+      telephone: "+18779586408",
+    },
+    areaServed: "United States",
+    serviceType: [
+      "Garage Epoxy",
+      "Metallic Epoxy",
+      "Commercial Epoxy Flooring",
+      "Quartz Flooring",
+      "Flake Epoxy Systems",
+      "Polished Concrete",
+      "Polyaspartic Coatings",
+    ],
+    priceRange: "$$",
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: "+18779586408",
+        contactType: "customer support",
+        email: "support@nationalepoxypros.com",
+        areaServed: "US",
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "digital bid leads",
+        email: "leads@nationalepoxypros.com",
+        areaServed: "US",
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: "sales@nationalepoxypros.com",
+        areaServed: "US",
+      },
+    ],
   };
+
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 }
