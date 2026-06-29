@@ -1,37 +1,39 @@
 # XPSWEBSITES
 
-Autonomous website factory starter for Xtreme Polishing Systems connected local market sites.
+Autonomous website factory starter for Xtreme Polishing Systems connected market sites.
 
-The first location is Phoenix Epoxy Pros. The scaffold is based on the Nashville Resin Worx reference pattern and now includes the production-readiness layer for integrations, pricing, Supabase, legal templates, receipt tracking, location registry, Metricool operations, Twilio SMS lead alerts, and QA.
+The active location brand is now National Epoxy Pros. This replaces the legacy Phoenix Epoxy Pros naming while keeping the same digital bid, visualizer, design center, production-readiness, lead-routing, and QA operating model.
 
 ## Current Default Inputs
 
-- Business name: Phoenix Epoxy Pros
-- Phone: 772-209-0266
-- Email: JEREMY@SHOPXPS.COM
-- Logo: placeholder
-- Images: placeholder
-- Reference repo: https://github.com/Strategic-Minds/NASHVILLERESINWORX
-- Phoenix Drive packet: https://drive.google.com/drive/folders/1wdvro-T90CqXjcLtyACFXnlJ9vOqxuTk
-- Readiness checklist: https://docs.google.com/spreadsheets/d/1WbzhWAbXYBXXBlqn7GsgKcfkPvl0gHcbwSt3VyOHiK4
-
+- Business name: National Epoxy Pros
+- Powered by: Xtreme Polishing Systems Supply, America's #1 Epoxy Super Store
+- Phone: (877) 958-6408
+- WhatsApp Business: 555-600-0743
+- Support email: support@nationalepoxypros.com
+- Digital bid leads: leads@nationalepoxypros.com
+- Outbound sales: sales@nationalepoxypros.com
+- Corporate address: 2200 NW 32nd St #700, Pompano Beach, FL 33069
+- Service footprint: 70+ locations nationwide
+- Visualizer: https://xtremepolishingsystems.com/pages/flake-visualizer
+- Current Drive packet: https://drive.google.com/drive/folders/1WqWwuctqRBvWYLRPxP6aquTUIVicY5Je
 
 ## Production-Readiness Drive Artifacts
 
-- Integration Matrix: https://docs.google.com/spreadsheets/d/1OlhBL3fZQ_6UBoj5ybnxvxF-RjFQG7ReShCMojZ20ww
-- Pricing And AI Estimating Workbook: https://docs.google.com/spreadsheets/d/1FVqeSbU-xeHznz-zMWv3vnj48D5r3oP2bBYFZiibfu8
-- Supabase Data Dictionary: https://docs.google.com/spreadsheets/d/1Tijw6ey7A1eM9QTEODNU80PjChzOua9-psHFueLNpBM
-- Legal And Approval Template Pack: https://docs.google.com/document/d/1ermccPi0TB-BPZcEDBqmTFmdFmFPmxHNnG6pP2SJoX4
-- Location Master Registry: https://docs.google.com/spreadsheets/d/1fkT28Mv8iArZZYN3TDiyEm3gkLLRysGxitpmItgfE4w
-- Metricool Operating Inputs: https://docs.google.com/spreadsheets/d/1B03cw3VPrNK4fPSMXuR2jXQm54DA3QL4TJ66T8vFJiQ
-- Automation Receipt Archive: https://drive.google.com/drive/folders/1Up7KoErt8neJIGq9Ooxv9xscJWaY_0AY
+The Phoenix legacy folder remains the source for prior plans, canonical docs, visualizer rules, color charts, and automation strategy. New work should transform those patterns into National Epoxy Pros without copying protected third-party assets.
+
+- Legacy plan and canonical docs: Phoenix Epoxy Pros - LAGACY
+- National workspace: NATIONAL EPOXY PROS
+- Approved canonical docs: APPROVED CANICAL DOCS
+- Color charts: COLOR CHARTS
+- Floor imagery: FLOOR IMAGES
 
 ## Scaffold Contents
 
-The production-ready scaffold package contains:
+The production-ready scaffold package is intended to contain:
 
-- `apps/phoenix-epoxy-pros-site`: public funnel website PWA with Twilio SMS lead alerts and opt-in customer confirmations
-- `apps/phoenix-job-ops-app`: separate customer/company job operations PWA
+- `app`: public National Epoxy Pros funnel website
+- `app/components`: structured data and shared site components
 - `packages/factory-config`: reusable location, brand, asset, and owner-input configuration
 - `packages/backend-template`: backend records, estimating, timeline, and receipt template logic
 - `supabase/migrations`: Supabase database schema with SMS consent/status lead fields
@@ -40,6 +42,14 @@ The production-ready scaffold package contains:
 - `.github/workflows`: validation workflows
 - `factory`: Auto Builder packets, manifests, location configs, and readiness checklists
 - `docs`: builder, branding, backend, legal, receipt, and owner handoff documentation
+
+## Lead Routing
+
+- Digital bid forms should route to `leads@nationalepoxypros.com`.
+- Customer support should route to `support@nationalepoxypros.com`.
+- Outbound sales workflows should route to `sales@nationalepoxypros.com`.
+- Phone CTAs should use `(877) 958-6408`.
+- WhatsApp CTAs should use `555-600-0743`.
 
 ## Twilio SMS Setup
 
@@ -56,15 +66,14 @@ Do not store live Twilio credentials in Drive or Git.
 
 ## Auto Builder Handoff
 
-Use this repo as the control repo and ingest the production-ready scaffold package after switching Auto Builder to:
+Use this repo as the control repo and ingest the National Epoxy Pros package after switching Auto Builder to:
 
 - repository: `Strategic-Minds/XPSWEBSITES`
-- first location: `phoenix-epoxy-pros`
-- website app path: `apps/phoenix-epoxy-pros-site`
-- customer app path: `apps/phoenix-job-ops-app`
-- Drive folder: `001_PHOENIX_EPOXY_PROS`
-- bootstrap manifest: `factory/bootstrap/scaffold-package.json`
-- validation checklist: `factory/checklists/pre-generation-readiness.md`
+- active brand: `national-epoxy-pros`
+- website app path: `app`
+- Drive folder: `NATIONAL EPOXY PROS`
+- legacy source folder: `Phoenix Epoxy Pros - LAGACY`
+- validation standard: browser-first visual QA, form routing checks, mobile and desktop pass, no legacy Phoenix public copy
 
 ## Local Validation After Materialization
 
@@ -72,6 +81,6 @@ Use this repo as the control repo and ingest the production-ready scaffold packa
 npm run validate
 ```
 
-This checks factory files, Supabase migration, receipt schema, PWA manifests, placeholder files, Twilio SMS wiring, and app-level validation scripts without requiring live integrations.
+This checks the Next.js build and enterprise autonomy checks when dependencies are available.
 
 Full production builds require dependencies and environment variables from `.env.example`. Do not store live secrets in Drive or Git.
