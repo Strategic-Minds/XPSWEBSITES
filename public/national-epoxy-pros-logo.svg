@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 220" role="img" aria-labelledby="title desc">
+  <title id="title">National Epoxy Pros</title>
+  <desc id="desc">Black, white, and gold National Epoxy Pros wordmark with connected national service mark.</desc>
+  <rect width="980" height="220" fill="#050505"/>
+  <g fill="none" stroke="#f5af19" stroke-width="3" opacity="0.9">
+    <path d="M48 119 75 90 116 95 150 72 195 84 224 54 263 78 310 66 345 97 391 93 421 122 464 119"/>
+    <path d="M78 139 116 95 195 84 263 78 345 97 421 122" opacity="0.65"/>
+    <path d="M150 72 171 126 224 54 241 137 310 66 314 128 391 93" opacity="0.55"/>
+  </g>
+  <g fill="#f5af19">
+    <circle cx="48" cy="119" r="10"/><circle cx="75" cy="90" r="7"/><circle cx="116" cy="95" r="9"/><circle cx="150" cy="72" r="8"/><circle cx="195" cy="84" r="12"/><circle cx="224" cy="54" r="8"/><circle cx="263" cy="78" r="10"/><circle cx="310" cy="66" r="9"/><circle cx="345" cy="97" r="11"/><circle cx="391" cy="93" r="8"/><circle cx="421" cy="122" r="10"/><circle cx="464" cy="119" r="7"/>
+  </g>
+  <line x1="510" y1="44" x2="510" y2="176" stroke="#f5af19" stroke-width="5"/>
+  <text x="545" y="92" font-family="Arial Black, Impact, sans-serif" font-size="58" fill="#ffffff" letter-spacing="10">NATIONAL</text>
+  <text x="548" y="154" font-family="Arial Black, Impact, sans-serif" font-size="50" fill="#f5af19" letter-spacing="14">EPOXY PROS</text>
+  <line x1="548" y1="174" x2="918" y2="174" stroke="#f5af19" stroke-width="4"/>
+  <g font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">
+    <text x="548" y="199">CERTIFIED PROS</text>
+    <text x="690" y="199">LOCAL SERVICE</text>
+    <text x="822" y="199">NATIONWIDE GROWTH</text>
+  </g>
+</svg>
