@@ -2,7 +2,7 @@
 
 Autonomous website factory starter for Xtreme Polishing Systems connected market sites.
 
-The active location brand is now National Epoxy Pros. This replaces the legacy Phoenix Epoxy Pros naming while keeping the same digital bid, visualizer, design center, production-readiness, lead-routing, and QA operating model.
+The active location brand is now National Epoxy Pros. This replaces the prior regional brand naming while keeping the same digital bid, visualizer, design center, production-readiness, lead-routing, and QA operating model.
 
 ## Current Default Inputs
 
@@ -20,9 +20,9 @@ The active location brand is now National Epoxy Pros. This replaces the legacy P
 
 ## Production-Readiness Drive Artifacts
 
-The Phoenix legacy folder remains the source for prior plans, canonical docs, visualizer rules, color charts, and automation strategy. New work should transform those patterns into National Epoxy Pros without copying protected third-party assets.
+The legacy regional folder remains the source for prior plans, canonical docs, visualizer rules, color charts, and automation strategy. New work should transform those patterns into National Epoxy Pros without copying protected third-party assets.
 
-- Legacy plan and canonical docs: Phoenix Epoxy Pros - LAGACY
+- Legacy plan and canonical docs: prior regional legacy folder
 - National workspace: NATIONAL EPOXY PROS
 - Approved canonical docs: APPROVED CANICAL DOCS
 - Color charts: COLOR CHARTS
@@ -72,8 +72,8 @@ Use this repo as the control repo and ingest the National Epoxy Pros package aft
 - active brand: `national-epoxy-pros`
 - website app path: `app`
 - Drive folder: `NATIONAL EPOXY PROS`
-- legacy source folder: `Phoenix Epoxy Pros - LAGACY`
-- validation standard: browser-first visual QA, form routing checks, mobile and desktop pass, no legacy Phoenix public copy
+- legacy source folder: prior regional legacy folder
+- validation standard: browser-first visual QA, form routing checks, mobile and desktop pass, no legacy public copy
 
 ## Local Validation After Materialization
 

@@ -1,0 +1,40 @@
+{
+  "name": "National Epoxy Pros",
+  "short_name": "Epoxy Pros",
+  "description": "Start a National Epoxy Pros digital bid, explore XPS floor systems, and connect with certified epoxy pros nationwide.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f3ea",
+  "theme_color": "#050505",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/national-epoxy-pros-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start Digital Bid",
+      "short_name": "Bid",
+      "description": "Open the National Epoxy Pros digital bid form.",
+      "url": "/#digital-bid"
+    },
+    {
+      "name": "Floor Visualizer",
+      "short_name": "Visualizer",
+      "description": "Open the XPS flake visualizer link from the site.",
+      "url": "/#visualizer"
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Call, email, or message National Epoxy Pros.",
+      "url": "/#contact"
+    }
+  ]
+}
