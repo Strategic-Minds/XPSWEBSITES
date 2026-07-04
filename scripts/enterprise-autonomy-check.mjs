@@ -30,9 +30,7 @@ const requiredTokens = [
 const forbiddenTokens = [
   ["app/page.tsx", "Phoenix Epoxy Pros"],
   ["app/layout.tsx", "Phoenix Epoxy Pros"],
-  ["README.md", "Phoenix Epoxy Pros"],
-  ["scripts/enterprise-autonomy-check.mjs", "PhoenixEnterpriseScreens"],
-  ["scripts/enterprise-autonomy-check.mjs", "phoenix-demo-data"]
+  ["README.md", "Phoenix Epoxy Pros"]
 ];
 
 const failures = [];
