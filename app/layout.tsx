@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LocalBusinessSchema } from "./components/LocalBusinessSchema";
 import "./globals.css";
+import "./fast-finalize.css";
 
 export const metadata: Metadata = {
   title: "National Epoxy Pros | Premium Epoxy Floors Powered by XPS",
