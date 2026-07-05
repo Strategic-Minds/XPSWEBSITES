@@ -1,5 +1,5 @@
 /* Fast finalization override for National Epoxy Pros.
-   Purpose: replace the temporary gradient hero with a premium garage/sports-car photo while preserving the existing page structure and lead routing.
+   Purpose: replace the temporary gradient hero with a premium local hero visual while preserving the existing page structure and lead routing.
    Rollback: remove this import from app/layout.tsx or delete this file. */
 
 .hero-image {
@@ -7,11 +7,11 @@
   inset: 0;
   background-image:
     linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.32) 42%, rgba(0, 0, 0, 0.08)),
-    url("https://orlandoconcretecoating.com/images/hero-garage.webp");
+    url("/national-epoxy-hero.svg");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;
-  filter: saturate(1.08) contrast(1.06);
+  filter: saturate(1.12) contrast(1.08);
   transform: scale(1.01);
 }
 
@@ -20,7 +20,7 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 78% 18%, rgba(247, 181, 33, 0.26), transparent 28%),
+    radial-gradient(circle at 78% 18%, rgba(247, 181, 33, 0.28), transparent 28%),
     linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.38));
   pointer-events: none;
 }
