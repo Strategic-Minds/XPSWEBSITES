@@ -21,8 +21,7 @@ export function PhoenixLeadForm() {
     }
 
     setState("submitting");
-    // Store in sessionStorage so dashboard can read it
-    window.sessionStorage.setItem("xpsLead", JSON.stringify({ fullName: name, email, phone }));
+    window.sessionStorage.setItem("nationalEpoxyProsLead", JSON.stringify({ fullName: name, email, phone }));
     const p = new URLSearchParams({ fullName: name, email, phone });
     window.location.assign(`/customer-portal/dashboard?${p.toString()}`);
   }
