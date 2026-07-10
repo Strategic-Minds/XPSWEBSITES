@@ -19,7 +19,7 @@ const estimatorSteps = [
   "Start here with name, email, phone, ZIP, project type, and ASAP request if needed.",
   "The full Digital Bid form opens with your details already filled in.",
   "Upload multiple floor photos, measurements, current covering, finish choice, and inspiration pictures.",
-  "Jeremy receives the package for review, then sends the proposal, payment path, warranty information, and tracker access steps."
+  "The National Epoxy Pros team receives the package for review, then sends the proposal, payment path, warranty information, and tracker access steps."
 ];
 
 export function DigitalEstimator() {
@@ -70,7 +70,7 @@ export function DigitalEstimator() {
       </div>
 
       <form className="digital-estimator-form" onSubmit={handleSubmit}>
-        <input type="hidden" name="source" value="xps_homepage_digital_estimator_start" />
+        <input type="hidden" name="source" value="national_epoxy_pros_homepage_digital_estimator_start" />
         <input type="hidden" name="campaign" value="15_percent_digital_estimator" />
 
         <div className="field-row">
