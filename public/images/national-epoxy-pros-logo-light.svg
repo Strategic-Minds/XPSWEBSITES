@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1774 443" role="img" aria-labelledby="title desc">
+  <title id="title">National Epoxy Pros Light Logo</title>
+  <desc id="desc">Light-background National Epoxy Pros wordmark and network mark.</desc>
+  <rect width="1774" height="443" fill="#ffffff"/>
+  <defs>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff1a8"/><stop offset="0.45" stop-color="#d99a17"/><stop offset="1" stop-color="#8d5706"/></linearGradient>
+  </defs>
+  <g transform="translate(140 70) scale(1.02)" stroke="url(#gold)" stroke-width="4" fill="none">
+    <path d="M12 55 L52 22 L122 70 L198 36 L276 68 L345 34 L420 92 L505 70 L585 120 L655 96 L716 148 L770 136 L806 190 L760 236 L678 230 L612 274 L528 250 L452 288 L382 250 L292 272 L235 218 L148 232 L92 178 L30 190 Z"/>
+    <path d="M52 22 L198 36 L345 34 L505 70 L655 96 L806 190" opacity=".78"/>
+    <path d="M122 70 L235 218 L345 34 L382 250 L505 70 L528 250 L655 96 L678 230" opacity=".62"/>
+    <path d="M12 55 L92 178 L198 36 L292 272 L420 92 L612 274 L716 148 L760 236" opacity=".5"/>
+  </g>
+  <g transform="translate(140 70) scale(1.02)" fill="url(#gold)">
+    <circle cx="12" cy="55" r="14"/><circle cx="52" cy="22" r="9"/><circle cx="122" cy="70" r="24"/><circle cx="198" cy="36" r="10"/><circle cx="276" cy="68" r="12"/><circle cx="345" cy="34" r="13"/><circle cx="420" cy="92" r="13"/><circle cx="505" cy="70" r="18"/><circle cx="585" cy="120" r="11"/><circle cx="655" cy="96" r="14"/><circle cx="716" cy="148" r="11"/><circle cx="770" cy="136" r="10"/><circle cx="806" cy="190" r="15"/><circle cx="760" cy="236" r="14"/><circle cx="678" cy="230" r="12"/><circle cx="612" cy="274" r="20"/><circle cx="528" cy="250" r="10"/><circle cx="452" cy="288" r="19"/><circle cx="382" cy="250" r="10"/><circle cx="292" cy="272" r="20"/><circle cx="235" cy="218" r="13"/><circle cx="148" cy="232" r="20"/><circle cx="92" cy="178" r="9"/><circle cx="30" cy="190" r="12"/>
+    <circle cx="345" cy="162" r="25" fill="#fff" stroke="#d99a17" stroke-width="4"/><text x="345" y="171" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-size="28" fill="#d99a17">★</text>
+  </g>
+  <line x1="640" y1="78" x2="640" y2="350" stroke="#d79a13" stroke-width="4"/>
+  <g font-family="Arial Black, Impact, sans-serif" text-rendering="geometricPrecision">
+    <text x="700" y="190" font-size="106" letter-spacing="22" fill="#030303">NATIONAL</text>
+    <text x="704" y="288" font-size="70" letter-spacing="26" fill="url(#gold)">EPOXY PROS</text>
+  </g>
+  <line x1="704" y1="316" x2="1625" y2="316" stroke="#d79a13" stroke-width="4"/>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#111111">
+    <text x="740" y="363">CERTIFIED PROS</text><text x="970" y="363">TRAINED EXPERTS</text><text x="1212" y="363">LOCAL SERVICE</text><text x="1445" y="363">NATIONWIDE GROWTH</text>
+  </g>
+</svg>
