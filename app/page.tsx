@@ -3,12 +3,14 @@ import { FinishVisualizer } from "./components/FinishVisualizer";
 import { MobileNavigation } from "./components/MobileNavigation";
 import { PhoenixLeadForm } from "./components/PhoenixLeadForm";
 
-const phone = "772-209-0266";
-const phoneHref = "tel:17722090266";
-const email = "JEREMY@SHOPXPS.COM";
+const phone = "(877) 958-6408";
+const phoneHref = "tel:18779586408";
+const email = "support@nationalepoxypros.com";
 
 const images = {
   hero: "/images/hero-garage-approved.webp?v=approved-final-20260617",
+  logoPanel: "/images/national-epoxy-pros-logo-header.svg",
+  logoHeader: "/images/national-epoxy-pros-logo-light.svg",
   beforeAfter: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-before-after.webp?v=1781648570",
   garage: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-garage.webp?v=1781648581",
   commercial: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/phoenix-epoxy-pros-service-commercial.webp?v=1781648591",
@@ -22,18 +24,10 @@ const images = {
   processFinalInspection: "https://cdn.shopify.com/s/files/1/0754/8905/0678/files/nashville-resin-worx-process-06-final-inspection.png?v=1781036605"
 };
 
-const navLinks = [
-  { label: "Gallery",       href: "/gallery" },
-  { label: "Color Charts",  href: "/#color-chart" },
-  { label: "Design Center", href: "/design" },
-  { label: "Digital Bid",   href: "/digital-estimator" },
-];
-
-
 const services = [
-  { title: "Garage Floor Coatings", image: images.garage, summary: "Diamond-grind prep, crack repair, full-broadcast flake, and durable polyaspartic topcoat planning.", detail: "Best for daily-use Phoenix garages that need a clean finish, traction, and easier maintenance." },
+  { title: "Garage Floor Coatings", image: images.garage, summary: "Diamond-grind prep, crack repair, full-broadcast flake, and durable polyaspartic topcoat planning.", detail: "Best for daily-use garages that need a clean finish, traction, and easier maintenance." },
   { title: "Commercial Floor Systems", image: images.commercial, summary: "Flake, quartz, and high-performance coating systems for shops, showrooms, warehouses, and workspaces.", detail: "Traffic, chemical exposure, slip resistance, downtime, and cleaning needs drive the system recommendation." },
-  { title: "Patios & Outdoor Concrete", image: images.patio, summary: "Exterior coating direction for patios, covered spaces, walkways, and Arizona concrete surfaces.", detail: "Outdoor projects need UV, heat, texture, and drainage considerations before finish selection." },
+  { title: "Patios & Outdoor Concrete", image: images.patio, summary: "Exterior coating direction for patios, covered spaces, walkways, and local concrete surfaces.", detail: "Outdoor projects need UV, heat, texture, and drainage considerations before finish selection." },
   { title: "Repair & Surface Prep", image: images.repair, summary: "Crack repair, spalling, failed coating removal, grinding, patching, and slab-condition review.", detail: "Prep is the part that decides whether the coating bonds, wears correctly, and looks right." }
 ];
 
@@ -68,7 +62,6 @@ const jobTrackerFeatures = [
 export default function HomePage() {
   return (
     <main className="phoenix-site">
-      {/* ── HEADER: hamburger only ── */}
       <header style={{
         position: "sticky",
         top: 0,
@@ -84,13 +77,13 @@ export default function HomePage() {
         <MobileNavigation />
       </header>
 
-      <section className="hero" id="home" aria-label="Phoenix Epoxy Pros estimate hero">
+      <section className="hero" id="home" aria-label="National Epoxy Pros estimate hero">
         <div className="hero-stage">
           <div className="hero-photo" aria-hidden="true">
             <img src={images.hero} alt="" />
           </div>
           <div className="hero-logo-panel" aria-hidden="true">
-            <img src="/images/logo-panel.webp?v=mask-20260616" alt="" />
+            <img src={images.logoPanel} alt="" />
           </div>
           <PhoenixLeadForm />
         </div>
@@ -119,7 +112,7 @@ export default function HomePage() {
       </section>
 
       <section className="section services-section" id="services">
-        <SectionIntro kicker="Services" title="Phoenix epoxy floors built around the right system" />
+        <SectionIntro kicker="Services" title="National epoxy floors built around the right system" />
         <div className="services-grid">
           {services.map((service) => (
             <a className="service-card" href="/digital-estimator" key={service.title}>
@@ -141,7 +134,7 @@ export default function HomePage() {
           <p>A good epoxy or polyaspartic system starts before the coating is poured. The slab needs the right profile, repairs, cleaning, base coat, broadcast, and topcoat for the way the floor will actually be used.</p>
           <a className="gold-button" href="/digital-estimator">Start My Quote</a>
         </div>
-        <img src={images.beforeAfter} alt="Before and after Phoenix epoxy garage floor comparison" />
+        <img src={images.beforeAfter} alt="Before and after epoxy garage floor comparison" />
       </section>
 
       <section className="section process-section" id="process">
@@ -218,18 +211,16 @@ export default function HomePage() {
 
       <footer className="site-footer">
         <div>
-          <img src="/images/logo-header.webp" alt="Phoenix Epoxy Pros" />
-          <p>Phoenix epoxy floor estimates, digital bid intake, finish system planning, proposal handoff, and customer project tracking.</p>
+          <img src={images.logoHeader} alt="National Epoxy Pros" />
+          <p>National epoxy floor estimates, digital bid intake, finish system planning, proposal handoff, and customer project tracking.</p>
         </div>
         <nav aria-label="Footer navigation">
-          <a href="/customer-portal/dashboard">Digital Bid</a>
+          <a href="/digital-estimator">Digital Bid</a>
           <a href="/customer-portal/dashboard">Portal System</a>
           <a href="/about-us">About Us</a>
           <a href="/contact-us">Contact Us</a>
           <a href="/gallery">Gallery</a>
           <a href="/customer-portal/dashboard">Client Dashboard</a>
-          <a href="/ops">Ops Center</a>
-          <a href="/installer">Installer App</a>
           <a href={`mailto:${email}`}>{email}</a>
           <a href={phoneHref}>{phone}</a>
         </nav>
