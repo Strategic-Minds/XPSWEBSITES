@@ -2,27 +2,25 @@ export function LocalBusinessSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://xpswebsites.vercel.app",
-    "name": "Phoenix Epoxy Pros",
-    "description": "XPS-certified epoxy and polished concrete floor specialists serving Phoenix, Scottsdale, Tempe, Mesa, and surrounding cities.",
+    "@id": "https://xpswebsites.vercel.app/#national-epoxy-pros",
+    "name": "National Epoxy Pros",
+    "description": "National epoxy, polished concrete, decorative concrete, and digital bid system serving local markets through the National Epoxy Pros network.",
     "url": "https://xpswebsites.vercel.app",
-    "telephone": "+17722090266",
-    "email": "info@phoenixepoxypros.com",
+    "telephone": "+18779586408",
+    "email": "support@nationalepoxypros.com",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "Phoenix",
-      "addressRegion": "AZ",
-      "postalCode": "85001",
+      "streetAddress": "2200 NW 32nd St #700",
+      "addressLocality": "Pompano Beach",
+      "addressRegion": "FL",
+      "postalCode": "33069",
       "addressCountry": "US"
     },
-    "geo": { "@type": "GeoCoordinates", "latitude": 33.4484, "longitude": -112.0740 },
-    "areaServed": ["Phoenix","Scottsdale","Tempe","Mesa","Chandler","Gilbert","Glendale","Peoria"],
-    "serviceType": ["Garage Epoxy","Metallic Epoxy","Commercial Flooring","Polished Concrete","Polyaspartic Coatings"],
+    "areaServed": "United States",
+    "serviceType": ["Garage Epoxy", "Metallic Epoxy", "Commercial Flooring", "Polished Concrete", "Polyaspartic Coatings", "Decorative Concrete"],
     "priceRange": "$$",
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "reviewCount": "127" },
-    "sameAs": ["https://www.facebook.com/phoenixepoxypros","https://www.instagram.com/phoenixepoxypros"],
     "openingHoursSpecification": [
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"], "opens": "07:00", "closes": "19:00" }
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "opens": "07:00", "closes": "19:00" }
     ]
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
