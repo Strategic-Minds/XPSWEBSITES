@@ -1,57 +1,84 @@
+import { PhoenixLeadForm } from './components/phoenix-lead-form';
+
+const services = [
+  ['Garage Floors', 'High-build flake systems engineered for Arizona garages, shops, and utility spaces.'],
+  ['Commercial Floors', 'Durable seamless coatings for retail, warehouses, restaurants, and service facilities.'],
+  ['Patios & Outdoors', 'Slip-resistant UV-aware systems selected for Phoenix heat and outdoor living.'],
+  ['Interior Floors', 'Metallic, solid-color, and decorative systems for polished residential interiors.'],
+  ['Concrete Surfaces', 'Polished concrete, stains, overlayments, countertops, and surface restoration.'],
+];
+
+const benefits = [
+  ['Arizona-ready', 'System selection considers heat, UV exposure, abrasion, and concrete condition.'],
+  ['Easy to maintain', 'Seamless surfaces reduce grout lines, dust traps, and difficult cleanup.'],
+  ['Built for value', 'A professional floor can improve appearance, usability, and property presentation.'],
+  ['Custom finishes', 'Choose flake, metallic, solid, stain, glitter, quartz, and polished looks.'],
+];
+
+const serviceAreas = ['Phoenix', 'Scottsdale', 'Tempe', 'Mesa', 'Chandler', 'Gilbert', 'Glendale', 'Peoria', 'Surprise', 'Avondale', 'Goodyear', 'Fountain Hills'];
+
 export default function HomePage() {
   return (
-    <main className="national-site" id="top">
+    <main className="national-site phoenix-market" id="top">
       <header className="site-header">
-        <a className="brand-mark" href="#top" aria-label="National Epoxy Pros home"><img src="/national-epoxy-pros-logo.svg" alt="National Epoxy Pros" /></a>
-        <nav aria-label="Primary navigation"><a href="#digital-bid">Digital Bid</a><a href="#systems">Floors</a><a href="#visualizer">Visualizer</a><a href="#dashboards">Dashboards</a><a href="#locations">Locations</a></nav>
-        <a className="header-cta" href="#digital-bid">Install App / Start Bid</a>
+        <a className="brand-lockup" href="#top" aria-label="National Epoxy Pros Phoenix home">
+          <span className="phoenix-mark" aria-hidden="true">◆</span>
+          <span><strong>National Epoxy Pros</strong><small>Phoenix, Arizona</small></span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="#services">Services</a><a href="#results">Results</a><a href="#benefits">Why Epoxy</a><a href="#colors">Floor Options</a><a href="#areas">Service Areas</a>
+        </nav>
+        <a className="header-cta" href="#digital-bid">Get a Free Quote</a>
       </header>
 
-      <section className="hero">
-        <div className="hero-image" aria-hidden="true" />
+      <section className="hero phoenix-hero">
+        <div className="hero-image" aria-hidden="true"><div className="desert-window" /><div className="garage-floor" /></div>
         <div className="hero-shade" />
         <div className="hero-content">
-          <p className="eyebrow">Powered by XPS - America's #1 Epoxy Super Store</p>
-          <h1>Epoxy will change your life.</h1>
-          <p className="hero-lede">Premium digital bids for epoxy flake, metallic epoxy, polished concrete, stained concrete, countertops, and overlayments, connected to the XPS nationwide supply network.</p>
-          <form className="location-lookup" action="https://xtremepolishingsystems.com/pages/locations" method="get">
-            <label htmlFor="heroZip">Find an XPS Xpress location near you</label>
-            <div><input id="heroZip" name="zip" inputMode="numeric" autoComplete="postal-code" placeholder="Enter ZIP code" /><button type="submit">Find Location</button></div>
-          </form>
-          <div className="hero-actions"><a className="button primary" href="#digital-bid">Start Digital Bid</a><a className="button secondary" href="https://xtremepolishingsystems.com/pages/flake-visualizer" target="_blank" rel="noopener noreferrer">Open XPS Visualizer</a><a className="button quiet" href="tel:+18779586408">Call (877) 958-6408</a></div>
+          <p className="eyebrow">Powered by XPS · Phoenix Metro Installation Network</p>
+          <h1>Arizona&apos;s premier epoxy flooring, built to last.</h1>
+          <p className="hero-lede">Transform garages, commercial spaces, patios, interiors, and concrete surfaces with high-performance systems designed for Arizona living.</p>
+          <div className="hero-actions"><a className="button primary" href="#digital-bid">Get a Free Quote</a><a className="button secondary" href="#results">View Our Work</a><a className="button quiet" href="tel:+18779586408">Call (877) 958-6408</a></div>
+          <div className="trust-row"><span>Arizona-ready systems</span><span>Residential warranties</span><span>Fast installation paths</span><span>70+ location network</span></div>
         </div>
       </section>
 
-      <section className="signal-strip" aria-label="XPS proof"><div><strong>70+</strong><span>XPS Xpress satellite locations</span></div><div><strong>XPS</strong><span>America's #1 Epoxy Super Store</span></div><div><strong>24 hr</strong><span>digital bid response target</span></div><div><strong>PWA</strong><span>branded app install path</span></div></section>
-
-      <section className="app-band" id="digital-bid">
-        <div className="bid-copy"><p className="eyebrow">Actual Digital Bid Page</p><h2>Quote the floor, route the lead, then move the customer into a dashboard.</h2><p>Every request packages location, finish, square footage, concrete condition, color-chart family, project notes, and urgency for the National Epoxy Pros lead team.</p><div className="route-box"><span>Lead inbox</span><strong>leads@nationalepoxypros.com</strong><span>AI operations</span><strong>ai@autobuilderos.com</strong></div></div>
-        <form className="digital-bid-form" action="mailto:leads@nationalepoxypros.com" method="post" encType="text/plain">
-          <div className="form-grid two"><label>Full name<input name="name" autoComplete="name" required /></label><label>Phone<input name="phone" type="tel" autoComplete="tel" required /></label></div>
-          <div className="form-grid two"><label>Email<input name="email" type="email" autoComplete="email" required /></label><label>Project ZIP<input name="zip" inputMode="numeric" autoComplete="postal-code" required /></label></div>
-          <div className="form-grid three"><label>Approx. square feet<input name="squareFeet" inputMode="numeric" placeholder="650" /></label><label>Floor system<select name="finish"><option>Epoxy flake</option><option>Metallic epoxy</option><option>Polished concrete</option><option>Stained concrete</option><option>Concrete countertop</option><option>Concrete overlayment</option></select></label><label>Timeline<select name="timeline"><option>ASAP</option><option>Within 30 days</option><option>1-3 months</option><option>Planning / budgeting</option></select></label></div>
-          <div className="form-grid two"><label>Color chart family<select name="colorChart"><option>XPS vinyl flake blends</option><option>XPS metallic pigments</option><option>XPS solid epoxy base coats</option><option>XPS concrete dye and stain colors</option><option>XPS glitter additive colors</option></select></label><label>Existing surface<select name="surface"><option>Bare concrete</option><option>Old coating needs removal</option><option>Cracks or spalling</option><option>Tile, VCT, carpet, or glue</option><option>Countertop or vertical surface</option></select></label></div>
-          <label>Project notes<textarea name="notes" rows={4} placeholder="Tell us about the floor, desired look, photos, moisture concerns, or business package interest." /></label>
-          <div className="form-actions"><button type="submit">Send Digital Bid Request</button><a href="https://xtremepolishingsystems.com/pages/color-charts" target="_blank" rel="noopener noreferrer">View XPS Color Charts</a></div>
-        </form>
+      <section className="services-section" id="services">
+        <div className="section-lead centered"><p className="eyebrow">Our Epoxy Flooring Services</p><h2>One local experience. A national supply backbone.</h2></div>
+        <div className="service-icon-grid">{services.map(([title, copy], index) => <article key={title}><span className="service-number">0{index + 1}</span><h3>{title}</h3><p>{copy}</p><a href="#digital-bid">Start quote</a></article>)}</div>
       </section>
 
-      <section className="systems-section" id="systems"><div className="section-lead"><p className="eyebrow">Premium Finish Library</p><h2>Dedicated floor paths for search, education, and conversion.</h2><p>Each finish routes visitors toward a digital bid, XPS visualizer, color charts, training, products, or business-package interest.</p></div><div className="system-grid premium"><article><div className="swatch flake" /><h3>Epoxy Flake Floors</h3><p>Dense broadcast flake systems for garages, shops, utility rooms, and commercial spaces.</p><a href="#digital-bid">Start bid</a></article><article><div className="swatch metallic" /><h3>Metallic Epoxy</h3><p>Luxury pearlescent movement for showrooms, salons, retail interiors, basements, bars, and lobbies.</p><a href="#digital-bid">Start bid</a></article><article><div className="swatch polished" /><h3>Polished Concrete</h3><p>Densified reflective concrete for retail, warehouses, showrooms, and long-life commercial floors.</p><a href="#digital-bid">Start bid</a></article><article><div className="swatch stained" /><h3>Stained Concrete</h3><p>Mottled translucent decorative concrete for patios, restaurants, interiors, and stone-tone looks.</p><a href="#digital-bid">Start bid</a></article><article><div className="swatch countertop" /><h3>Countertops & Overlayments</h3><p>Concrete countertop coatings, microtoppings, resurfacing, and specialty decorative systems.</p><a href="#digital-bid">Start bid</a></article></div></section>
+      <section className="results-section" id="results">
+        <div className="result-copy"><p className="eyebrow">Real Results</p><h2>Real transformation.</h2><p>Preparation, repair, coating selection, broadcast density, and finish quality all matter. The Phoenix team follows a documented path from surface review to final walkthrough.</p><a className="button primary" href="#digital-bid">Plan My Floor</a></div>
+        <div className="transformation-grid"><article><span>Before</span><div className="floor before-floor" /><strong>Worn garage concrete</strong></article><article><span>After</span><div className="floor after-floor" /><strong>Broadcast flake finish</strong></article><article><span>Premium</span><div className="floor metallic-floor" /><strong>Metallic interior system</strong></article></div>
+      </section>
 
-      <section className="visualizer-section" id="visualizer"><div className="visualizer-stage" aria-hidden="true"><div className="visualizer-floor" /><span>Visualizer + Color Charts</span></div><div className="visualizer-copy"><p className="eyebrow">Design Before You Buy</p><h2>Use XPS color charts and visualizer links inside the bid path.</h2><p>Customers can explore flake blends, metallic pigments, solid epoxy colors, glitter additives, concrete dye and stain colors, then submit the exact family they want quoted.</p><div className="link-cluster"><a href="https://xtremepolishingsystems.com/pages/flake-visualizer" target="_blank" rel="noopener noreferrer">Flake Visualizer</a><a href="https://xtremepolishingsystems.com/pages/color-charts" target="_blank" rel="noopener noreferrer">Color Charts</a><a href="https://xtremepolishingsystems.com/pages/metallic-epoxy-colors" target="_blank" rel="noopener noreferrer">Metallic Colors</a><a href="https://xtremepolishingsystems.com/pages/epoxy-flake-colors" target="_blank" rel="noopener noreferrer">Flake Colors</a></div></div></section>
+      <section className="benefits-section" id="benefits">
+        <div className="benefit-grid">{benefits.map(([title, copy]) => <article key={title}><span>✓</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
+        <aside className="sunset-quote"><p className="eyebrow">Get Your Free Quote Today</p><h2>Built for your floor and your timeline.</h2><p>Share the size, condition, finish, and ZIP code. This controlled Preview validates the complete request path without sending a live customer message.</p><a className="button primary" href="#digital-bid">Start My Quote</a></aside>
+      </section>
 
-      <section className="dashboards" id="dashboards"><div className="section-lead"><p className="eyebrow">App Dashboards</p><h2>One premium interface, four operational views.</h2></div><div className="dashboard-shell"><aside className="dashboard-nav" aria-label="Dashboard roles"><span>Customer</span><span>Crew Leader</span><span>Owner</span><span>Supervisor</span></aside><div className="dashboard-panel"><div className="dashboard-topline"><span>Owner Dashboard</span><strong>Lead engine active</strong></div><div className="dashboard-grid"><div><span>Customer</span><strong>Upload photos, confirm finish, track bid status</strong></div><div><span>Crew Leader</span><strong>Review prep, surface condition, materials, and install notes</strong></div><div><span>Owner</span><strong>Track leads, close rate, XPS routing, and revenue pipeline</strong></div><div><span>Supervisor</span><strong>Monitor QA, approvals, blockers, and release readiness</strong></div></div><div className="timeline"><span className="done">Lead captured</span><span className="active">Design review</span><span>Bid sent</span><span>Install scheduled</span></div></div></div></section>
+      <section className="colors-section" id="colors">
+        <div className="section-lead centered"><p className="eyebrow">Popular Color & Finish Options</p><h2>Design the surface before installation.</h2></div>
+        <div className="flake-grid"><div className="flake chrome"><span>Chrome</span></div><div className="flake nightfall"><span>Nightfall</span></div><div className="flake saddle"><span>Saddle Tan</span></div><div className="flake gravel"><span>Gravel</span></div><div className="flake domino"><span>Domino</span></div><div className="flake cabin"><span>Cabin Fever</span></div><div className="flake tuxedo"><span>Tuxedo</span></div><div className="flake hazelnut"><span>Hazelnut</span></div></div>
+        <div className="center-actions"><a className="button dark" href="https://xtremepolishingsystems.com/pages/flake-visualizer" target="_blank" rel="noopener noreferrer">Open XPS Visualizer</a><a className="button outline-dark" href="https://xtremepolishingsystems.com/pages/color-charts" target="_blank" rel="noopener noreferrer">View Color Charts</a></div>
+      </section>
 
-      <section className="xps-funnel"><div className="section-lead"><p className="eyebrow">Lead Generation Helper For XPS</p><h2>Capture the entire journey: floor buyer, DIY buyer, trainee, contractor, and store owner.</h2></div><div className="funnel-grid"><a href="#digital-bid"><strong>Get a Floor Installed</strong><span>Digital bid, finish selection, project routing</span></a><a href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer"><strong>Buy Products</strong><span>Epoxy coatings, grinders, tooling, stains, dyes, supplies</span></a><a href="https://xtremepolishingsystems.com/pages/how-to-videos" target="_blank" rel="noopener noreferrer"><strong>Learn The Trade</strong><span>How-to videos, tutorials, polishing education</span></a><a href="https://xtremepolishingsystems.com/pages/open-an-epoxy-store" target="_blank" rel="noopener noreferrer"><strong>Start A Business</strong><span>XPS Xpress, business packages, coaching, support</span></a></div></section>
+      <section className="app-band" id="digital-bid">
+        <div className="bid-copy"><p className="eyebrow">Phoenix Digital Bid</p><h2>Tell us what the floor needs.</h2><p>This golden-path pilot proves that the approved visual, workbook controls, working interface, validation endpoint, Git branch, Preview deployment, and evidence receipts can move together as one pipeline.</p><div className="route-box"><span>Current brand</span><strong>National Epoxy Pros</strong><span>Market</span><strong>Phoenix, Arizona</strong><span>Production state</span><strong>Locked pending approval</strong></div></div>
+        <PhoenixLeadForm />
+      </section>
 
-      <section className="seo-directory"><div className="section-lead"><p className="eyebrow">SEO Expansion Scaffold</p><h2>64-page organic structure staged around the concrete coatings market.</h2></div><div className="page-grid"><a href="#digital-bid">garage epoxy floors</a><a href="#digital-bid">metallic epoxy floors</a><a href="#digital-bid">polished concrete floors</a><a href="#digital-bid">stained concrete patios</a><a href="#digital-bid">concrete countertops</a><a href="#digital-bid">microtopping overlayments</a><a href="#digital-bid">epoxy floor training</a><a href="#digital-bid">XPS Xpress locations</a><a href="#digital-bid">open an epoxy store</a><a href="#digital-bid">epoxy startup package</a><a href="#digital-bid">epoxy floor cost</a><a href="#digital-bid">decorative concrete near me</a></div></section>
+      <section className="testimonial-section"><p className="eyebrow">What Customers Value</p><blockquote>“The floor should feel intentional, durable, and easy to live with. That starts with preparation and ends with a clean final walkthrough.”</blockquote><span>National Epoxy Pros quality standard</span></section>
 
-      <section className="asset-library"><div><p className="eyebrow">AI Image Asset Library</p><h2>Universal creative intake for National Epoxy Pros, Auto Builder OS, and Strategic Minds Advisory.</h2><p>GPT agents, Base44 agents, and future AI teammates use <strong>ai@autobuilderos.com</strong> as the unified creative intake mailbox.</p></div><div className="asset-steps"><span>Inbox</span><span>Raw generation</span><span>Metadata</span><span>QA approval</span><span>Website / social / ads / dashboard export</span></div></section>
+      <section className="locations-section" id="areas">
+        <div className="location-copy"><p className="eyebrow">Proudly Serving the Phoenix Metro Area</p><h2>Local project routing backed by XPS.</h2><div className="area-grid">{serviceAreas.map(area => <span key={area}>{area}</span>)}</div><div className="contact-grid"><a href="tel:+18779586408">Call (877) 958-6408</a><a href="mailto:leads@nationalepoxypros.com">Email the Lead Team</a></div></div>
+        <div className="phoenix-map" aria-label="Stylized Phoenix metro service map"><span className="map-pin">●</span><strong>Phoenix</strong><small>Metro service network</small></div>
+      </section>
 
-      <section className="locations-section" id="locations"><div className="location-copy"><p className="eyebrow">70+ Location Network</p><h2>Route every visitor to an installer, XPS Xpress store, product path, or business path.</h2><p>Corporate source: Xtreme Polishing Systems Supply, 2200 NW 32nd St #700, Pompano Beach, FL 33069. Phone: (877) 958-6408.</p><div className="contact-grid"><a href="tel:+18779586408">Call (877) 958-6408</a><a href="https://wa.me/15556000743" target="_blank" rel="noopener noreferrer">WhatsApp 555-600-0743</a><a href="mailto:support@nationalepoxypros.com">Support</a><a href="mailto:sales@nationalepoxypros.com">Sales</a></div></div><form className="locator-card" action="https://xtremepolishingsystems.com/pages/locations" method="get"><h3>Location Lookup</h3><label>ZIP code<input name="zip" inputMode="numeric" autoComplete="postal-code" /></label><button type="submit">Find XPS Xpress Near Me</button><a href="https://xtremepolishingsystems.com/pages/locations" target="_blank" rel="noopener noreferrer">Open XPS location directory</a></form></section>
+      <section className="financing-band"><div><p className="eyebrow">Flexible Project Paths</p><h2>Install, supply, training, and business support.</h2></div><a className="button primary" href="https://xtremepolishingsystems.com" target="_blank" rel="noopener noreferrer">Explore XPS</a></section>
 
-      <section className="mobile-install"><div><p className="eyebrow">Branded Mobile Home Screen Button</p><h2>Install National Epoxy Pros as a field-ready app.</h2></div><a className="button primary" href="#digital-bid">Download National Epoxy Pros App</a></section>
-      <footer><span>National Epoxy Pros</span><span>Powered by XPS - America's #1 Epoxy Super Store</span><span>EpoxyWillChangeYourLife.com</span><span>ai@autobuilderos.com</span></footer>
+      <footer><span><strong>National Epoxy Pros</strong> · Phoenix</span><span>Powered by Xtreme Polishing Systems</span><span><a href="tel:+18779586408">(877) 958-6408</a></span><span><a href="mailto:support@nationalepoxypros.com">support@nationalepoxypros.com</a></span></footer>
     </main>
   );
 }
