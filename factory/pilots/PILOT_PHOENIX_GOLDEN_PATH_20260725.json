@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "project_id": "PILOT-PHX-EPOXY-PROS-20260725",
+  "public_brand": "National Epoxy Pros - Phoenix",
+  "visual_contract": {
+    "name": "phoenix-prop-epoxy-approved-web-pack.png",
+    "drive_file_id": "1MZN3mi-3zAvqjmgI94K9HRqPXFk_tIiB",
+    "usage": "visual direction only; not rendered as a screenshot website"
+  },
+  "control_workbook": {
+    "name": "GOLDEN_UNIVERSAL_PROJECT_FACTORY_ALL_IN_ONE_CEILING_V7_MASTER.xlsx",
+    "sha256": "1980bc524a15a5c84a9dd596aaf726f869a7bd7dc7327b81d51968099662de5c",
+    "drive_file_id": "1dI9te-lQ5hbbKWqMxnxrnjIz-ag1afI4"
+  },
+  "implementation": {
+    "repository": "Strategic-Minds/XPSWEBSITES",
+    "branch": "auto-builder/golden-path-national-epoxy-phoenix-20260725",
+    "framework": "Next.js",
+    "safe_preview_form_route": "/api/lead-preview",
+    "live_customer_message": false,
+    "production_locked": true
+  },
+  "required_validation": [
+    "npm run build",
+    "npm run typecheck",
+    "npm run validate:enterprise",
+    "homepage HTTP 200",
+    "lead-preview valid request HTTP 202",
+    "lead-preview invalid request HTTP 422",
+    "navigation anchors",
+    "external links",
+    "desktop screenshot",
+    "tablet screenshot",
+    "mobile screenshot",
+    "console and network error review",
+    "rollback evidence"
+  ]
+}
